@@ -218,10 +218,10 @@ def step2_population(london_lsoa_codes=None):
         age_cols = [c for c in df.columns if str(c).isdigit() or str(c) == "90+"]
         if age_cols:
             print(f"  Summing {len(age_cols)} age columns for total population")
-            df["total_population"] = pd.to_numeric(
+            df["population"] = pd.to_numeric(
                 df[age_cols].stack(), errors="coerce"
             ).unstack().sum(axis=1)
-            total_col = "total_population"
+            total_col = "population"
         else:
             print("  ERROR: Cannot find population columns")
             return None
@@ -249,17 +249,17 @@ def step2_population(london_lsoa_codes=None):
             df_london = df[df[lsoa_col].astype(str).str.startswith("E01")].copy()
 
     # Build output dataframe
-    cols_map = {lsoa_col: "LSOA21CD", total_col: "total_population"}
+    cols_map = {lsoa_col: "LSOA21CD", total_col: "population"}
     if name_col:
         cols_map[name_col] = "LSOA21NM"
 
     df_out = df_london[list(cols_map.keys())].rename(columns=cols_map).copy()
-    df_out["total_population"] = pd.to_numeric(df_out["total_population"], errors="coerce")
-    df_out = df_out.dropna(subset=["LSOA21CD", "total_population"])
+    df_out["population"] = pd.to_numeric(df_out["population"], errors="coerce")
+    df_out = df_out.dropna(subset=["LSOA21CD", "population"])
 
     print(f"  London LSOAs with population: {len(df_out)}")
-    print(f"  Total London population: {df_out['total_population'].sum():,.0f}")
-    print(f"  Mean LSOA population: {df_out['total_population'].mean():,.0f}")
+    print(f"  Total London population: {df_out['population'].sum():,.0f}")
+    print(f"  Mean LSOA population: {df_out['population'].mean():,.0f}")
 
     df_out.to_csv(pop_csv, index=False)
     print(f"  Saved: {pop_csv}")

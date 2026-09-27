@@ -1,0 +1,35 @@
+<title>LAS results review</title>
+<style>body{font-family:system-ui;max-width:1200px;margin:24px auto;
+background:#f9f9f7;color:#0b0b0b;padding:0 16px}
+img{max-width:100%;border:1px solid rgba(11,11,11,.1);border-radius:8px;
+background:#fff}
+table{border-collapse:collapse;font-size:14px}
+td,th{border:1px solid #e1e0d9;padding:6px 12px;text-align:right}
+th:first-child,td:first-child{text-align:left}</style>
+<h1>LAS ensemble + optimizer results</h1>
+<table>
+<tr><th></th><th>E (M)</th><th>T_mean (min)</th><th>T90 (min)</th>
+<th>C8</th><th>C15</th></tr>
+<tr><td>ensemble mean (95% band)</td><td>&ndash;</td>
+<td>3.05
+ (2.86&ndash;3.26)</td>
+<td>5.36</td>
+<td>98.5%</td><td>99.9%</td></tr>
+<tr><td>matched-count optimum s*_66 (&le; 66 sites)</td>
+<td>7.578</td>
+<td>2.95</td><td>5.06</td>
+<td>99.2%</td><td>100.0%</td></tr>
+<tr><td>s_LAS</td><td>7.940</td>
+<td>2.93</td><td>4.78</td>
+<td>99.5%</td><td>100.0%</td></tr>
+</table>
+<p><b>Energy gap</b> E(s_LAS) &minus; E(s*) = 0.362M
+ (4.8% of E(s*)) &middot; R&#770;(E) = 0.998 &middot;
+ boundary edges L1: 0.0% robust / 88.8%
+ contested / 11.2% fixed &middot;
+ stations used &gt;90%: 0, 10&ndash;90%: 12,
+ &lt;10%: 54 &middot; real-station center share:
+ 4.9%</p>
+<h2>Convergence</h2><img src="fig_convergence.png">
+<h2>Boundary frequency</h2><img src="fig_boundary_freq.png">
+<h2>Optimizer plan vs s_LAS</h2><img src="fig_plans.png">

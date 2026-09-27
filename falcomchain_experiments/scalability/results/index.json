@@ -1,0 +1,75 @@
+{
+  "experiment": "scalability",
+  "paper_section": "7",
+  "ran_at": "2026-05-28T22:54:21.247213+00:00",
+  "T_steps": 50000,
+  "sizes": [
+    100,
+    400,
+    1000,
+    10000,
+    50000
+  ],
+  "seed": 42,
+  "environment": {
+    "python": "3.12.2",
+    "platform": "macOS-14.6.1-arm64-arm-64bit",
+    "pythonhashseed": "0",
+    "packages": {
+      "networkx": "3.6.1",
+      "numpy": "1.26.4",
+      "scipy": "1.12.0",
+      "matplotlib": "3.8.3",
+      "falcomchain": "0.1.0",
+      "pymetis": "2025.2.2"
+    }
+  },
+  "total_wall_time_s": 7567.580418208847,
+  "runs": [
+    {
+      "n_nodes": 100,
+      "seed": 42,
+      "n_chain_steps_succeeded": 50000,
+      "chain_total_time_s": 151.51233208319172,
+      "n_districts_initial": 3,
+      "n_l1_candidates": 29,
+      "n_l2_candidates": 6
+    },
+    {
+      "n_nodes": 400,
+      "seed": 42,
+      "n_chain_steps_succeeded": 50000,
+      "chain_total_time_s": 329.4126615419518,
+      "n_districts_initial": 6,
+      "n_l1_candidates": 98,
+      "n_l2_candidates": 20
+    },
+    {
+      "n_nodes": 1000,
+      "seed": 42,
+      "n_chain_steps_succeeded": 50000,
+      "chain_total_time_s": 467.9964645409491,
+      "n_districts_initial": 12,
+      "n_l1_candidates": 234,
+      "n_l2_candidates": 47
+    },
+    {
+      "n_nodes": 10000,
+      "seed": 42,
+      "n_chain_steps_succeeded": 50000,
+      "chain_total_time_s": 1642.425003875047,
+      "n_districts_initial": 35,
+      "n_l1_candidates": 1689,
+      "n_l2_candidates": 338
+    },
+    {
+      "n_nodes": 50000,
+      "seed": 42,
+      "n_chain_steps_succeeded": 50000,
+      "chain_total_time_s": 4884.743663165951,
+      "n_districts_initial": 82,
+      "n_l1_candidates": 6958,
+      "n_l2_candidates": 1392
+    }
+  ]
+}

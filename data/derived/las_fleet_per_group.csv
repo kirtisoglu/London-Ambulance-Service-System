@@ -1,0 +1,22 @@
+station_name,group_label,sector,n_dca,n_dca_op,n_fru,n_mru,n_app
+Camden,Camden Group,North Central,27,19,4,0,0
+Edmonton,Edmonton Group,North Central,32,23,6,0,0
+Friern Barnet,Friern Barnet Group,North Central,30,21,5,0,0
+Homerton,Homerton Group,North East,29,20,7,0,0
+Ilford,Ilford Group,North East,22,16,6,6,3
+Newham,Newham Group,North East,28,20,4,0,0
+Romford,Romford Group,North East,28,20,7,0,0
+Whipps Cross,Whipps Cross Group,North East,20,14,3,4,0
+Brent,Brent Group,North West,37,26,10,0,1
+Fulham,Fulham Group,North West,34,24,5,0,0
+Hanwell,Hanwell Group,North West,38,27,6,0,0
+Hillingdon,Hillingdon Group,North West,23,16,6,0,0
+Westminster,Westminster Group,North West,16,11,5,0,1
+Bromley,Bromley Group,South East,34,24,5,0,0
+Deptford,Deptford Group,South East,42,30,4,0,0
+Greenwich,Greenwich Group,South East,31,22,7,0,0
+Oval,Oval Group,South East,23,16,5,0,0
+Croydon,Croydon Group,South West,26,18,6,3,1
+New Malden,New Malden Group,South West,22,16,6,0,0
+St Helier,St Helier Group,South West,18,13,3,0,0
+Wimbledon,Wimbledon Group,South West,23,16,5,0,0

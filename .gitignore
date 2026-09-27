@@ -1,2 +1,5 @@
 data/raw/
-Implementation.md
+__pycache__/
+*.pyc
+.DS_Store
+texput.log
