@@ -1,0 +1,12 @@
+# Python 3.11+ (the runs reported in the paper used 3.11.15).
+# falcomchain is installed from the FalcomChain repository: pip install -e ../FalcomChain
+numpy>=2.0
+pandas>=2.2
+pyarrow>=15
+networkx>=3.3
+scipy>=1.13
+matplotlib>=3.9
+geopandas>=1.0
+shapely>=2.0
+pyproj>=3.6
+pyogrio>=0.9
