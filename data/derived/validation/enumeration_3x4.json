@@ -1,7 +1,9 @@
 {
   "instance": {
+    "name": "3x4",
     "rows": 3,
     "cols": 4,
+    "unit": 3,
     "w": 300.0,
     "eps": 0.15,
     "c_max": 2,
@@ -27,10 +29,10 @@
   "runs": {
     "first": {
       "steps": 200000,
-      "seconds": 201.0,
-      "acceptance_rate": 0.9666848334241671,
+      "seconds": 200.2,
+      "acceptance_rate": 0.9663498317491588,
       "rejection_causes": {
-        "super_district_below_kappa": 6663
+        "super_district_below_kappa": 6730
       },
       "visited_level1": 93,
       "feasible_level1": 93,
@@ -38,16 +40,16 @@
       "visited_joint": 119,
       "feasible_joint": 119,
       "unsound_joint_visits": 0,
-      "tv_first_vs_second_half": 0.015174511445114445,
-      "tv_to_uniform": 0.4036387923875103,
-      "tv_to_spanning_tree_law": 0.3700480004747442
+      "tv_first_vs_second_half": 0.013875389953899548,
+      "tv_to_uniform": 0.40419642958429847,
+      "tv_to_spanning_tree_law": 0.3712832570422633
     },
     "last": {
       "steps": 200000,
-      "seconds": 195.9,
-      "acceptance_rate": 0.9662598312991565,
+      "seconds": 199.3,
+      "acceptance_rate": 0.9660998304991525,
       "rejection_causes": {
-        "super_district_below_kappa": 6748
+        "super_district_below_kappa": 6780
       },
       "visited_level1": 93,
       "feasible_level1": 93,
@@ -55,16 +57,16 @@
       "visited_joint": 119,
       "feasible_joint": 119,
       "unsound_joint_visits": 0,
-      "tv_first_vs_second_half": 0.014864509345093448,
-      "tv_to_uniform": 0.40595880398756834,
-      "tv_to_spanning_tree_law": 0.36981299929973827
+      "tv_first_vs_second_half": 0.01608475324753247,
+      "tv_to_uniform": 0.40532406963110085,
+      "tv_to_spanning_tree_law": 0.3712130062997733
     },
     "middle": {
       "steps": 200000,
-      "seconds": 196.0,
-      "acceptance_rate": 0.9664748323741619,
+      "seconds": 201.1,
+      "acceptance_rate": 0.9671348356741784,
       "rejection_causes": {
-        "super_district_below_kappa": 6705
+        "super_district_below_kappa": 6573
       },
       "visited_level1": 93,
       "feasible_level1": 93,
@@ -72,41 +74,42 @@
       "visited_joint": 119,
       "feasible_joint": 119,
       "unsound_joint_visits": 0,
-      "tv_first_vs_second_half": 0.016004660246602468,
-      "tv_to_uniform": 0.4025064211342562,
-      "tv_to_spanning_tree_law": 0.3709680050747671
+      "tv_first_vs_second_half": 0.013815539655396551,
+      "tv_to_uniform": 0.40553143625933186,
+      "tv_to_spanning_tree_law": 0.3706980037247604
     }
   },
   "tv_between_starts": {
-    "first-last": 0.011640058200290997,
-    "first-middle": 0.010980054900274497,
-    "last-middle": 0.01169505847529238
+    "first-last": 0.01075505377526888,
+    "first-middle": 0.009890049450247245,
+    "last-middle": 0.011865059325296622
   },
-  "pooled_tv_to_uniform": 0.4039737940625187,
-  "pooled_tv_to_spanning_tree_law": 0.3702763349497499,
-  "max_over_min_pooled_frequency": 223.46006389776355,
+  "pooled_tv_to_uniform": 0.4049280999093168,
+  "pooled_tv_to_spanning_tree_law": 0.37097800512476736,
+  "unvisited_level1_states": 0,
+  "max_over_min_pooled_frequency": 262.3909774436091,
   "pattern_mass": {
     "(3, 3, 3, 3)": {
       "states": 15,
-      "empirical": 0.1354640106533866,
+      "empirical": 0.13507734205337693,
       "uniform": 0.16129032258064516,
       "spanning_tree_law": 0.023474178403755867,
-      "empirical_max_over_min": 1.7126033575544979
+      "empirical_max_over_min": 1.7409170633926334
     },
     "(3, 3, 6)": {
       "states": 59,
-      "empirical": 0.6446948901411174,
+      "empirical": 0.6458832294161471,
       "uniform": 0.6344086021505376,
       "spanning_tree_law": 0.3865414710485133,
-      "empirical_max_over_min": 23.834507042253524
+      "empirical_max_over_min": 24.008826125330984
     },
     "(6, 6)": {
       "states": 19,
-      "empirical": 0.21984109920549602,
+      "empirical": 0.219039428530476,
       "uniform": 0.20430107526881722,
       "spanning_tree_law": 0.5899843505477308,
-      "empirical_max_over_min": 223.46006389776355
+      "empirical_max_over_min": 262.3909774436091
     }
   },
-  "pooled_tv_to_spanning_tree_law_within_pattern": 0.1083219879002896
+  "pooled_tv_to_spanning_tree_law_within_pattern": 0.10787783143004628
 }

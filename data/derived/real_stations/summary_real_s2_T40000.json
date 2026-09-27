@@ -21,24 +21,24 @@
   },
   "init": "sectors",
   "init_attempts": 1,
-  "init_seconds": 2.7,
-  "runtime_seconds": 3287.5,
-  "steps_per_second": 12.17,
-  "acceptance_rate": 0.3825,
+  "init_seconds": 2.8,
+  "runtime_seconds": 3401.9,
+  "steps_per_second": 11.76,
+  "acceptance_rate": 0.6742,
   "rejection_causes": {
-    "cut_search_exhausted:super": 23411,
-    "super_district_below_kappa": 1284,
+    "cut_search_exhausted:super": 10694,
+    "super_district_below_kappa": 2331,
     "cut_search_exhausted:base": 6
   },
   "travel_pairs_missing_from_road_matrix": 264,
-  "travel_fallback_lookups": 277902,
+  "travel_fallback_lookups": 490234,
   "P1_range": [
-    45,
-    60
+    44,
+    61
   ],
   "P2_range": [
     5,
     27
   ],
-  "E_final": 8997272.246532898
+  "E_final": 9723059.518602982
 }

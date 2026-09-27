@@ -1,12 +1,14 @@
 {
   "experiment": "scalability",
   "paper_section": "7",
-  "ran_at": "2026-09-27T03:24:15.089745+00:00",
+  "ran_at": "2026-09-27T12:20:18.515390+00:00",
   "T_steps": 10000,
   "sizes": [
     100,
     400,
-    1000
+    1000,
+    10000,
+    50000
   ],
   "seed": 42,
   "environment": {
@@ -22,13 +24,13 @@
       "pymetis": null
     }
   },
-  "total_wall_time_s": 509.0841144370006,
+  "total_wall_time_s": 3976.9517450389994,
   "runs": [
     {
       "n_nodes": 100,
       "seed": 42,
       "n_chain_steps_succeeded": 10000,
-      "chain_total_time_s": 67.20976978100043,
+      "chain_total_time_s": 62.19310493499961,
       "n_districts_initial": 3,
       "n_l1_candidates": 29,
       "n_l2_candidates": 6
@@ -37,7 +39,7 @@
       "n_nodes": 400,
       "seed": 42,
       "n_chain_steps_succeeded": 10000,
-      "chain_total_time_s": 188.31794533100037,
+      "chain_total_time_s": 114.71731813299994,
       "n_districts_initial": 8,
       "n_l1_candidates": 98,
       "n_l2_candidates": 20
@@ -46,10 +48,28 @@
       "n_nodes": 1000,
       "seed": 42,
       "n_chain_steps_succeeded": 10000,
-      "chain_total_time_s": 252.95786012799908,
+      "chain_total_time_s": 200.57217063400003,
       "n_districts_initial": 14,
       "n_l1_candidates": 234,
       "n_l2_candidates": 47
+    },
+    {
+      "n_nodes": 10000,
+      "seed": 42,
+      "n_chain_steps_succeeded": 10000,
+      "chain_total_time_s": 837.8334900500004,
+      "n_districts_initial": 38,
+      "n_l1_candidates": 1689,
+      "n_l2_candidates": 338
+    },
+    {
+      "n_nodes": 50000,
+      "seed": 42,
+      "n_chain_steps_succeeded": 10000,
+      "chain_total_time_s": 2530.9663856380002,
+      "n_districts_initial": 89,
+      "n_l1_candidates": 6958,
+      "n_l2_candidates": 1392
     }
   ]
 }

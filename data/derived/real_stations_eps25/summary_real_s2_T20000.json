@@ -1,7 +1,7 @@
 {
   "tag": "real",
-  "seed": 1,
-  "steps": 40000,
+  "seed": 2,
+  "steps": 20000,
   "snap_every": 40,
   "max_attempts_base": 1000,
   "counting": true,
@@ -9,8 +9,8 @@
   "falcomchain_version": "0.1.0",
   "calibration": {
     "w": 10887,
-    "eps_base": 0.15,
-    "eps_super": 0.15,
+    "eps_base": 0.25,
+    "eps_super": 0.25,
     "c_min_base": 1,
     "c_max_base": 3,
     "c_min_super": 2,
@@ -20,18 +20,18 @@
     "gamma_super": 0.0
   },
   "init": "sectors",
-  "init_attempts": 1,
-  "init_seconds": 19.0,
-  "runtime_seconds": 3523.2,
-  "steps_per_second": 11.35,
-  "acceptance_rate": 0.6767,
+  "init_attempts": 2,
+  "init_seconds": 1.3,
+  "runtime_seconds": 1680.3,
+  "steps_per_second": 11.9,
+  "acceptance_rate": 0.69,
   "rejection_causes": {
-    "cut_search_exhausted:super": 10670,
-    "super_district_below_kappa": 2246,
-    "cut_search_exhausted:base": 17
+    "cut_search_exhausted:super": 5345,
+    "super_district_below_kappa": 852,
+    "cut_search_exhausted:base": 3
   },
   "travel_pairs_missing_from_road_matrix": 264,
-  "travel_fallback_lookups": 491627,
+  "travel_fallback_lookups": 251794,
   "P1_range": [
     45,
     61
@@ -40,5 +40,5 @@
     5,
     28
   ],
-  "E_final": 9914480.660945445
+  "E_final": 9450026.31506314
 }
