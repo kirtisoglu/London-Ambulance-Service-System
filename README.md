@@ -58,6 +58,11 @@ stranding a candidate-free residual).
    `s_LAS` against the ensemble) into `ensemble_real_stations.json` and the
    `fig_*.png` figures.
 
+3. Sensitivity to the tolerance (paper Section 7.4):
+   `python -m falcomchain_experiments.las.run_real_stations --seed S --steps 20000 --snap-every 40 --tag real --eps 0.25 --out-dir data/derived/real_stations_eps25`
+   for `S = 1 2 3 4`, then
+   `python -m falcomchain_experiments.las.postprocess_real_stations --in-dir data/derived/real_stations_eps25 --tag real --steps 20000`.
+
 `falcomchain_experiments/las/build_s_las.py` reconstructs the operational
 layout `s_LAS` (Appendix B of the paper); `run_cdba.py`,
 `compute_cdba_travel_times.py`, `run_chain_v3.py` and `postprocess_ensemble.py`
@@ -66,12 +71,13 @@ reference only.
 
 ### Exact-enumeration validation (paper Section 7.2.1)
 
-`python -m falcomchain_experiments.validation.enumeration --steps 200000`
-lists every feasible hierarchical state of a 3x4 grid (93 level-1 and 119
-joint states), runs three chains from very different starts and compares
-their empirical laws with each other and with the uniform and
-spanning-tree laws. Outputs: `data/derived/validation/enumeration_3x4.json`,
-`enumeration_3x4_states.json` and `fig_enumeration_3x4.{png,pdf}`;
+`python -m falcomchain_experiments.validation.enumeration --instance 3x4 --steps 200000`
+(and `--instance 4x4`) lists every feasible hierarchical state of the grid
+(3x4: 93 level-1 and 119 joint states; 4x4: 435 and 595), runs three
+chains from very different starts and compares their empirical laws with
+each other and with the uniform and spanning-tree laws. Outputs:
+`data/derived/validation/enumeration_<instance>.json`,
+`enumeration_<instance>_states.json` and `fig_enumeration_<instance>.{png,pdf}`;
 `--plot-only` redraws the figure from the saved files.
 
 ### Multi-start agreement and scalability on synthetic grids (paper Sections 7.2.2-7.2.3)
@@ -86,7 +92,7 @@ The grids and their per-grid parameters live in
 - multi-start diagnostics: `PYTHONHASHSEED=0 python run_scalability.py --sizes 10000 --steps 50000 --seed S --track-structural --snap-every 100 --out-dir results/multistart`
   for four seeds, then `python analyze_multistart.py --nodes 10000 --seeds 42 43 44 45`
   (`results/multistart/multistart_10000.json`, `figures/fig_multistart_10000.png`);
-  the 50,000-node grid uses `--steps 20000 --snap-every 50`.
+  the 50,000-node grid uses the same 30,000 steps with `--snap-every 60`.
 
 ### MILP comparison (paper Section 7.3)
 
