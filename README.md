@@ -89,10 +89,11 @@ The grids and their per-grid parameters live in
 - timing sweep: `PYTHONHASHSEED=0 python run_scalability.py --sizes 100 400 1000 10000 50000 --steps 10000 --seed 42`
   then `python analyze_scalability.py` (table `results/summary.csv`, figures
   `figures/scal_t_vs_*.png`);
-- multi-start diagnostics: `PYTHONHASHSEED=0 python run_scalability.py --sizes 10000 --steps 50000 --seed S --track-structural --snap-every 100 --out-dir results/multistart`
-  for four seeds, then `python analyze_multistart.py --nodes 10000 --seeds 42 43 44 45`
+- multi-start diagnostics: `PYTHONHASHSEED=0 python run_scalability.py --sizes 10000 --steps 30000 --seed S --track-structural --snap-every 60 --out-dir results/multistart`
+  for the seeds S = 42, 43, 44, 45, then `python analyze_multistart.py --nodes 10000 --seeds 42 43 44 45`
   (`results/multistart/multistart_10000.json`, `figures/fig_multistart_10000.png`);
-  the 50,000-node grid uses the same 30,000 steps with `--snap-every 60`.
+  the 50,000-node grid uses the same command with `--sizes 50000` (about
+  2.2 h per chain on the cloud container) and `--nodes 50000` in the analysis.
 
 ### MILP comparison (paper Section 7.3)
 
