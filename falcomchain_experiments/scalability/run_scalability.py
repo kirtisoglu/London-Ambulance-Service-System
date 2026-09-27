@@ -43,6 +43,7 @@ from functools import partial
 from pathlib import Path
 
 import networkx as nx
+import numpy as np
 
 # Make the experiment package importable
 _EXP_ROOT = Path(__file__).resolve().parent.parent
@@ -207,7 +208,8 @@ def load_grid(path: Path) -> nx.Graph:
 
 def run_one(n: int, seed: int, steps: int, results_dir: Path,
             with_l2_facility: bool = False,
-            track_structural: bool = False) -> dict:
+            track_structural: bool = False,
+            snap_every: int = 0) -> dict:
     print(f"\n=== chain run |V|={n:,} seed={seed} steps={steps:,} ===")
 
     grid_path = GUROBI_DATA / f"grid_{n}.json"
@@ -222,6 +224,7 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
     c_max_l1 = meta["c_max_l1"]
     c_min_l2 = meta["c_min_l2"]
     c_max_l2 = meta["c_max_l2"]
+    kappa_min = int(meta.get("min_l1_per_l2", 1))
 
     g = load_grid(grid_path)
     print(f"  Loaded {grid_path.name}: {g.number_of_nodes():,} nodes, "
@@ -314,6 +317,7 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
         c_min_base=c_min_l1,
         c_min_super=c_min_l2,
         c_max_super=c_max_l2,
+        min_districts_super=kappa_min,
     )
     chain = MarkovChain(
         proposal=proposal,
@@ -332,6 +336,34 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
     # catch them here, count them as failed attempts, and retry (the global
     # RNG has advanced, so the next draw differs). Cap total attempts.
     print(f"  Running {steps:,} steps (max {steps * 4:,} attempts)…")
+    # Compact snapshots of the level-1/level-2 plan for the multi-start
+    # diagnostics (forgetting curves, boundary agreement across chains).
+    node_list = sorted(g.nodes)
+    node_pos = {v: i for i, v in enumerate(node_list)}
+    edges = np.array([(node_pos[u], node_pos[v]) for u, v in g.edges()], dtype=np.int32)
+    snaps = {"step": [], "district": [], "super": [], "capacity": []}
+
+    def take_snapshot(step_no):
+        part = chain.state.partition
+        assignment = part.assignment
+        sup = part.super_assignment
+        teams = part.assignment.teams
+        dist = np.empty(len(node_list), dtype=np.int32)
+        supr = np.empty(len(node_list), dtype=np.int32)
+        cap = np.empty(len(node_list), dtype=np.int8)
+        for v in node_list:
+            d = assignment[v]
+            i = node_pos[v]
+            dist[i] = int(d)
+            supr[i] = int(sup.get(d, d))
+            cap[i] = int(teams.get(d, 1))
+        snaps["step"].append(step_no)
+        snaps["district"].append(dist)
+        snaps["super"].append(supr)
+        snaps["capacity"].append(cap)
+
+    if snap_every:
+        take_snapshot(0)
     chain.total_steps = steps * 4
     chain_iter = iter(chain)
     probe._t_last = time.perf_counter()
@@ -344,6 +376,8 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
         try:
             next(chain_iter)
             n_step += 1
+            if snap_every and n_step % snap_every == 0:
+                take_snapshot(n_step)
             if n_step % next_report == 0:
                 el = time.perf_counter() - t_chain_start
                 print(f"    {n_step:,}/{steps:,} steps  "
@@ -361,6 +395,21 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
     print(f"  Chain: {n_step:,} steps ({len(probe.records)} recorded, "
           f"{n_rejected} rejected), {n_failed:,} hard-fail {err_types} in "
           f"{t_chain:.1f}s ({t_chain / max(n_step, 1) * 1000:.2f}ms/step)")
+
+    rejection_report = chain.rejection_report()
+    print(f"  Rejections by cause: {rejection_report.get('causes')}")
+    if snap_every:
+        snap_path = results_dir / f"snap_grid_{n}_seed{seed}.npz"
+        np.savez_compressed(
+            snap_path,
+            step=np.array(snaps["step"], dtype=np.int32),
+            district=np.stack(snaps["district"]),
+            super=np.stack(snaps["super"]),
+            capacity=np.stack(snaps["capacity"]),
+            node_ids=np.array(node_list, dtype=np.int32),
+            edges=edges,
+        )
+        print(f"  Wrote {snap_path} ({len(snaps['step'])} snapshots)")
 
     out = {
         "n_nodes": n,
@@ -392,6 +441,9 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
         "n_chain_steps_hard_failed": n_failed,
         "hard_fail_error_types": err_types,
         "n_districts_initial": len(partition.parts),
+        "kappa_min": kappa_min,
+        "snap_every": snap_every,
+        "rejection_report": rejection_report,
         "steps": probe.records,
     }
     out_path = results_dir / f"grid_{n}_seed{seed}.json"
@@ -419,6 +471,9 @@ def main():
                          "cost) and per-team demand spread each step.")
     ap.add_argument("--out-dir", default="results",
                     help="results subdirectory (e.g. results/convergence).")
+    ap.add_argument("--snap-every", type=int, default=0,
+                    help="store a compact plan snapshot every N steps "
+                         "(0 = off) for the multi-start diagnostics.")
     args = ap.parse_args()
 
     if os.environ.get("PYTHONHASHSEED") != "0":
@@ -444,7 +499,8 @@ def main():
         try:
             summary.append(run_one(n, args.seed, args.steps, results_dir,
                                    with_l2_facility=args.with_l2_facility,
-                                   track_structural=args.track_structural))
+                                   track_structural=args.track_structural,
+                                   snap_every=args.snap_every))
         except RuntimeError as exc:
             print(f"  ! |V|={n} failed: {exc}")
             continue
