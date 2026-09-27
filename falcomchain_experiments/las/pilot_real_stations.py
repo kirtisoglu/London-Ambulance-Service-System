@@ -28,7 +28,7 @@ import networkx as nx
 import pandas as pd
 
 import sys
-sys.path.insert(0, "/Users/kirtisoglu/GitHub/FalcomChain")
+# falcomchain must be installed (pip install -e ../FalcomChain); no hard-coded paths.
 
 from falcomchain.graph import Graph
 from falcomchain.markovchain import MarkovChain
