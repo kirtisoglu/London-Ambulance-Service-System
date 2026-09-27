@@ -1,0 +1,24 @@
+facility_id,facility_name,facility_type,LSOA21CD,LSOA21NM,latitude,longitude,sector,notes
+GH-Camden,Camden Group HQ (Camden),group_hq,E01000887,Camden 006B,51.55457690836258,-0.1622225910576832,North Central,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Edmonton,Edmonton Group HQ (Edmonton),group_hq,E01001465,Enfield 031B,51.61914831921273,-0.0824930169649758,North Central,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Friern_Barnet,Friern Barnet Group HQ (Friern Barnet),group_hq,E01000164,Barnet 022D,51.60574593108301,-0.1531620040467537,North Central,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Homerton,Homerton Group HQ (Homerton),group_hq,E01001729,Hackney 019A,51.5487757168521,-0.0441487888860336,North East,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Ilford,Ilford Group HQ (Ilford),group_hq,E01003751,Redbridge 020A,51.576055194446454,0.1014268018655601,North East,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Newham,Newham Group HQ (Newham),group_hq,E01003523,Newham 024A,51.531042925238616,0.0566451332720444,North East,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Romford,Romford Group HQ (Romford),group_hq,E01002350,Havering 016B,51.570639713700054,0.1854859341488657,North East,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Whipps_Cross,Whipps Cross Group HQ (Whipps Cross),group_hq,E01004366,Waltham Forest 019C,51.57541757915347,0.0030556747890115,North East,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Brent,Brent Group HQ (Brent),group_hq,E01000506,Brent 014A,51.552358650055936,-0.2459163153771888,North West,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Fulham,Fulham Group HQ (Fulham),group_hq,E01001883,Hammersmith and Fulham 017D,51.4850577752992,-0.1961541116225929,North West,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Hanwell,Hanwell Group HQ (Hanwell),group_hq,E01001252,Ealing 030B,51.50751253462854,-0.335704457592746,North West,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Hillingdon,Hillingdon Group HQ (Hillingdon),group_hq,E01002412,Hillingdon 017B,51.52608,-0.46115,North West,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Westminster,Westminster Group HQ (Westminster),group_hq,E01035720,Westminster 021G,51.49056599273301,-0.1288064439607071,North West,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Bromley,Bromley Group HQ (Bromley),group_hq,E01000668,Bromley 020B,51.391759224690695,0.0312740014958141,South East,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Deptford,Deptford Group HQ (Deptford),group_hq,E01003302,Lewisham 003D,51.48031134005077,-0.0517871361755662,South East,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Greenwich,Greenwich Group HQ (Greenwich),group_hq,E01001646,Greenwich 019A,51.47217094362285,0.0466092886235643,South East,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Oval,Oval Group HQ (Oval),group_hq,E01003183,Lambeth 005E,51.47853240491452,-0.107852681799563,South East,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Croydon,Croydon Group HQ (Croydon),group_hq,E01000985,Croydon 021A,51.37991033781492,-0.0606158069171893,South West,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-New_Malden,New Malden Group HQ (New Malden),group_hq,E01002928,Kingston upon Thames 008B,51.39965738384688,-0.264481114910992,South West,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-St_Helier,St Helier Group HQ (St Helier),group_hq,E01004129,Sutton 002E,51.38591144388044,-0.1883899903395584,South West,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+GH-Wimbledon,Wimbledon Group HQ (Wimbledon),group_hq,E01003404,Merton 004D,51.41708816985075,-0.2189521478595367,South West,Group HQ from LAS-List-Of-Departments-2025; snapped to host station's LSOA centroid.
+EOC-Waterloo,Waterloo EOC,eoc,E01032582,Lambeth 036E,51.50246849428194,-0.1128035347427578,,"LAS Trust HQ, 220 Waterloo Road SE1 8SD."
+EOC-Newham,Newham EOC,eoc,E01003523,Newham 024A,51.531042925238616,0.05664513327204443,,Co-located with Newham ambulance station.
