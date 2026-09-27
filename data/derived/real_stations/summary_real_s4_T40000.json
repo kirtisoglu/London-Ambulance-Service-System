@@ -1,0 +1,44 @@
+{
+  "tag": "real",
+  "seed": 4,
+  "steps": 40000,
+  "snap_every": 40,
+  "max_attempts_base": 1000,
+  "counting": true,
+  "rule": "per_team",
+  "falcomchain_version": "0.1.0",
+  "calibration": {
+    "w": 10887,
+    "eps_base": 0.15,
+    "eps_super": 0.15,
+    "c_min_base": 1,
+    "c_max_base": 3,
+    "c_min_super": 2,
+    "c_max_super": 6,
+    "min_districts_super": 2,
+    "gamma_base": 0.0,
+    "gamma_super": 0.0
+  },
+  "init": "sectors",
+  "init_attempts": 1,
+  "init_seconds": 1.4,
+  "runtime_seconds": 3208.7,
+  "steps_per_second": 12.47,
+  "acceptance_rate": 0.384,
+  "rejection_causes": {
+    "cut_search_exhausted:super": 23293,
+    "super_district_below_kappa": 1342,
+    "cut_search_exhausted:base": 3
+  },
+  "travel_pairs_missing_from_road_matrix": 264,
+  "travel_fallback_lookups": 280019,
+  "P1_range": [
+    45,
+    62
+  ],
+  "P2_range": [
+    5,
+    28
+  ],
+  "E_final": 9530322.532637792
+}
