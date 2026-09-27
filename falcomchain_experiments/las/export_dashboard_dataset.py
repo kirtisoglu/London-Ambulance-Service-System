@@ -30,8 +30,8 @@ import time
 from functools import partial
 from pathlib import Path
 
+import os
 import sys
-sys.path.insert(0, "/Users/kirtisoglu/GitHub/FalcomChain")
 
 from falcomchain import MarkovChain, Partition, always_accept, hierarchical_recom
 from falcomchain.ensemble import EnsembleStats
@@ -40,7 +40,7 @@ from falcomchain.partition.assignment import Assignment
 from falcomchain.random import set_seed
 
 REPO = Path(__file__).resolve().parents[2]
-SITE = Path("/Users/kirtisoglu/GitHub/website/static/falcomplot")
+SITE = Path(os.environ.get("FALCOM_SITE_DIR", REPO / "data" / "derived" / "dashboard"))  # export target; override with FALCOM_SITE_DIR
 
 
 # --------------------------------------------------------------------------

@@ -7,7 +7,6 @@ import os
 import geopandas as gpd
 import pandas as pd
 
-sys.path.insert(0, "/Users/kirtisoglu/GitHub/FalcomPlot/src")
 from shapely.geometry import Point
 from falcomplot.mapping import build_basemap, add_choropleth, add_hierarchy, add_markers
 

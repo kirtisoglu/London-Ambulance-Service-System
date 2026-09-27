@@ -36,7 +36,6 @@ from pathlib import Path
 import networkx as nx
 import pandas as pd
 
-sys.path.insert(0, "/Users/kirtisoglu/GitHub/FalcomChain")
 
 from falcomchain.graph import Graph
 from falcomchain.partition import Partition

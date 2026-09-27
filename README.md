@@ -9,13 +9,17 @@ travel-time computation additionally uses `falcomtravel` and OSMnx.
 
 ## Repository layout
 
-- `data/` — raw inputs (`raw/`) and derived instance files (`derived/`),
-  including the final ensemble results and figures in `derived/chain_v3/`.
+- `data/` — raw inputs (`raw/`) and derived files (`derived/`): the
+  real-station ensemble in `derived/real_stations/`, the enumeration
+  validation in `derived/validation/`, and the earlier augmented-candidate
+  ensemble in `derived/chain_v3/`.
 - `analysis/` — instance-construction scripts (sectors, Groups, station
   catchments, demand attachment).
 - `falcomchain_experiments/las/` — the LAS case-study pipeline (see below).
-- `falcomchain_experiments/experiment1/` — detailed-balance validation on
-  synthetic grids.
+- `falcomchain_experiments/validation/` — exact-enumeration validation of
+  the sampler on a 3x4 grid.
+- `falcomchain_experiments/experiment1/` — earlier detailed-balance
+  diagnostics on synthetic grids.
 - `falcomchain_experiments/gurobi/` — MILP (Gurobi) vs FalCom comparison
   on synthetic grids, with numeric results (`solution_*.json`).
 - `falcomchain_experiments/scalability/` — runtime and convergence
@@ -23,39 +27,73 @@ travel-time computation additionally uses `falcomtravel` and OSMnx.
 - `plot_london.py` — London population/facilities overview map via
   FalcomPlot.
 
-## LAS pipeline (reproduction order)
+## Reproducing the paper's experiments
 
-Instance construction (only needed to rebuild derived data from raw):
+All experiment scripts run from the repository root with the `falcomchain`
+package installed (`pip install -e ../FalcomChain`), Python 3.12, and
+`PYTHONHASHSEED=0` for deterministic set iteration. Outputs land in
+`data/derived/<experiment>/`, which is committed for every run reported in
+the paper.
 
-1. `analysis/run_build_v2_data.py` — parse FOI PDFs into sector/borough
-   tables.
-2. `analysis/run_build_groups_v2.py` — build the 21-Group layer
-   (`lsoa_to_group.csv`).
-3. `analysis/run_apply_group_overrides.py` — apply hand-verified
-   boundary overrides.
-4. `analysis/run_build_station_catchments.py` — station catchments
-   (`lsoa_to_station.csv`).
-5. `analysis/run_calls_to_demand.py`, `analysis/run_borough_attr.py` —
-   attach demand and borough attributes to the graph.
+### London Ambulance Service on the 66 real stations (paper Section 7.4)
 
-Experiment (calibration locked 2026-07-02: capacity unit = 3-ambulance
-block, w_unit = 10,887, eps = 0.15, c1 in [1,3], c2 in [2,6] units,
-uniform cut selection):
+Calibration (locked; `falcomchain_experiments/las/calibration.py`): capacity
+unit = block of 3 ambulances, `w_unit = 10,887` calls/year, `eps = 0.15`,
+`c1 in [1, 3]`, `c2 in [2, 6]` units, `kappa = 2`, uniform cut selection.
+The candidate set is the 66 real stations; no artificial candidates are
+added (the counting predicate of the tree cut keeps the recursion from
+stranding a candidate-free residual).
 
-1. `falcomchain_experiments/las/run_cdba.py --w 10887 --cmin 1` —
-   CDBA candidate set.
-2. `falcomchain_experiments/las/compute_cdba_travel_times.py` —
-   OSM road-network travel-time matrix (needs network access).
-3. `falcomchain_experiments/las/run_chain_v3.py --seeds 1 2 3 4 --snapshots`
-   — 4-chain ensemble; `--optimizer --beta 0.05` for optimizer runs.
-4. `falcomchain_experiments/las/postprocess_ensemble.py` — ensemble
-   metrics, convergence and boundary-frequency figures, review page.
-5. `falcomchain_experiments/las/plot_ensemble_diagnostics.py`,
-   `plot_final_state_map.py`, `plot_hierarchy.py` — diagnostics and maps.
+1. `python -m falcomchain_experiments.las.run_real_stations --seed S --steps 40000 --snap-every 40 --tag real`
+   for `S = 1 2 3 4` (about one hour per chain on one core; the four
+   chains can run in parallel). Initial plans are built sector by sector
+   (`--init sectors`, the default). Each run writes
+   `summary_real_sS_T40000.json`, a per-step `trace_*.csv` and a compact
+   `snap_*.npz` of every 40th plan to `data/derived/real_stations/`.
+2. `python -m falcomchain_experiments.las.postprocess_real_stations --tag real --steps 40000`
+   computes the diagnostics reported in the paper (cross-chain KS distances,
+   split-R-hat and ESS, forgetting curves, boundary frequencies, contested
+   LSOAs, station opening frequencies and capacity mixes, Group
+   co-membership against the 21 real Groups, and the operational layout
+   `s_LAS` against the ensemble) into `ensemble_real_stations.json` and the
+   `fig_*.png` figures.
 
-`diag_debt_mode.py` is a standalone A/B diagnostic for the debt-correction
-rule (defaults reference the earlier w=3,642 calibration; its candidate
-CSV is kept in `data/derived/` for that reason).
+`falcomchain_experiments/las/build_s_las.py` reconstructs the operational
+layout `s_LAS` (Appendix B of the paper); `run_cdba.py`,
+`compute_cdba_travel_times.py`, `run_chain_v3.py` and `postprocess_ensemble.py`
+are the earlier pipeline on an augmented candidate set and are kept for
+reference only.
+
+### Exact-enumeration validation (paper Section 7.2.1)
+
+`python -m falcomchain_experiments.validation.enumeration --steps 200000`
+lists every feasible hierarchical state of a 3x4 grid (93 level-1 and 119
+joint states), runs three chains from very different starts and compares
+their empirical laws with each other and with the uniform and
+spanning-tree laws. Outputs: `data/derived/validation/enumeration_3x4.json`,
+`enumeration_3x4_states.json` and `fig_enumeration_3x4.{png,pdf}`;
+`--plot-only` redraws the figure from the saved files.
+
+### Multi-start agreement and scalability on synthetic grids (paper Sections 7.2.2-7.2.3)
+
+The grids and their per-grid parameters live in
+`falcomchain_experiments/gurobi/data/grid_{N}.json` and `.meta.json`
+(built by `gurobi/build_instances.py`). From `falcomchain_experiments/scalability/`:
+
+- timing sweep: `PYTHONHASHSEED=0 python run_scalability.py --sizes 100 400 1000 10000 50000 --steps 10000 --seed 42`
+  then `python analyze_scalability.py` (table `results/summary.csv`, figures
+  `figures/scal_t_vs_*.png`);
+- multi-start diagnostics: `PYTHONHASHSEED=0 python run_scalability.py --sizes 10000 --steps 50000 --seed S --track-structural --snap-every 100 --out-dir results/multistart`
+  for four seeds, then `python analyze_multistart.py --nodes 10000 --seeds 42 43 44 45`
+  (`results/multistart/multistart_10000.json`, `figures/fig_multistart_10000.png`);
+  the 50,000-node grid uses `--steps 20000 --snap-every 50`.
+
+### MILP comparison (paper Section 7.3)
+
+`falcomchain_experiments/gurobi/solve_milp.py` solves the exact model with
+Gurobi on `grid_100`, `grid_400` and `grid_400_dense`;
+`gurobi/run_falcom.py {100,400}` runs FalCom as an optimizer on the same
+instances. Numeric results are the `gurobi/solution_*.json` files.
 
 ## Data
 

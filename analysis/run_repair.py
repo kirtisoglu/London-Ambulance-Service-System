@@ -21,7 +21,6 @@ from pathlib import Path
 
 import networkx as nx
 
-sys.path.insert(0, "/Users/kirtisoglu/GitHub/FalcomChain")
 from falcomchain.candidates.feasibility import (
     check_facility_density,
     repair_facility_density,
