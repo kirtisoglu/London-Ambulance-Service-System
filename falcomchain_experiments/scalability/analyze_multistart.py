@@ -137,7 +137,7 @@ def main():
             axes[2].set_xlabel("step"); axes[2].set_ylabel("share of initial boundary kept"); axes[2].set_title("forgetting the start")
             axes[2].legend(fontsize=7)
         fig.suptitle(f"grid with {args.nodes:,} nodes, {len(runs)} independently started chains")
-        fig.tight_layout(); fig.savefig(FIG_DIR / f"fig_multistart_{args.nodes}.png", dpi=150)
+        fig.tight_layout(); fig.savefig(FIG_DIR / f"fig_multistart_{args.nodes}.png", dpi=300)
     except Exception as exc:  # noqa: BLE001
         out["figure_error"] = str(exc)
 

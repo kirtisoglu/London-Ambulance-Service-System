@@ -1,5 +1,5 @@
 """
-Exact-enumeration validation of the FalCom sampler on a 3 x 4 grid.
+Exact-enumeration validation of the FalCom sampler on small grids (3x4 and 4x4).
 
 Instance: 12 units of demand 100, four candidate sites, w = 300 (four units of
 capacity), eps = 0.15, c^1 in {1, 2}, c^2 in [2, 4], kappa^2_min = 2. Under
@@ -42,13 +42,35 @@ from falcomchain.partition.assignment import Assignment
 from falcomchain.random import set_seed
 from falcomchain.tree.tree import Flip
 
-ROWS, COLS = 3, 4
+# Two enumerable instances. Every level-1 district is a connected set of
+# UNIT * c nodes (c capacity units, c <= C_MAX) that contains a candidate.
+INSTANCES = {
+    "3x4": dict(rows=3, cols=4, unit=3, c_max=2, c_super=(2, 4), kappa=2,
+                candidates={(0, 0), (0, 3), (2, 1), (1, 2)}),
+    "4x4": dict(rows=4, cols=4, unit=4, c_max=2, c_super=(2, 4), kappa=2,
+                candidates={(0, 0), (0, 3), (3, 0), (3, 3), (1, 2)}),
+}
 DEMAND = 100.0
-W = 300.0
 EPS = 0.15
-C_MAX = 2
-C_MIN_SUPER, C_MAX_SUPER, KAPPA = 2, 4, 2
-CANDIDATES = {(0, 0), (0, 3), (2, 1), (1, 2)}
+# set by configure(); module-level so the chain helpers can read them
+ROWS = COLS = UNIT = C_MAX = C_MIN_SUPER = C_MAX_SUPER = KAPPA = None
+W = None
+CANDIDATES = None
+INSTANCE = "3x4"
+
+
+def configure(name: str) -> None:
+    global ROWS, COLS, UNIT, C_MAX, C_MIN_SUPER, C_MAX_SUPER, KAPPA, W, CANDIDATES, INSTANCE
+    spec = INSTANCES[name]
+    ROWS, COLS, UNIT, C_MAX = spec["rows"], spec["cols"], spec["unit"], spec["c_max"]
+    C_MIN_SUPER, C_MAX_SUPER = spec["c_super"]
+    KAPPA = spec["kappa"]
+    W = UNIT * DEMAND                     # one capacity unit = UNIT nodes of demand DEMAND
+    CANDIDATES = spec["candidates"]
+    INSTANCE = name
+
+
+configure("3x4")
 OUT_DIR = Path(__file__).resolve().parents[2] / "data/derived/validation"
 
 
@@ -77,7 +99,7 @@ def connected_sets(g, size):
 
 def enumerate_level1(g, cand):
     """All partitions into connected 3- and 6-sets that contain a candidate."""
-    pieces = [s for size in (3, 6) for s in connected_sets(g, size) if s & cand]
+    pieces = [s for size in (UNIT * c for c in range(1, C_MAX + 1)) for s in connected_sets(g, size) if s & cand]
     by_node = {n: [s for s in pieces if n in s] for n in g.nodes}
     states = set()
 
@@ -98,7 +120,7 @@ def enumerate_level2(g, state):
     """Set partitions of the districts into connected super-districts holding
     at least KAPPA districts and C_MIN_SUPER..C_MAX_SUPER units."""
     districts = sorted(state, key=sorted)
-    units = {d: len(d) // 3 for d in districts}
+    units = {d: len(d) // UNIT for d in districts}
     adj = {d: {e for e in districts if e != d and any(g.has_edge(u, v) for u in d for v in e)}
            for d in districts}
 
@@ -147,7 +169,7 @@ def spanning_tree_weight(g, state):
 def make_partition(graph, state):
     flips, teams = {}, {}
     for i, d in enumerate(sorted(state, key=sorted), start=1):
-        teams[i] = len(d) // 3
+        teams[i] = len(d) // UNIT
         for n in d:
             flips[n] = i
     flip = Flip(flips=flips, team_flips=teams, new_ids=frozenset(teams), merged_ids=frozenset())
@@ -203,8 +225,8 @@ def plot_from_json(out_dir: Path) -> None:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    rows = json.loads((out_dir / "enumeration_3x4_states.json").read_text())
-    summary = json.loads((out_dir / "enumeration_3x4.json").read_text())
+    rows = json.loads((out_dir / f"enumeration_{INSTANCE}_states.json").read_text())
+    summary = json.loads((out_dir / f"enumeration_{INSTANCE}.json").read_text())
     n1 = len(rows)
     patterns = sorted({tuple(r["sizes"]) for r in rows}, key=lambda t: (len(t), t))
     colors = {p: c for p, c in zip(patterns, ["#1f77b4", "#d62728", "#2ca02c", "#9467bd"])}
@@ -221,7 +243,7 @@ def plot_from_json(out_dir: Path) -> None:
     ax.axhline(1 / n1, color="gray", lw=0.8, ls=":", label="uniform law")
     ax.set_xscale("log"); ax.set_yscale("log")
     ax.set_xlabel("spanning-tree law"); ax.set_ylabel("sampled frequency (three chains pooled)")
-    ax.set_title(f"(a) all {n1} feasible level-1 states")
+    ax.set_title(f"(a) all {n1} feasible level-1 states, {INSTANCE} grid")
     ax.legend(fontsize=7, loc="upper left")
     ax = axes[1]
     pm = summary["pattern_mass"]
@@ -235,8 +257,8 @@ def plot_from_json(out_dir: Path) -> None:
     ax.set_ylabel("probability mass of the pattern")
     ax.set_title("(b) mass by district-size pattern")
     ax.legend(fontsize=8)
-    fig.tight_layout(); fig.savefig(out_dir / "fig_enumeration_3x4.png", dpi=160)
-    fig.savefig(out_dir / "fig_enumeration_3x4.pdf")
+    fig.tight_layout(); fig.savefig(out_dir / f"fig_enumeration_{INSTANCE}.png", dpi=300)
+    fig.savefig(out_dir / f"fig_enumeration_{INSTANCE}.pdf")
     plt.close(fig)
 
 
@@ -245,7 +267,9 @@ def main() -> int:
     ap.add_argument("--steps", type=int, default=200_000)
     ap.add_argument("--out-dir", default=str(OUT_DIR))
     ap.add_argument("--plot-only", action="store_true", help="re-draw the figure from the saved JSON files")
+    ap.add_argument("--instance", choices=sorted(INSTANCES), default="3x4")
     a = ap.parse_args()
+    configure(a.instance)
     if a.plot_only:
         plot_from_json(Path(a.out_dir))
         return 0
@@ -307,7 +331,7 @@ def main() -> int:
             "empirical": sum(pooled[s] for s in members),
             "uniform": len(members) / n1,
             "spanning_tree_law": sum(law_tree[s] for s in members),
-            "empirical_max_over_min": max(pooled[s] for s in members) / min(pooled[s] for s in members),
+            "empirical_max_over_min": max(pooled[s] for s in members) / max(min(pooled[s] for s in members), 1e-12),
         }
     law_tree_within = {}
     for pat in patterns:
@@ -316,28 +340,29 @@ def main() -> int:
         m = pattern_mass[str(pat)]["empirical"]
         for s in members:
             law_tree_within[s] = m * st_weight[s] / z
-    summary = {"instance": {"rows": ROWS, "cols": COLS, "w": W, "eps": EPS, "c_max": C_MAX,
+    summary = {"instance": {"name": INSTANCE, "rows": ROWS, "cols": COLS, "unit": UNIT, "w": W, "eps": EPS, "c_max": C_MAX,
                             "c_super": [C_MIN_SUPER, C_MAX_SUPER], "kappa": KAPPA,
                             "candidates": sorted(cand)},
                "feasible_level1": n1, "feasible_joint": n2, "district_size_patterns": {str(k): v for k, v in sizes.items()},
                "runs": results, "tv_between_starts": cross,
                "pooled_tv_to_uniform": tv(pooled, law_uniform), "pooled_tv_to_spanning_tree_law": tv(pooled, law_tree),
-               "max_over_min_pooled_frequency": max(pooled.values()) / min(pooled.values()),
+               "unvisited_level1_states": int(sum(1 for v in pooled.values() if v == 0)),
+               "max_over_min_pooled_frequency": max(pooled.values()) / min(v for v in pooled.values() if v > 0),
                "pattern_mass": pattern_mass,
                "pooled_tv_to_spanning_tree_law_within_pattern": tv(pooled, law_tree_within)}
-    (out_dir / "enumeration_3x4.json").write_text(json.dumps(summary, indent=2))
+    (out_dir / f"enumeration_{INSTANCE}.json").write_text(json.dumps(summary, indent=2))
     # per-state table for a figure
     rows = []
     for s in states1:
         rows.append({"sizes": sorted(len(d) for d in s), "spanning_tree_weight": st_weight[s],
                      "law_tree": law_tree[s], "pooled_empirical": pooled[s],
                      **{f"emp_{n}": empirical[n].get(s, 0.0) for n in names}})
-    (out_dir / "enumeration_3x4_states.json").write_text(json.dumps(rows))
+    (out_dir / f"enumeration_{INSTANCE}_states.json").write_text(json.dumps(rows))
     try:
         plot_from_json(out_dir)
     except Exception as exc:  # noqa: BLE001
         summary["figure_error"] = str(exc)
-        (out_dir / "enumeration_3x4.json").write_text(json.dumps(summary, indent=2))
+        (out_dir / f"enumeration_{INSTANCE}.json").write_text(json.dumps(summary, indent=2))
     print(json.dumps({k: v for k, v in summary.items() if k != "runs"}, indent=1), flush=True)
     return 0
 

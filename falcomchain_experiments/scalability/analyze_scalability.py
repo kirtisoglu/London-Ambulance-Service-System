@@ -172,7 +172,7 @@ def main():
                     bbox=dict(boxstyle="round,pad=0.4",
                               facecolor="white", edgecolor="lightgray"))
             fig.tight_layout()
-            fig.savefig(FIG_DIR / fname, dpi=150)
+            fig.savefig(FIG_DIR / fname, dpi=300)
             plt.close(fig)
             print(f"Wrote {FIG_DIR / fname}")
     except ImportError:

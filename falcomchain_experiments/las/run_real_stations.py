@@ -338,7 +338,12 @@ def main() -> int:
     ap.add_argument("--out-dir", default=str(OUT_DIR))
     ap.add_argument("--tag", default="real")
     ap.add_argument("--init", choices=["sectors", "global"], default="sectors")
+    ap.add_argument("--eps", type=float, default=None,
+                    help="override the calibrated tolerance at both levels (sensitivity runs)")
     a = ap.parse_args()
+    if a.eps is not None:
+        global EPS_BASE, EPS_SUPER
+        EPS_BASE = EPS_SUPER = float(a.eps)
     run(a.seed, a.steps, a.snap_every, a.max_attempts, Path(a.out_dir), a.tag, init=a.init)
     return 0
 

@@ -277,7 +277,7 @@ def main() -> int:
         axh.set_title("post-burn-in", fontsize=9)
     fig.suptitle(f"Real-station London chains, T={a.steps:,}, burn-in {burn_in:,} (shaded)")
     fig.tight_layout()
-    fig.savefig(out_dir / "fig_traces.png", dpi=140)
+    fig.savefig(out_dir / "fig_traces.png", dpi=300)
     plt.close(fig)
 
     # ---------------- 2. forgetting the initial plan ----------------
@@ -298,7 +298,7 @@ def main() -> int:
     ax.set_ylim(0, 1)
     ax.legend()
     fig.tight_layout()
-    fig.savefig(out_dir / "fig_forgetting.png", dpi=140)
+    fig.savefig(out_dir / "fig_forgetting.png", dpi=300)
     plt.close(fig)
     out["forgetting_share_at_end"] = {s: v["share"][-1] for s, v in forgetting.items()}
     # an independent random plan of the same family shares about this much:
@@ -379,7 +379,7 @@ def main() -> int:
     axes[1].set_xticks(range(n_st))
     axes[1].set_xticklabels(names, rotation=90, fontsize=6)
     fig.tight_layout()
-    fig.savefig(out_dir / "fig_stations.png", dpi=140)
+    fig.savefig(out_dir / "fig_stations.png", dpi=300)
     plt.close(fig)
 
     # groups: co-membership vs the 21 real Groups
@@ -421,7 +421,7 @@ def main() -> int:
     fig.colorbar(im, ax=ax, label="share of plans with both stations in one super-district")
     ax.set_title("Station co-membership; stations ordered by their real LAS Group")
     fig.tight_layout()
-    fig.savefig(out_dir / "fig_groups.png", dpi=140)
+    fig.savefig(out_dir / "fig_groups.png", dpi=300)
     plt.close(fig)
 
     # ---------------- 4. s_LAS against the ensemble ----------------
@@ -445,6 +445,7 @@ def main() -> int:
         if s >= 0:
             slas_load[int(s)] += demand[idx[n]]
     W = runs[0]["summary"]["calibration"]["w"]
+    EPS = float(runs[0]["summary"]["calibration"].get("eps_base", 0.15))
     slas_units = {inst["lsoa_station"].get(inst["lsoa_of"][s]): v / W for s, v in slas_load.items()}
     # ensemble drive-time metrics per snapshot (level-1 leg)
     tt_matrix = np.full((n_st, len(node_ids)), np.nan)
@@ -469,7 +470,8 @@ def main() -> int:
         "ems_percentile_in_ensemble": {k: pct(v, ens[k]) for k, v in slas_ems.items()},
         "station_load_in_units_range": [float(min(slas_units.values())), float(max(slas_units.values()))],
         "stations_outside_unit_window_share": float(np.mean([
-            not any(abs(u - c) <= 0.15 * c for c in (1, 2, 3)) for u in slas_units.values()])),
+            not any(abs(u - c) <= EPS * c for c in (1, 2, 3)) for u in slas_units.values()])),
+        "eps": EPS,
     }
     out["ensemble_ems"] = {k: {"mean": float(np.mean(v)), "q05": float(np.quantile(v, 0.05)),
                                "q95": float(np.quantile(v, 0.95))} for k, v in ens.items()}
@@ -488,7 +490,7 @@ def main() -> int:
     axes[0].legend()
     fig.suptitle("The operational layout s_LAS against the real-station ensemble")
     fig.tight_layout()
-    fig.savefig(out_dir / "fig_slas.png", dpi=140)
+    fig.savefig(out_dir / "fig_slas.png", dpi=300)
     plt.close(fig)
 
     # ---------------- 5. maps ----------------
@@ -505,7 +507,7 @@ def main() -> int:
             sx = [inst["xy"][n][0] for n in station_nodes]; sy = [inst["xy"][n][1] for n in station_nodes]
             ax.scatter(sx, sy, s=12, c="cyan", edgecolors="k", linewidths=0.4, zorder=5)
             ax.set_axis_off(); ax.set_title("Contested LSOAs (stations in cyan)")
-            fig.tight_layout(); fig.savefig(out_dir / "fig_contested.png", dpi=150); plt.close(fig)
+            fig.tight_layout(); fig.savefig(out_dir / "fig_contested.png", dpi=300); plt.close(fig)
 
             fig, axes = plt.subplots(1, 2, figsize=(15, 6.5))
             segs = np.array([[inst["xy"][node_ids[u]], inst["xy"][node_ids[v]]] for u, v in edges])
@@ -517,7 +519,7 @@ def main() -> int:
                 ax.add_collection(lc)
                 ax.set_axis_off(); ax.set_title(title)
             fig.colorbar(lc, ax=axes, shrink=0.6, label="share of plans in which the edge is cut")
-            fig.savefig(out_dir / "fig_boundary_freq.png", dpi=150); plt.close(fig)
+            fig.savefig(out_dir / "fig_boundary_freq.png", dpi=300); plt.close(fig)
         except Exception as exc:   # maps are optional
             out["map_error"] = f"{type(exc).__name__}: {exc}"
 
