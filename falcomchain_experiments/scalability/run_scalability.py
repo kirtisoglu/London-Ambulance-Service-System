@@ -209,11 +209,11 @@ def load_grid(path: Path) -> nx.Graph:
 def run_one(n: int, seed: int, steps: int, results_dir: Path,
             with_l2_facility: bool = False,
             track_structural: bool = False,
-            snap_every: int = 0) -> dict:
+            snap_every: int = 0, variant: str = "") -> dict:
     print(f"\n=== chain run |V|={n:,} seed={seed} steps={steps:,} ===")
 
-    grid_path = GUROBI_DATA / f"grid_{n}.json"
-    meta_path = GUROBI_DATA / f"grid_{n}.meta.json"
+    grid_path = GUROBI_DATA / f"grid_{n}{variant}.json"
+    meta_path = GUROBI_DATA / f"grid_{n}{variant}.meta.json"
     meta = json.load(open(meta_path))
 
     # Per-grid parameters — the single source of truth.
@@ -399,7 +399,7 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
     rejection_report = chain.rejection_report()
     print(f"  Rejections by cause: {rejection_report.get('causes')}")
     if snap_every:
-        snap_path = results_dir / f"snap_grid_{n}_seed{seed}.npz"
+        snap_path = results_dir / f"snap_grid_{n}{variant}_seed{seed}.npz"
         np.savez_compressed(
             snap_path,
             step=np.array(snaps["step"], dtype=np.int32),
@@ -443,10 +443,11 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
         "n_districts_initial": len(partition.parts),
         "kappa_min": kappa_min,
         "snap_every": snap_every,
+        "variant": variant,
         "rejection_report": rejection_report,
         "steps": probe.records,
     }
-    out_path = results_dir / f"grid_{n}_seed{seed}.json"
+    out_path = results_dir / f"grid_{n}{variant}_seed{seed}.json"
     with open(out_path, "w") as f:
         json.dump(out, f)
     print(f"  Wrote {out_path}")
@@ -471,6 +472,9 @@ def main():
                          "cost) and per-team demand spread each step.")
     ap.add_argument("--out-dir", default="results",
                     help="results subdirectory (e.g. results/convergence).")
+    ap.add_argument("--variant", default="",
+                    help="instance-name suffix, e.g. _w2000 loads grid_{n}_w2000.json "
+                         "and names the outputs accordingly.")
     ap.add_argument("--snap-every", type=int, default=0,
                     help="store a compact plan snapshot every N steps "
                          "(0 = off) for the multi-start diagnostics.")
@@ -500,7 +504,8 @@ def main():
             summary.append(run_one(n, args.seed, args.steps, results_dir,
                                    with_l2_facility=args.with_l2_facility,
                                    track_structural=args.track_structural,
-                                   snap_every=args.snap_every))
+                                   snap_every=args.snap_every,
+                                   variant=args.variant))
         except RuntimeError as exc:
             print(f"  ! |V|={n} failed: {exc}")
             continue

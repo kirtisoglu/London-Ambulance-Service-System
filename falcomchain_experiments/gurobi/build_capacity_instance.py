@@ -103,36 +103,23 @@ def build():
     print(f"  base: {g.number_of_nodes()} nodes, peaks={peak_ids} @ {d_peak} "
           f"(gap {gap_lo:.0f}-{gap_hi:.0f}), total demand={total_d:,}")
 
-    # 3. CDBA + greedy repair for Assumption 6.1 -------------------------
-    V_max = (1 - eps) * w
-    d_max = max(1, int(V_max // d_max_base) - 1)
-    cdba_added = cdba_two_phase(g, V_max=V_max, d_max=d_max, log=False)
-    chk = check_facility_density(g, demand_target=w, epsilon=eps,
-                                 c_min=SPEC["c_min_l1"])
-    greedy_added = []
-    if not chk.passes:
-        greedy_added = repair_facility_density(
-            g, demand_target=w, epsilon=eps, c_min=SPEC["c_min_l1"],
-            strategy="fast_center") or []
-    chk = check_facility_density(g, demand_target=w, epsilon=eps,
-                                 c_min=SPEC["c_min_l1"])
-    assert chk.passes, "Assumption 6.1 not satisfied after repair"
-    n_l1 = sum(1 for _, d in g.nodes(data=True) if d.get("candidate"))
-    # peaks must remain candidates after repair
-    for pid in peak_ids:
-        assert g.nodes[pid]["candidate"], f"peak {pid} lost candidate flag"
-    print(f"  repair: +{len(cdba_added)} CDBA +{len(greedy_added)} greedy "
-          f"=> L1={n_l1}; Assumption 6.1 worst={chk.worst_demand:.0f} "
-          f"< threshold={chk.threshold:.0f}")
-
-    # 4. L2 super-candidates: fixed-seed subset of L1 (peaks forced in) ---
-    n_l2 = max(1, round(SPEC["l2_ratio"] * n_l1))
-    cand_ids = sorted(node for node, d in g.nodes(data=True)
-                      if d.get("candidate"))
-    rng = random.Random(seed)
-    super_set = set(rng.sample(cand_ids, k=n_l2)) | set(peak_ids)
+    # 3. Sparse candidates (the paper's regime): ceil(1.5 k) sites uniformly at
+    #    random with the grid_400 draw, peaks forced in, F2 = F1, no repair.
+    import math
+    k_teams = math.ceil(total_d / w)
+    n_cand = math.ceil(1.5 * k_teams)
+    rng = random.Random(seed * 1000 + 7)
+    chosen = set(rng.sample(sorted(g.nodes()), k=n_cand)) | set(peak_ids)
     for node, d in g.nodes(data=True):
-        d["super_candidate"] = 1 if node in super_set else 0
+        d["candidate"] = 1 if node in chosen else 0
+        d["candidate_artificial"] = 0
+        d["super_candidate"] = d["candidate"]
+    n_l1 = n_l2 = len(chosen)
+    chk = check_facility_density(g, demand_target=w, epsilon=eps,
+                                 c_min=SPEC["c_min_l1"])
+    cdba_added, greedy_added, V_max, d_max = [], [], None, None
+    print(f"  sparse: L1 = L2 = {n_l1} sites (1.5 per team, k={k_teams}, peaks forced); "
+          f"Assumption 6.1 {'holds' if chk.passes else 'does not hold'}")
     print(f"  L2: {len(super_set)} super-candidates (incl. {len(peak_ids)} peaks)")
 
     # 5. serialise + meta -------------------------------------------------
@@ -165,7 +152,7 @@ def build():
         "k_teams_coverage": int(k_teams),
         "forces_capacity_2": True,
         "c_max_1_infeasible_by_construction": True,
-        "repair": "cdba_two_phase + fast_center patch",
+        "repair": "none", "regime": "sparse", "candidates_per_team": 1.5,
         "cdba_V_max": V_max, "cdba_d_max": d_max,
         "assumption_6_1_passes": True,
         "assumption_6_1_threshold": float(chk.threshold),

@@ -84,7 +84,11 @@ each other and with the uniform and spanning-tree laws. Outputs:
 
 The grids and their per-grid parameters live in
 `falcomchain_experiments/gurobi/data/grid_{N}.json` and `.meta.json`
-(built by `gurobi/build_instances.py`). From `falcomchain_experiments/scalability/`:
+(built by `PYTHONHASHSEED=0 python gurobi/build_instances.py`, sparse regime:
+1.5 candidate sites per team, `F2 = F1`, no augmentation; the augmented
+instances of the first draft are archived under `gurobi/data/augmented/`,
+their results under `scalability/results/augmented/` and
+`scalability/results/multistart_augmented/`). From `falcomchain_experiments/scalability/`:
 
 - timing sweep: `PYTHONHASHSEED=0 python run_scalability.py --sizes 100 400 1000 10000 50000 --steps 10000 --seed 42`
   then `python analyze_scalability.py` (table `results/summary.csv`, figures
@@ -93,9 +97,14 @@ The grids and their per-grid parameters live in
   for the seeds S = 42, 43, 44, 45, then `python analyze_multistart.py --nodes 10000 --seeds 42 43 44 45`
   (`results/multistart/multistart_10000.json`, `figures/fig_multistart_10000.png`);
   the 50,000-node grid uses the same command with `--sizes 50000` (about
-  2.2 h per chain on the cloud container) and `--nodes 50000` in the analysis.
+  2.2 h per chain on the cloud container) and `--nodes 50000` in the analysis;
+- fixed-workload check (Section 7.2.3): `PYTHONHASHSEED=0 python run_scalability.py --sizes 10000 --variant _w2000 --steps 3000 --seed 42 --out-dir results/fixed_w`
+  on `grid_10000_w2000` (w = 2,000, about 500 teams).
 
 ### MILP comparison (paper Section 7.3)
+
+`gurobi/RUNBOOK.md` is the step-by-step procedure (Gurobi license needed) for
+the sparse instances; `gurobi/summarize_milp.py` collects its outputs.
 
 `falcomchain_experiments/gurobi/solve_milp.py` solves the exact model with
 Gurobi on `grid_100`, `grid_400` and `grid_400_dense`;
