@@ -1,0 +1,99 @@
+=== Solving §3 MILP for grid_100.json (obj=median, eps_l1=0.15, eps_l2=0.15, c_l1 in [1, 2], c_l2 in [2, 5], contiguity=none) ===
+  |V|=100, |E|=180, |F^1|=8, |F^2|=8, total demand=9,897
+Set parameter Username
+Set parameter LicenseID to value 2761897
+Academic license - for non-commercial use only - expires 2027-01-07
+Set parameter LogToConsole to value 1
+Set parameter MIPGap to value 1e-06
+Set parameter Seed to value 0
+Set parameter Threads to value 4
+  WARNING: contiguity disabled
+Set parameter TimeLimit to value 3600
+Gurobi Optimizer version 13.0.2 build v13.0.2rc1 (mac64[arm] - Darwin 23.6.0 23G93)
+
+CPU model: Apple M3 Pro
+Thread count: 11 physical cores, 11 logical processors, using up to 4 threads
+
+Non-default parameters:
+TimeLimit  3600
+MIPGap  1e-06
+Threads  4
+
+Optimize a model with 6882 rows, 1696 columns and 24536 nonzeros (Min)
+Model fingerprint: 0xf8bab949
+Model has 1584 linear objective coefficients
+Variable types: 0 continuous, 1696 integer (1680 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+03]
+  Objective range  [8e+01, 2e+03]
+  Bounds range     [1e+00, 5e+00]
+  RHS range        [1e+00, 5e+00]
+
+Presolve removed 80 rows and 16 columns
+Presolve time: 0.02s
+Presolved: 6802 rows, 1680 columns, 24440 nonzeros
+Variable types: 0 continuous, 1680 integer (1664 binary)
+Found heuristic solution: objective 98898.000000
+
+Root relaxation: objective 5.019597e+04, 965 iterations, 0.02 seconds (0.06 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 50195.9681    0  362 98898.0000 50195.9681  49.2%     -    0s
+H    0     0                    79600.000000 50195.9681  36.9%     -    0s
+H    0     0                    79572.000000 50195.9681  36.9%     -    0s
+H    0     0                    79465.000000 50195.9681  36.8%     -    0s
+H    0     0                    78879.000000 50195.9681  36.4%     -    0s
+H    0     0                    78825.000000 50195.9681  36.3%     -    0s
+H    0     0                    78090.000000 50195.9681  35.7%     -    0s
+H    0     0                    78056.000000 50195.9681  35.7%     -    0s
+H    0     0                    77959.000000 50195.9681  35.6%     -    0s
+H    0     0                    77953.000000 50195.9681  35.6%     -    0s
+H    0     0                    77950.000000 50195.9681  35.6%     -    0s
+H    0     0                    69395.000000 56148.1408  19.1%     -    0s
+H    0     0                    69257.000000 56148.1408  18.9%     -    0s
+     0     0 56148.1408    0  467 69257.0000 56148.1408  18.9%     -    0s
+H    0     0                    69010.000000 56615.9911  18.0%     -    0s
+H    0     0                    69005.000000 56615.9911  18.0%     -    0s
+     0     0 56615.9911    0  475 69005.0000 56615.9911  18.0%     -    0s
+     0     0 56651.1715    0  470 69005.0000 56651.1715  17.9%     -    0s
+     0     0 56652.1053    0  472 69005.0000 56652.1053  17.9%     -    0s
+H    0     0                    68998.000000 56652.1053  17.9%     -    0s
+H    0     0                    68985.000000 56652.1053  17.9%     -    0s
+H    0     0                    62162.000000 60899.1255  2.03%     -    0s
+H    0     0                    61889.000000 60899.1255  1.60%     -    0s
+H    0     0                    61884.000000 60899.1255  1.59%     -    0s
+     0     0 61151.3196    0  529 61884.0000 61151.3196  1.18%     -    0s
+     0     0 61632.4778    0  529 61884.0000 61632.4778  0.41%     -    0s
+     0     0 61632.4778    0  506 61884.0000 61632.4778  0.41%     -    0s
+     0     0 61632.7839    0  486 61884.0000 61632.7839  0.41%     -    0s
+     0     0 61632.7839    0  520 61884.0000 61632.7839  0.41%     -    0s
+     0     0 61632.7839    0  382 61884.0000 61632.7839  0.41%     -    0s
+     0     0 61884.0000    0  418 61884.0000 61884.0000  0.00%     -    0s
+
+Cutting planes:
+  Learned: 4
+  Gomory: 5
+  Lift-and-project: 1
+  Cover: 25
+  Implied bound: 123
+  Clique: 184
+  MIR: 35
+  StrongCG: 3
+  Zero half: 8
+  Network: 12
+  RLT: 19
+  Relax-and-lift: 3
+  BQP: 10
+
+Explored 1 nodes (3774 simplex iterations) in 0.66 seconds (1.21 work units)
+Thread count was 4 (of 11 available processors)
+
+Solution count 10: 61884 61889 62162 ... 77950
+
+Optimal solution found (tolerance 1.00e-06)
+Best objective 6.188400000000e+04, best bound 6.188400000000e+04, gap 0.0000%
+
+Status: 2   wall: 0.67s   lazy cuts added: 0
+Wrote /Users/kirtisoglu/GitHub/London-Ambulance-Service-System/falcomchain_experiments/gurobi/solution_100_median.json

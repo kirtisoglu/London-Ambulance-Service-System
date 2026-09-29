@@ -1,0 +1,86 @@
+=== Solving §3 MILP for grid_100.json (obj=median, eps_l1=0.15, eps_l2=0.15, c_l1 in [1, 2], c_l2 in [2, 5], contiguity=shir) ===
+  |V|=100, |E|=180, |F^1|=8, |F^2|=8, total demand=9,897
+Set parameter Username
+Set parameter LicenseID to value 2761897
+Academic license - for non-commercial use only - expires 2027-01-07
+Set parameter LogToConsole to value 1
+Set parameter MIPGap to value 1e-06
+Set parameter Seed to value 0
+Set parameter Threads to value 4
+  Adding SHIR contiguity (|F^1| x |E| x 2 = 2,880 flow vars)
+Set parameter TimeLimit to value 3600
+Gurobi Optimizer version 13.0.2 build v13.0.2rc1 (mac64[arm] - Darwin 23.6.0 23G93)
+
+CPU model: Apple M3 Pro
+Thread count: 11 physical cores, 11 logical processors, using up to 4 threads
+
+Non-default parameters:
+TimeLimit  3600
+MIPGap  1e-06
+Threads  4
+
+Optimize a model with 10562 rows, 4576 columns and 37640 nonzeros (Min)
+Model fingerprint: 0x879fd00e
+Model has 1584 linear objective coefficients
+Variable types: 2880 continuous, 1696 integer (1680 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+03]
+  Objective range  [8e+01, 2e+03]
+  Bounds range     [1e+00, 1e+02]
+  RHS range        [1e+00, 5e+00]
+
+Presolve removed 80 rows and 16 columns
+Presolve time: 0.03s
+Presolved: 10482 rows, 4560 columns, 37544 nonzeros
+Variable types: 2880 continuous, 1680 integer (1664 binary)
+
+Root relaxation: objective 5.019609e+04, 1422 iterations, 0.04 seconds (0.12 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 50196.0863    0  367          - 50196.0863      -     -    0s
+H    0     0                    63703.000000 53432.4313  16.1%     -    0s
+H    0     0                    63589.000000 53432.4313  16.0%     -    0s
+     0     0 53432.4313    0  439 63589.0000 53432.4313  16.0%     -    0s
+H    0     0                    62626.000000 53432.5841  14.7%     -    0s
+     0     0 56308.8354    0  481 62626.0000 56308.8354  10.1%     -    0s
+     0     0 56599.6752    0  482 62626.0000 56599.6752  9.62%     -    0s
+     0     0 58011.4992    0  491 62626.0000 58011.4992  7.37%     -    0s
+     0     0 58011.4992    0  485 62626.0000 58011.4992  7.37%     -    0s
+     0     0 58011.4992    0  486 62626.0000 58011.4992  7.37%     -    0s
+H    0     0                    61989.000000 60207.9084  2.87%     -    0s
+H    0     0                    61884.000000 60207.9084  2.71%     -    0s
+     0     0 60956.3801    0  507 61884.0000 60956.3801  1.50%     -    0s
+     0     0 61014.9275    0  530 61884.0000 61014.9275  1.40%     -    0s
+     0     0 61059.9168    0  529 61884.0000 61059.9168  1.33%     -    0s
+     0     0 61059.9556    0  535 61884.0000 61059.9556  1.33%     -    0s
+     0     0 61060.0099    0  539 61884.0000 61060.0099  1.33%     -    0s
+     0     0 61060.0099    0  543 61884.0000 61060.0099  1.33%     -    0s
+
+Cutting planes:
+  Learned: 3
+  Gomory: 3
+  Cover: 74
+  Implied bound: 493
+  Clique: 213
+  MIR: 59
+  StrongCG: 6
+  Flow cover: 139
+  Zero half: 16
+  Network: 31
+  RLT: 67
+  Relax-and-lift: 39
+  BQP: 34
+  PSD: 1
+
+Explored 1 nodes (4927 simplex iterations) in 1.05 seconds (1.87 work units)
+Thread count was 4 (of 11 available processors)
+
+Solution count 5: 61884 61989 62626 ... 63703
+
+Optimal solution found (tolerance 1.00e-06)
+Best objective 6.188400000000e+04, best bound 6.188400000000e+04, gap 0.0000%
+
+Status: 2   wall: 1.05s   lazy cuts added: 0
+Wrote /Users/kirtisoglu/GitHub/London-Ambulance-Service-System/falcomchain_experiments/gurobi/solution_100_median.json

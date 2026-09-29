@@ -1,0 +1,184 @@
+{
+  "rows": [
+    {
+      "instance": "100",
+      "n_nodes": 100,
+      "k_teams": 5,
+      "n_l1_candidates": 8,
+      "regime": "sparse",
+      "milp": {
+        "shir": {
+          "file": "solution_100_median_shir.json",
+          "obj": 61884.0,
+          "l1_cost": 23050.0,
+          "l2_cost": 38834.0,
+          "mip_gap": 0.0,
+          "wall_time_s": 1.052885583601892,
+          "n_open_l1": 5,
+          "n_open_l2": 2,
+          "params": {
+            "w": 2000,
+            "eps_l1": 0.15,
+            "eps_l2": 0.15,
+            "c_min_l1": 1,
+            "c_max_l1": 2,
+            "c_min_l2": 2,
+            "c_max_l2": 5,
+            "min_l1_per_l2": 2,
+            "contiguity": "shir"
+          }
+        },
+        "noshir": {
+          "file": "solution_100_median_noshir.json",
+          "obj": 61884.0,
+          "l1_cost": 23050.0,
+          "l2_cost": 38834.0,
+          "mip_gap": 0.0,
+          "wall_time_s": 0.6672424171119928,
+          "n_open_l1": 5,
+          "n_open_l2": 2,
+          "params": {
+            "w": 2000,
+            "eps_l1": 0.15,
+            "eps_l2": 0.15,
+            "c_min_l1": 1,
+            "c_max_l1": 2,
+            "c_min_l2": 2,
+            "c_max_l2": 5,
+            "min_l1_per_l2": 2,
+            "contiguity": "none"
+          }
+        }
+      },
+      "falcom": {
+        "obj": 62830.0,
+        "R1": 23048.0,
+        "R2": 39782.0,
+        "wall_time_s": 15.31347450055182,
+        "params": {
+          "demand_target_w": 2000,
+          "epsilon_l1": 0.15,
+          "epsilon_l2": 0.15,
+          "c_max_l1": 2,
+          "c_max_l2": 5,
+          "rule": "per_team",
+          "chain_steps": 10000,
+          "seed": 42,
+          "cut_selection": "uniform",
+          "accept_rule": "simulated_annealing"
+        },
+        "multistart_best": 62427.0,
+        "multistart_median": 62980.0,
+        "multistart_n_seeds": 8,
+        "multistart_total_wall_s": 122.92966770753264
+      },
+      "falcom_over_milp_pct": 0.8774481287570293
+    },
+    {
+      "instance": "400",
+      "n_nodes": 400,
+      "k_teams": 10,
+      "n_l1_candidates": 15,
+      "regime": "sparse",
+      "milp": {
+        "shir": {
+          "file": "solution_400_median_shir.json",
+          "obj": 352810.0,
+          "l1_cost": 154695.0,
+          "l2_cost": 198115.0,
+          "mip_gap": 0.0,
+          "wall_time_s": 830.1472283750772,
+          "n_open_l1": 10,
+          "n_open_l2": 5,
+          "params": {
+            "w": 4000,
+            "eps_l1": 0.15,
+            "eps_l2": 0.15,
+            "c_min_l1": 1,
+            "c_max_l1": 2,
+            "c_min_l2": 2,
+            "c_max_l2": 5,
+            "min_l1_per_l2": 2,
+            "contiguity": "shir"
+          }
+        },
+        "noshir": {
+          "file": "solution_400_median_noshir.json",
+          "obj": 352785.0,
+          "l1_cost": 154485.0,
+          "l2_cost": 198300.0,
+          "mip_gap": 0.0,
+          "wall_time_s": 244.58551229164004,
+          "n_open_l1": 10,
+          "n_open_l2": 5,
+          "params": {
+            "w": 4000,
+            "eps_l1": 0.15,
+            "eps_l2": 0.15,
+            "c_min_l1": 1,
+            "c_max_l1": 2,
+            "c_min_l2": 2,
+            "c_max_l2": 5,
+            "min_l1_per_l2": 2,
+            "contiguity": "none"
+          }
+        }
+      },
+      "falcom": {
+        "obj": 394055.0,
+        "R1": 174052.0,
+        "R2": 220003.0,
+        "wall_time_s": 26.960386458784342,
+        "params": {
+          "demand_target_w": 4000,
+          "epsilon_l1": 0.15,
+          "epsilon_l2": 0.15,
+          "c_max_l1": 2,
+          "c_max_l2": 5,
+          "rule": "per_team",
+          "chain_steps": 10000,
+          "seed": 42,
+          "cut_selection": "uniform",
+          "accept_rule": "simulated_annealing"
+        },
+        "multistart_best": 379300.0,
+        "multistart_median": 398319.0,
+        "multistart_n_seeds": 8,
+        "multistart_total_wall_s": 238.12939162459224
+      },
+      "falcom_over_milp_pct": 7.508290581332728
+    },
+    {
+      "instance": "400_dense",
+      "n_nodes": 400,
+      "k_teams": 14,
+      "n_l1_candidates": 23,
+      "regime": "sparse",
+      "milp": {
+        "shir": {
+          "file": "solution_400_dense_median_shir.json",
+          "obj": 316234.0,
+          "l1_cost": 132823.0,
+          "l2_cost": 183411.0,
+          "mip_gap": 0.0,
+          "wall_time_s": 1454.6650385409594,
+          "n_open_l1": 12,
+          "n_open_l2": 6,
+          "params": {
+            "w": 4000,
+            "eps_l1": 0.15,
+            "eps_l2": 0.15,
+            "c_min_l1": 1,
+            "c_max_l1": 2,
+            "c_min_l2": 2,
+            "c_max_l2": 5,
+            "min_l1_per_l2": 2,
+            "contiguity": "shir"
+          }
+        }
+      },
+      "falcom": null,
+      "falcom_over_milp_pct": null
+    }
+  ]
+}

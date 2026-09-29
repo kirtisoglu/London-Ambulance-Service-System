@@ -1,0 +1,59 @@
+{
+  "n_nodes": 400,
+  "seed": 43,
+  "derived_from": "grid_400",
+  "rows": 20,
+  "cols": 20,
+  "n_edges": 760,
+  "total_demand": 52236,
+  "d_max_node": 5600,
+  "d_max_baseline": 300,
+  "hotspots": [
+    {
+      "col": 5,
+      "row": 5,
+      "node": 105
+    },
+    {
+      "col": 14,
+      "row": 14,
+      "node": 294
+    }
+  ],
+  "rho_peak": 1.4,
+  "d_peak": 5600,
+  "capacity_gap": [
+    4600.0,
+    6800.0
+  ],
+  "halo_demand": 300,
+  "rho": 0.05,
+  "n_l1_real": 23,
+  "n_l1_candidates": 23,
+  "n_l1_artificial": 0,
+  "n_l2_candidates": 23,
+  "demand_target_w": 4000,
+  "epsilon_l1": 0.15,
+  "epsilon_l2": 0.15,
+  "c_min_l1": 1,
+  "c_max_l1": 2,
+  "c_min_l2": 2,
+  "c_max_l2": 5,
+  "min_l1_per_l2": 2,
+  "k_teams": 14,
+  "k_teams_coverage": 14,
+  "forces_capacity_2": true,
+  "c_max_1_infeasible_by_construction": true,
+  "repair": "none",
+  "regime": "sparse",
+  "candidates_per_team": 1.5,
+  "cdba_V_max": null,
+  "cdba_d_max": null,
+  "assumption_6_1_passes": false,
+  "assumption_6_1_threshold": 3400.0,
+  "assumption_6_1_worst_demand": 38927.0,
+  "grid_sha256": "202715e95aa2ec794182d1c56480d178489db80340ad27e45f3ccaf5127babda",
+  "grid_path": "grid_400_dense.json",
+  "pythonhashseed": "0",
+  "built_at": "2026-09-29T00:08:15.280876+00:00"
+}
