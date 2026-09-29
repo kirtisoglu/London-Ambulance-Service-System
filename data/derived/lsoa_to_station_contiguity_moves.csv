@@ -1,0 +1,18 @@
+LSOA21CD,LSOA21NM,demand,from_station,to_station,from_group,to_group,iteration,same_group
+E01003268,Lewisham 023B,210.0,Forest Hill,Beckenham,Bromley,Bromley,1,1
+E01003269,Lewisham 023C,183.0,Forest Hill,Beckenham,Bromley,Bromley,1,1
+E01003280,Lewisham 016A,190.0,Forest Hill,Beckenham,Bromley,Bromley,1,1
+E01003285,Lewisham 016C,202.0,Forest Hill,Beckenham,Bromley,Bromley,1,1
+E01002572,Hounslow 007B,164.0,Isleworth,Hanwell,Hanwell,Hanwell,1,1
+E01002578,Hounslow 007D,160.0,Isleworth,Hanwell,Hanwell,Hanwell,1,1
+E01002579,Hounslow 008B,183.0,Isleworth,Hanwell,Hanwell,Hanwell,1,1
+E01002604,Hounslow 026A,168.0,Isleworth,Feltham,Hanwell,Hanwell,1,1
+E01003866,Richmond upon Thames 007A,156.0,Richmond,Twickenham,New Malden,New Malden,1,1
+E01003868,Richmond upon Thames 007B,152.0,Richmond,Twickenham,New Malden,New Malden,1,1
+E01003869,Richmond upon Thames 011B,169.0,Richmond,Twickenham,New Malden,New Malden,1,1
+E01003871,Richmond upon Thames 007C,163.0,Richmond,Twickenham,New Malden,New Malden,1,1
+E01003872,Richmond upon Thames 007D,150.0,Richmond,Twickenham,New Malden,New Malden,1,1
+E01003892,Richmond upon Thames 009A,202.0,Richmond,Twickenham,New Malden,New Malden,1,1
+E01003893,Richmond upon Thames 009B,160.0,Richmond,Twickenham,New Malden,New Malden,1,1
+E01003894,Richmond upon Thames 009C,158.0,Richmond,Twickenham,New Malden,New Malden,1,1
+E01003895,Richmond upon Thames 009D,159.0,Richmond,Twickenham,New Malden,New Malden,1,1
