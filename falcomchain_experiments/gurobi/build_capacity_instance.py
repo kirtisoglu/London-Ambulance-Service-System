@@ -95,7 +95,6 @@ def build():
                 g.nodes[nb]["demand"] = max(g.nodes[nb]["demand"], HALO_DEMAND)
 
     total_d = sum(d["demand"] for _, d in g.nodes(data=True))
-    n_real = sum(1 for _, d in g.nodes(data=True) if d.get("candidate"))
     # CDBA granularity uses the *baseline* max demand (peaks are candidates,
     # so they are excluded from facility-free components).
     d_max_base = max(d["demand"] for v, d in g.nodes(data=True)
@@ -120,7 +119,7 @@ def build():
     cdba_added, greedy_added, V_max, d_max = [], [], None, None
     print(f"  sparse: L1 = L2 = {n_l1} sites (1.5 per team, k={k_teams}, peaks forced); "
           f"Assumption 6.1 {'holds' if chk.passes else 'does not hold'}")
-    print(f"  L2: {len(super_set)} super-candidates (incl. {len(peak_ids)} peaks)")
+    print(f"  L2: {n_l2} super-candidates (incl. {len(peak_ids)} peaks)")
 
     # 5. serialise + meta -------------------------------------------------
     out_dir = Path(__file__).resolve().parent / "data"
@@ -142,19 +141,19 @@ def build():
         "capacity_gap": [gap_lo, gap_hi],
         "halo_demand": HALO_DEMAND,
         "rho": SPEC["rho"],
-        "n_l1_real": n_real, "n_l1_candidates": n_l1,
-        "n_l1_artificial": n_l1 - n_real,
-        "n_l2_candidates": len(super_set),
+        "n_l1_real": n_l1, "n_l1_candidates": n_l1,
+        "n_l1_artificial": 0,
+        "n_l2_candidates": n_l2,
         "demand_target_w": w, "epsilon_l1": eps, "epsilon_l2": eps,
         "c_min_l1": SPEC["c_min_l1"], "c_max_l1": SPEC["c_max_l1"],
         "c_min_l2": SPEC["c_min_l2"], "c_max_l2": SPEC["c_max_l2"],
         "min_l1_per_l2": SPEC["mu2"],
-        "k_teams_coverage": int(k_teams),
+        "k_teams": int(k_teams), "k_teams_coverage": int(k_teams),
         "forces_capacity_2": True,
         "c_max_1_infeasible_by_construction": True,
         "repair": "none", "regime": "sparse", "candidates_per_team": 1.5,
         "cdba_V_max": V_max, "cdba_d_max": d_max,
-        "assumption_6_1_passes": True,
+        "assumption_6_1_passes": bool(chk.passes),
         "assumption_6_1_threshold": float(chk.threshold),
         "assumption_6_1_worst_demand": float(chk.worst_demand),
         "grid_sha256": sha, "grid_path": grid_path.name,

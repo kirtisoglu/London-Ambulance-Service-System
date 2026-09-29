@@ -1,0 +1,329 @@
+
+========== run 1/8  seed=100 ==========
+=== FalCom (SA, R^1+R^2) on grid_400 ===
+  |V|=400  |E|=760  w=4000  eps=0.15  c1 in [1, 2]  c2 in [2, 5]  rule=per_team  steps=10000
+  scoring objective: median (disaggregated hierarchical median (matches MILP benchmark))
+  initial: 0.01s  |P^1|=7  caps=[1, 1, 1, 1, 2, 2, 2]  R1=224272.0 R2=351950.0  R1+R2=576222.0
+  running SA chain for 10000 steps (beta(t)=t/N, beta_magnitude=1.0)...
+    step   500/10000  beta=0.050  current R1+R2=477746.0  best=437066.0  (340.9 steps/s)
+    step  1000/10000  beta=0.100  current R1+R2=478373.0  best=437066.0  (348.0 steps/s)
+    step  1500/10000  beta=0.150  current R1+R2=438079.0  best=432394.0  (337.0 steps/s)
+    step  2000/10000  beta=0.200  current R1+R2=436140.0  best=422785.0  (343.2 steps/s)
+    step  2500/10000  beta=0.250  current R1+R2=408884.0  best=391732.0  (352.3 steps/s)
+    step  3000/10000  beta=0.300  current R1+R2=404335.0  best=391732.0  (329.4 steps/s)
+    step  3500/10000  beta=0.350  current R1+R2=392943.0  best=391732.0  (338.4 steps/s)
+    step  4000/10000  beta=0.400  current R1+R2=392943.0  best=391732.0  (343.1 steps/s)
+    step  4500/10000  beta=0.450  current R1+R2=392943.0  best=391732.0  (346.8 steps/s)
+    step  5000/10000  beta=0.500  current R1+R2=392999.0  best=391732.0  (351.2 steps/s)
+    step  5500/10000  beta=0.550  current R1+R2=390817.0  best=390817.0  (354.7 steps/s)
+    step  6000/10000  beta=0.600  current R1+R2=390817.0  best=390817.0  (358.7 steps/s)
+    step  6500/10000  beta=0.650  current R1+R2=386998.0  best=386998.0  (361.0 steps/s)
+    step  7000/10000  beta=0.700  current R1+R2=390020.0  best=386998.0  (361.9 steps/s)
+    step  7500/10000  beta=0.750  current R1+R2=393028.0  best=386998.0  (364.6 steps/s)
+    step  8000/10000  beta=0.800  current R1+R2=393028.0  best=386998.0  (365.6 steps/s)
+    step  8500/10000  beta=0.850  current R1+R2=379300.0  best=379300.0  (368.0 steps/s)
+    step  9000/10000  beta=0.900  current R1+R2=379300.0  best=379300.0  (370.3 steps/s)
+    step  9500/10000  beta=0.950  current R1+R2=379300.0  best=379300.0  (370.0 steps/s)
+    step 10000/10000  beta=1.000  current R1+R2=379300.0  best=379300.0  (370.1 steps/s)
+  chain done: 27.02s  best R1+R2 = 379300.0
+  diag: proposal_stalls=1347  super_fallbacks=17  sa_called=8653  accepted=790  rej_improving=0  rej_worsening=7863  score_failed=0
+    steps [    1, 3334): {'stall': 346, 'accepted': 778, 'rejected_worsening': 2209}
+    steps [ 3334, 6667): {'rejected_worsening': 2835, 'stall': 492, 'accepted': 6}
+    steps [ 6667,10001): {'rejected_worsening': 2819, 'stall': 509, 'accepted': 6}
+  wrote:
+    solution_400_falcom_initial.json
+    solution_400_falcom_final.json
+    solution_400_falcom_trajectory.json
+    solution_400_falcom_initial.html
+    solution_400_falcom_final.html
+    solution_400_falcom_trajectory.html
+
+========== run 2/8  seed=200 ==========
+=== FalCom (SA, R^1+R^2) on grid_400 ===
+  |V|=400  |E|=760  w=4000  eps=0.15  c1 in [1, 2]  c2 in [2, 5]  rule=per_team  steps=10000
+  scoring objective: median (disaggregated hierarchical median (matches MILP benchmark))
+  initial: 0.01s  |P^1|=6  caps=[1, 1, 2, 2, 2, 2]  R1=257943.0 R2=341885.0  R1+R2=599828.0
+  running SA chain for 10000 steps (beta(t)=t/N, beta_magnitude=1.0)...
+    step   500/10000  beta=0.050  current R1+R2=464661.0  best=427835.0  (325.9 steps/s)
+    step  1000/10000  beta=0.100  current R1+R2=463119.0  best=427835.0  (334.2 steps/s)
+    step  1500/10000  beta=0.150  current R1+R2=490080.0  best=427835.0  (331.2 steps/s)
+    step  2000/10000  beta=0.200  current R1+R2=416576.0  best=414642.0  (338.5 steps/s)
+    step  2500/10000  beta=0.250  current R1+R2=424693.0  best=411164.0  (346.8 steps/s)
+    step  3000/10000  beta=0.300  current R1+R2=439908.0  best=411164.0  (347.1 steps/s)
+    step  3500/10000  beta=0.350  current R1+R2=417525.0  best=411164.0  (347.7 steps/s)
+    step  4000/10000  beta=0.400  current R1+R2=419575.0  best=411164.0  (348.8 steps/s)
+    step  4500/10000  beta=0.450  current R1+R2=414882.0  best=411164.0  (351.7 steps/s)
+    step  5000/10000  beta=0.500  current R1+R2=411356.0  best=411164.0  (353.1 steps/s)
+    step  5500/10000  beta=0.550  current R1+R2=395550.0  best=393876.0  (352.1 steps/s)
+    step  6000/10000  beta=0.600  current R1+R2=394556.0  best=393876.0  (351.7 steps/s)
+    step  6500/10000  beta=0.650  current R1+R2=397542.0  best=393876.0  (352.3 steps/s)
+    step  7000/10000  beta=0.700  current R1+R2=392014.0  best=392014.0  (355.3 steps/s)
+    step  7500/10000  beta=0.750  current R1+R2=392014.0  best=392014.0  (358.4 steps/s)
+    step  8000/10000  beta=0.800  current R1+R2=391558.0  best=390270.0  (360.5 steps/s)
+    step  8500/10000  beta=0.850  current R1+R2=389168.0  best=389168.0  (362.7 steps/s)
+    step  9000/10000  beta=0.900  current R1+R2=389168.0  best=389168.0  (364.8 steps/s)
+    step  9500/10000  beta=0.950  current R1+R2=386366.0  best=386366.0  (366.5 steps/s)
+    step 10000/10000  beta=1.000  current R1+R2=386366.0  best=386366.0  (368.1 steps/s)
+  chain done: 27.16s  best R1+R2 = 386366.0
+  diag: proposal_stalls=1345  super_fallbacks=66  sa_called=8655  accepted=927  rej_improving=0  rej_worsening=7728  score_failed=0
+    steps [    1, 3334): {'stall': 324, 'accepted': 883, 'rejected_worsening': 2126}
+    steps [ 3334, 6667): {'rejected_worsening': 2848, 'stall': 454, 'accepted': 31}
+    steps [ 6667,10001): {'stall': 567, 'rejected_worsening': 2754, 'accepted': 13}
+  wrote:
+    solution_400_falcom_initial.json
+    solution_400_falcom_final.json
+    solution_400_falcom_trajectory.json
+    solution_400_falcom_initial.html
+    solution_400_falcom_final.html
+    solution_400_falcom_trajectory.html
+
+========== run 3/8  seed=300 ==========
+=== FalCom (SA, R^1+R^2) on grid_400 ===
+  |V|=400  |E|=760  w=4000  eps=0.15  c1 in [1, 2]  c2 in [2, 5]  rule=per_team  steps=10000
+  scoring objective: median (disaggregated hierarchical median (matches MILP benchmark))
+  initial: 0.01s  |P^1|=7  caps=[1, 1, 1, 1, 2, 2, 2]  R1=206000.0 R2=328749.0  R1+R2=534749.0
+  running SA chain for 10000 steps (beta(t)=t/N, beta_magnitude=1.0)...
+    step   500/10000  beta=0.050  current R1+R2=459029.0  best=443424.0  (86.8 steps/s)
+    step  1000/10000  beta=0.100  current R1+R2=440930.0  best=416813.0  (138.4 steps/s)
+    step  1500/10000  beta=0.150  current R1+R2=453180.0  best=416813.0  (170.9 steps/s)
+    step  2000/10000  beta=0.200  current R1+R2=475373.0  best=416813.0  (194.6 steps/s)
+    step  2500/10000  beta=0.250  current R1+R2=432917.0  best=416813.0  (212.2 steps/s)
+    step  3000/10000  beta=0.300  current R1+R2=429358.0  best=416813.0  (227.3 steps/s)
+    step  3500/10000  beta=0.350  current R1+R2=408111.0  best=408111.0  (240.3 steps/s)
+    step  4000/10000  beta=0.400  current R1+R2=408111.0  best=408111.0  (252.8 steps/s)
+    step  4500/10000  beta=0.450  current R1+R2=410740.0  best=406469.0  (262.8 steps/s)
+    step  5000/10000  beta=0.500  current R1+R2=410740.0  best=406469.0  (272.0 steps/s)
+    step  5500/10000  beta=0.550  current R1+R2=410740.0  best=406469.0  (278.7 steps/s)
+    step  6000/10000  beta=0.600  current R1+R2=410740.0  best=406469.0  (285.2 steps/s)
+    step  6500/10000  beta=0.650  current R1+R2=410740.0  best=406469.0  (291.0 steps/s)
+    step  7000/10000  beta=0.700  current R1+R2=410740.0  best=406469.0  (295.7 steps/s)
+    step  7500/10000  beta=0.750  current R1+R2=410740.0  best=406469.0  (299.9 steps/s)
+    step  8000/10000  beta=0.800  current R1+R2=411334.0  best=406469.0  (304.2 steps/s)
+    step  8500/10000  beta=0.850  current R1+R2=411334.0  best=406469.0  (308.2 steps/s)
+    step  9000/10000  beta=0.900  current R1+R2=411334.0  best=406469.0  (311.6 steps/s)
+    step  9500/10000  beta=0.950  current R1+R2=411334.0  best=406469.0  (314.9 steps/s)
+    step 10000/10000  beta=1.000  current R1+R2=407444.0  best=406469.0  (317.9 steps/s)
+  chain done: 31.46s  best R1+R2 = 406469.0
+  diag: proposal_stalls=1332  super_fallbacks=21  sa_called=8668  accepted=769  rej_improving=0  rej_worsening=7899  score_failed=0
+    steps [    1, 3334): {'stall': 300, 'accepted': 764, 'rejected_worsening': 2269}
+    steps [ 3334, 6667): {'rejected_worsening': 2835, 'stall': 495, 'accepted': 3}
+    steps [ 6667,10001): {'rejected_worsening': 2795, 'stall': 537, 'accepted': 2}
+  wrote:
+    solution_400_falcom_initial.json
+    solution_400_falcom_final.json
+    solution_400_falcom_trajectory.json
+    solution_400_falcom_initial.html
+    solution_400_falcom_final.html
+    solution_400_falcom_trajectory.html
+
+========== run 4/8  seed=400 ==========
+=== FalCom (SA, R^1+R^2) on grid_400 ===
+  |V|=400  |E|=760  w=4000  eps=0.15  c1 in [1, 2]  c2 in [2, 5]  rule=per_team  steps=10000
+  scoring objective: median (disaggregated hierarchical median (matches MILP benchmark))
+  initial: 0.01s  |P^1|=7  caps=[1, 1, 1, 1, 2, 2, 2]  R1=229053.0 R2=309708.0  R1+R2=538761.0
+  running SA chain for 10000 steps (beta(t)=t/N, beta_magnitude=1.0)...
+    step   500/10000  beta=0.050  current R1+R2=508845.0  best=430702.0  (102.1 steps/s)
+    step  1000/10000  beta=0.100  current R1+R2=472872.0  best=430702.0  (158.2 steps/s)
+    step  1500/10000  beta=0.150  current R1+R2=442316.0  best=430702.0  (192.4 steps/s)
+    step  2000/10000  beta=0.200  current R1+R2=458601.0  best=429302.0  (213.2 steps/s)
+    step  2500/10000  beta=0.250  current R1+R2=461696.0  best=427241.0  (232.1 steps/s)
+    step  3000/10000  beta=0.300  current R1+R2=420442.0  best=419263.0  (249.4 steps/s)
+    step  3500/10000  beta=0.350  current R1+R2=425928.0  best=419263.0  (262.0 steps/s)
+    step  4000/10000  beta=0.400  current R1+R2=411942.0  best=411942.0  (271.9 steps/s)
+    step  4500/10000  beta=0.450  current R1+R2=414507.0  best=410278.0  (279.4 steps/s)
+    step  5000/10000  beta=0.500  current R1+R2=417813.0  best=410278.0  (286.1 steps/s)
+    step  5500/10000  beta=0.550  current R1+R2=415894.0  best=410278.0  (291.6 steps/s)
+    step  6000/10000  beta=0.600  current R1+R2=416415.0  best=410278.0  (295.7 steps/s)
+    step  6500/10000  beta=0.650  current R1+R2=416415.0  best=410278.0  (299.1 steps/s)
+    step  7000/10000  beta=0.700  current R1+R2=414813.0  best=410278.0  (301.7 steps/s)
+    step  7500/10000  beta=0.750  current R1+R2=413775.0  best=410017.0  (304.4 steps/s)
+    step  8000/10000  beta=0.800  current R1+R2=410839.0  best=409289.0  (306.8 steps/s)
+    step  8500/10000  beta=0.850  current R1+R2=412282.0  best=409289.0  (309.1 steps/s)
+    step  9000/10000  beta=0.900  current R1+R2=412282.0  best=409289.0  (312.2 steps/s)
+    step  9500/10000  beta=0.950  current R1+R2=415067.0  best=409289.0  (315.1 steps/s)
+    step 10000/10000  beta=1.000  current R1+R2=413698.0  best=409289.0  (317.2 steps/s)
+  chain done: 31.52s  best R1+R2 = 409289.0
+  diag: proposal_stalls=983  super_fallbacks=37  sa_called=9017  accepted=765  rej_improving=0  rej_worsening=8252  score_failed=0
+    steps [    1, 3334): {'stall': 400, 'accepted': 692, 'rejected_worsening': 2241}
+    steps [ 3334, 6667): {'rejected_worsening': 3021, 'stall': 259, 'accepted': 53}
+    steps [ 6667,10001): {'rejected_worsening': 2990, 'stall': 324, 'accepted': 20}
+  wrote:
+    solution_400_falcom_initial.json
+    solution_400_falcom_final.json
+    solution_400_falcom_trajectory.json
+    solution_400_falcom_initial.html
+    solution_400_falcom_final.html
+    solution_400_falcom_trajectory.html
+
+========== run 5/8  seed=500 ==========
+=== FalCom (SA, R^1+R^2) on grid_400 ===
+  |V|=400  |E|=760  w=4000  eps=0.15  c1 in [1, 2]  c2 in [2, 5]  rule=per_team  steps=10000
+  scoring objective: median (disaggregated hierarchical median (matches MILP benchmark))
+  initial: 0.01s  |P^1|=8  caps=[1, 1, 1, 1, 1, 1, 2, 2]  R1=203871.0 R2=283033.0  R1+R2=486904.0
+  running SA chain for 10000 steps (beta(t)=t/N, beta_magnitude=1.0)...
+    step   500/10000  beta=0.050  current R1+R2=491830.0  best=431250.0  (336.4 steps/s)
+    step  1000/10000  beta=0.100  current R1+R2=471991.0  best=431250.0  (224.7 steps/s)
+    step  1500/10000  beta=0.150  current R1+R2=430968.0  best=412066.0  (251.6 steps/s)
+    step  2000/10000  beta=0.200  current R1+R2=426340.0  best=412066.0  (272.3 steps/s)
+    step  2500/10000  beta=0.250  current R1+R2=410660.0  best=410660.0  (287.6 steps/s)
+    step  3000/10000  beta=0.300  current R1+R2=429449.0  best=410660.0  (297.6 steps/s)
+    step  3500/10000  beta=0.350  current R1+R2=441191.0  best=410660.0  (303.9 steps/s)
+    step  4000/10000  beta=0.400  current R1+R2=425496.0  best=410448.0  (309.3 steps/s)
+    step  4500/10000  beta=0.450  current R1+R2=414400.0  best=410448.0  (314.7 steps/s)
+    step  5000/10000  beta=0.500  current R1+R2=412740.0  best=410448.0  (319.5 steps/s)
+    step  5500/10000  beta=0.550  current R1+R2=410712.0  best=410448.0  (322.7 steps/s)
+    step  6000/10000  beta=0.600  current R1+R2=397352.0  best=397352.0  (327.1 steps/s)
+    step  6500/10000  beta=0.650  current R1+R2=397352.0  best=397352.0  (329.2 steps/s)
+    step  7000/10000  beta=0.700  current R1+R2=404176.0  best=397352.0  (333.3 steps/s)
+    step  7500/10000  beta=0.750  current R1+R2=404721.0  best=397352.0  (336.8 steps/s)
+    step  8000/10000  beta=0.800  current R1+R2=403406.0  best=397352.0  (338.7 steps/s)
+    step  8500/10000  beta=0.850  current R1+R2=403406.0  best=397352.0  (341.6 steps/s)
+    step  9000/10000  beta=0.900  current R1+R2=405245.0  best=397352.0  (343.0 steps/s)
+    step  9500/10000  beta=0.950  current R1+R2=401240.0  best=397352.0  (345.0 steps/s)
+    step 10000/10000  beta=1.000  current R1+R2=401240.0  best=397352.0  (346.4 steps/s)
+  chain done: 28.87s  best R1+R2 = 397352.0
+  diag: proposal_stalls=1191  super_fallbacks=14  sa_called=8809  accepted=668  rej_improving=0  rej_worsening=8141  score_failed=0
+    steps [    1, 3334): {'stall': 311, 'accepted': 613, 'rejected_worsening': 2409}
+    steps [ 3334, 6667): {'rejected_worsening': 2872, 'accepted': 49, 'stall': 412}
+    steps [ 6667,10001): {'rejected_worsening': 2860, 'stall': 468, 'accepted': 6}
+  wrote:
+    solution_400_falcom_initial.json
+    solution_400_falcom_final.json
+    solution_400_falcom_trajectory.json
+    solution_400_falcom_initial.html
+    solution_400_falcom_final.html
+    solution_400_falcom_trajectory.html
+
+========== run 6/8  seed=600 ==========
+=== FalCom (SA, R^1+R^2) on grid_400 ===
+  |V|=400  |E|=760  w=4000  eps=0.15  c1 in [1, 2]  c2 in [2, 5]  rule=per_team  steps=10000
+  scoring objective: median (disaggregated hierarchical median (matches MILP benchmark))
+  initial: 0.01s  |P^1|=6  caps=[1, 1, 2, 2, 2, 2]  R1=209932.0 R2=302049.0  R1+R2=511981.0
+  running SA chain for 10000 steps (beta(t)=t/N, beta_magnitude=1.0)...
+    step   500/10000  beta=0.050  current R1+R2=487683.0  best=434501.0  (331.6 steps/s)
+    step  1000/10000  beta=0.100  current R1+R2=451912.0  best=419190.0  (334.0 steps/s)
+    step  1500/10000  beta=0.150  current R1+R2=457454.0  best=412955.0  (189.5 steps/s)
+    step  2000/10000  beta=0.200  current R1+R2=465668.0  best=412955.0  (214.1 steps/s)
+    step  2500/10000  beta=0.250  current R1+R2=417711.0  best=410495.0  (230.5 steps/s)
+    step  3000/10000  beta=0.300  current R1+R2=418139.0  best=410495.0  (246.1 steps/s)
+    step  3500/10000  beta=0.350  current R1+R2=421773.0  best=410495.0  (258.2 steps/s)
+    step  4000/10000  beta=0.400  current R1+R2=415611.0  best=410495.0  (267.2 steps/s)
+    step  4500/10000  beta=0.450  current R1+R2=419067.0  best=410495.0  (274.8 steps/s)
+    step  5000/10000  beta=0.500  current R1+R2=420335.0  best=409089.0  (282.2 steps/s)
+    step  5500/10000  beta=0.550  current R1+R2=422631.0  best=409089.0  (286.3 steps/s)
+    step  6000/10000  beta=0.600  current R1+R2=408080.0  best=408080.0  (290.9 steps/s)
+    step  6500/10000  beta=0.650  current R1+R2=408318.0  best=408080.0  (294.8 steps/s)
+    step  7000/10000  beta=0.700  current R1+R2=412698.0  best=408080.0  (297.3 steps/s)
+    step  7500/10000  beta=0.750  current R1+R2=408208.0  best=408080.0  (299.0 steps/s)
+    step  8000/10000  beta=0.800  current R1+R2=403375.0  best=402765.0  (302.4 steps/s)
+    step  8500/10000  beta=0.850  current R1+R2=406945.0  best=398319.0  (303.0 steps/s)
+    step  9000/10000  beta=0.900  current R1+R2=404344.0  best=398319.0  (304.9 steps/s)
+    step  9500/10000  beta=0.950  current R1+R2=405323.0  best=398319.0  (307.4 steps/s)
+    step 10000/10000  beta=1.000  current R1+R2=405323.0  best=398319.0  (310.6 steps/s)
+  chain done: 32.20s  best R1+R2 = 398319.0
+  diag: proposal_stalls=1072  super_fallbacks=95  sa_called=8928  accepted=779  rej_improving=0  rej_worsening=8149  score_failed=0
+    steps [    1, 3334): {'stall': 330, 'accepted': 709, 'rejected_worsening': 2294}
+    steps [ 3334, 6667): {'rejected_worsening': 2928, 'stall': 363, 'accepted': 42}
+    steps [ 6667,10001): {'rejected_worsening': 2927, 'stall': 379, 'accepted': 28}
+  wrote:
+    solution_400_falcom_initial.json
+    solution_400_falcom_final.json
+    solution_400_falcom_trajectory.json
+    solution_400_falcom_initial.html
+    solution_400_falcom_final.html
+    solution_400_falcom_trajectory.html
+
+========== run 7/8  seed=700 ==========
+=== FalCom (SA, R^1+R^2) on grid_400 ===
+  |V|=400  |E|=760  w=4000  eps=0.15  c1 in [1, 2]  c2 in [2, 5]  rule=per_team  steps=10000
+  [seed retry] succeeded at seed=701
+  scoring objective: median (disaggregated hierarchical median (matches MILP benchmark))
+  initial: 0.67s  |P^1|=8  caps=[1, 1, 1, 1, 1, 1, 2, 2]  R1=233098.0 R2=304733.0  R1+R2=537831.0
+  running SA chain for 10000 steps (beta(t)=t/N, beta_magnitude=1.0)...
+    step   500/10000  beta=0.050  current R1+R2=465391.0  best=429497.0  (338.9 steps/s)
+    step  1000/10000  beta=0.100  current R1+R2=438579.0  best=427392.0  (167.0 steps/s)
+    step  1500/10000  beta=0.150  current R1+R2=495042.0  best=425631.0  (200.6 steps/s)
+    step  2000/10000  beta=0.200  current R1+R2=452679.0  best=425631.0  (222.9 steps/s)
+    step  2500/10000  beta=0.250  current R1+R2=420614.0  best=420614.0  (242.7 steps/s)
+    step  3000/10000  beta=0.300  current R1+R2=419795.0  best=415074.0  (257.2 steps/s)
+    step  3500/10000  beta=0.350  current R1+R2=412035.0  best=412035.0  (267.4 steps/s)
+    step  4000/10000  beta=0.400  current R1+R2=413492.0  best=412035.0  (276.1 steps/s)
+    step  4500/10000  beta=0.450  current R1+R2=411516.0  best=411516.0  (284.3 steps/s)
+    step  5000/10000  beta=0.500  current R1+R2=404546.0  best=404546.0  (292.0 steps/s)
+    step  5500/10000  beta=0.550  current R1+R2=414503.0  best=404546.0  (298.6 steps/s)
+    step  6000/10000  beta=0.600  current R1+R2=411079.0  best=404546.0  (303.9 steps/s)
+    step  6500/10000  beta=0.650  current R1+R2=411079.0  best=404546.0  (307.6 steps/s)
+    step  7000/10000  beta=0.700  current R1+R2=408919.0  best=404546.0  (311.6 steps/s)
+    step  7500/10000  beta=0.750  current R1+R2=408838.0  best=404546.0  (314.1 steps/s)
+    step  8000/10000  beta=0.800  current R1+R2=408806.0  best=404546.0  (316.5 steps/s)
+    step  8500/10000  beta=0.850  current R1+R2=408806.0  best=404546.0  (318.9 steps/s)
+    step  9000/10000  beta=0.900  current R1+R2=399277.0  best=399277.0  (322.0 steps/s)
+    step  9500/10000  beta=0.950  current R1+R2=402081.0  best=398908.0  (325.0 steps/s)
+    step 10000/10000  beta=1.000  current R1+R2=401988.0  best=398908.0  (327.3 steps/s)
+  chain done: 30.55s  best R1+R2 = 398908.0
+  diag: proposal_stalls=1054  super_fallbacks=7  sa_called=8946  accepted=711  rej_improving=0  rej_worsening=8235  score_failed=0
+    steps [    1, 3334): {'stall': 297, 'accepted': 688, 'rejected_worsening': 2348}
+    steps [ 3334, 6667): {'rejected_worsening': 2944, 'stall': 377, 'accepted': 12}
+    steps [ 6667,10001): {'rejected_worsening': 2943, 'stall': 380, 'accepted': 11}
+  wrote:
+    solution_400_falcom_initial.json
+    solution_400_falcom_final.json
+    solution_400_falcom_trajectory.json
+    solution_400_falcom_initial.html
+    solution_400_falcom_final.html
+    solution_400_falcom_trajectory.html
+
+========== run 8/8  seed=800 ==========
+=== FalCom (SA, R^1+R^2) on grid_400 ===
+  |V|=400  |E|=760  w=4000  eps=0.15  c1 in [1, 2]  c2 in [2, 5]  rule=per_team  steps=10000
+  scoring objective: median (disaggregated hierarchical median (matches MILP benchmark))
+  initial: 0.01s  |P^1|=7  caps=[1, 1, 1, 1, 2, 2, 2]  R1=212991.0 R2=325632.0  R1+R2=538623.0
+  running SA chain for 10000 steps (beta(t)=t/N, beta_magnitude=1.0)...
+    step   500/10000  beta=0.050  current R1+R2=464627.0  best=414645.0  (342.6 steps/s)
+    step  1000/10000  beta=0.100  current R1+R2=453235.0  best=414645.0  (337.8 steps/s)
+    step  1500/10000  beta=0.150  current R1+R2=432392.0  best=414645.0  (338.7 steps/s)
+    step  2000/10000  beta=0.200  current R1+R2=464484.0  best=414645.0  (342.3 steps/s)
+    step  2500/10000  beta=0.250  current R1+R2=419031.0  best=414645.0  (347.5 steps/s)
+    step  3000/10000  beta=0.300  current R1+R2=409419.0  best=409419.0  (353.6 steps/s)
+    step  3500/10000  beta=0.350  current R1+R2=410187.0  best=405205.0  (355.8 steps/s)
+    step  4000/10000  beta=0.400  current R1+R2=404787.0  best=404787.0  (359.3 steps/s)
+    step  4500/10000  beta=0.450  current R1+R2=394348.0  best=394348.0  (362.6 steps/s)
+    step  5000/10000  beta=0.500  current R1+R2=397164.0  best=394348.0  (364.7 steps/s)
+    step  5500/10000  beta=0.550  current R1+R2=396434.0  best=394348.0  (363.4 steps/s)
+    step  6000/10000  beta=0.600  current R1+R2=396434.0  best=394348.0  (363.7 steps/s)
+    step  6500/10000  beta=0.650  current R1+R2=395902.0  best=394348.0  (365.3 steps/s)
+    step  7000/10000  beta=0.700  current R1+R2=395996.0  best=394174.0  (365.3 steps/s)
+    step  7500/10000  beta=0.750  current R1+R2=395996.0  best=394174.0  (366.2 steps/s)
+    step  8000/10000  beta=0.800  current R1+R2=394473.0  best=394174.0  (367.4 steps/s)
+    step  8500/10000  beta=0.850  current R1+R2=394473.0  best=394174.0  (368.4 steps/s)
+    step  9000/10000  beta=0.900  current R1+R2=394153.0  best=394153.0  (368.2 steps/s)
+    step  9500/10000  beta=0.950  current R1+R2=394066.0  best=394066.0  (369.1 steps/s)
+    step 10000/10000  beta=1.000  current R1+R2=393848.0  best=393848.0  (370.2 steps/s)
+  chain done: 27.02s  best R1+R2 = 393848.0
+  diag: proposal_stalls=1254  super_fallbacks=10  sa_called=8746  accepted=730  rej_improving=0  rej_worsening=8016  score_failed=0
+    steps [    1, 3334): {'stall': 358, 'accepted': 705, 'rejected_worsening': 2270}
+    steps [ 3334, 6667): {'rejected_worsening': 2874, 'stall': 439, 'accepted': 20}
+    steps [ 6667,10001): {'rejected_worsening': 2872, 'stall': 457, 'accepted': 5}
+  wrote:
+    solution_400_falcom_initial.json
+    solution_400_falcom_final.json
+    solution_400_falcom_trajectory.json
+    solution_400_falcom_initial.html
+    solution_400_falcom_final.html
+    solution_400_falcom_trajectory.html
+
+========== MULTI-START SUMMARY ==========
+  total wall time: 238.1s for 8 seeds
+   seed   initial     final     R1     R2   elapsed
+    100  576222.0  379300.0  169941.0  209359.0     27.4s
+    200  599828.0  386366.0  167902.0  218464.0     27.3s
+    300  534749.0  406469.0  179300.0  227169.0     31.6s
+    400  538761.0  409289.0  173896.0  235393.0     31.7s
+    500  486904.0  397352.0  169431.0  227921.0     29.0s
+    600  511981.0  398319.0  169602.0  228717.0     32.4s
+    700  537831.0  398908.0  166362.0  232546.0     31.4s
+    800  538623.0  393848.0  174815.0  219033.0     27.2s
+
+  BEST: seed=100  R1+R2=379300.0  (R1=169941.0 R2=209359.0)
+  wrote solution_400_falcom_multistart_best_*.{json,html}
+  wrote solution_400_falcom_multistart_summary.json
