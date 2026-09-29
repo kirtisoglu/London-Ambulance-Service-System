@@ -206,10 +206,40 @@ def load_grid(path: Path) -> nx.Graph:
     return nx.node_link_graph(data, edges="adjacency")
 
 
+def make_zones(g, meta, n: int, demand_target: float, c_max_l1: int,
+               target_zone_nodes: int = 5000):
+    """Rectangular zones for a zone-wise initial partition (as the sector-wise
+    start on London): blocks of about ``target_zone_nodes`` nodes, each cut
+    against its own per-team target. Falls back to fewer zones when a block
+    has too few candidate sites for its team count; ``None`` means global."""
+    rows, cols = int(meta["rows"]), int(meta["cols"])
+    nz = max(1, round(n / target_zone_nodes))
+    while nz > 1:
+        zr = max(1, round(math.sqrt(nz * rows / cols)))
+        zc = max(1, round(nz / zr))
+        h, w_ = math.ceil(rows / zr), math.ceil(cols / zc)
+        zones = {v: (v // cols // h) * zc + (v % cols) // w_ for v in g.nodes}
+        ok = True
+        for z in set(zones.values()):
+            nodes = [v for v in g.nodes if zones[v] == z]
+            d = sum(g.nodes[v]["demand"] for v in nodes)
+            k = max(1, round(d / demand_target))
+            cand = sum(1 for v in nodes if g.nodes[v].get("candidate"))
+            if cand < math.ceil(k / c_max_l1) + 1:
+                ok = False
+                break
+        if ok:
+            print(f"  Zone-wise init: {zr}x{zc} blocks of ~{h}x{w_} nodes")
+            return zones
+        nz //= 2
+    return None
+
+
 def run_one(n: int, seed: int, steps: int, results_dir: Path,
             with_l2_facility: bool = False,
             track_structural: bool = False,
-            snap_every: int = 0, variant: str = "") -> dict:
+            snap_every: int = 0, variant: str = "", init: str = "zones",
+            zone_nodes: int = 5000) -> dict:
     print(f"\n=== chain run |V|={n:,} seed={seed} steps={steps:,} ===")
 
     grid_path = GUROBI_DATA / f"grid_{n}{variant}.json"
@@ -255,6 +285,7 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
     total_demand = sum(d["demand"] for _, d in g.nodes(data=True))
     k_teams = max(1, math.ceil(total_demand / demand_target))
     seed_demand_target = total_demand / k_teams
+    zones = make_zones(g, meta, n, demand_target, c_max_l1, zone_nodes) if init == "zones" else None
     t0 = time.perf_counter()
     partition = None
     n_init_retries = 0
@@ -267,6 +298,7 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
                 assignment_class=None,
                 capacity_level=c_max_l1,
                 c_min=c_min_l1,
+                super_assignment=zones,
             )
             break
         except Exception:
@@ -279,7 +311,7 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
         )
     t_init_partition = time.perf_counter() - t0
     print(f"  Initial partition: {len(partition.parts)} districts "
-          f"({t_init_partition:.2f}s, {n_init_retries} reseeds, "
+          f"({t_init_partition:.2f}s, {n_init_retries} reseeds, init={'zones' if zones else 'global'}, "
           f"seed_demand_target={seed_demand_target:.0f} (=total/{k_teams}), "
           f"eps={eps_l1})")
 
@@ -444,6 +476,7 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
         "kappa_min": kappa_min,
         "snap_every": snap_every,
         "variant": variant,
+        "init": "zones" if zones else "global",
         "rejection_report": rejection_report,
         "steps": probe.records,
     }
@@ -472,6 +505,11 @@ def main():
                          "cost) and per-team demand spread each step.")
     ap.add_argument("--out-dir", default="results",
                     help="results subdirectory (e.g. results/convergence).")
+    ap.add_argument("--init", choices=["zones", "global"], default="zones",
+                    help="initial partition: zone-wise blocks of ~5,000 nodes "
+                         "(default; global recursion below that size) or global.")
+    ap.add_argument("--zone-nodes", type=int, default=5000,
+                    help="target block size of the zone-wise initial partition.")
     ap.add_argument("--variant", default="",
                     help="instance-name suffix, e.g. _w2000 loads grid_{n}_w2000.json "
                          "and names the outputs accordingly.")
@@ -505,7 +543,8 @@ def main():
                                    with_l2_facility=args.with_l2_facility,
                                    track_structural=args.track_structural,
                                    snap_every=args.snap_every,
-                                   variant=args.variant))
+                                   variant=args.variant, init=args.init,
+                                   zone_nodes=args.zone_nodes))
         except RuntimeError as exc:
             print(f"  ! |V|={n} failed: {exc}")
             continue

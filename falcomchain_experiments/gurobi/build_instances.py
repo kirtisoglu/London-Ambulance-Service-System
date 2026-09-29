@@ -71,9 +71,6 @@ INSTANCES = {
     "1000":  dict(n_nodes=1000,  seed=44, w=6000,  **COMMON),
     "10000": dict(n_nodes=10000, seed=45, w=20000, **COMMON),
     "50000": dict(n_nodes=50000, seed=46, w=45000, **COMMON),
-    # Fixed-workload variant for the level-2 cost check (Section 7.2.3):
-    # the grid and demands of grid_10000 with w = 2,000, as on grid_100.
-    "10000_w2000": dict(n_nodes=10000, seed=45, w=2000, **COMMON),
 }
 
 
