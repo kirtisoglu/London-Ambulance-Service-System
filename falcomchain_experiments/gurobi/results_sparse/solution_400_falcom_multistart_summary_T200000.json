@@ -1,0 +1,85 @@
+{
+ "instance": "400",
+ "steps": 200000,
+ "beta_magnitude": 1.0,
+ "cooling": "linear",
+ "note": "4 processes x 2 seeds on a shared 4-core container; wall times are contended",
+ "optimum_shir": 352810.0,
+ "results": [
+  {
+   "seed": 100,
+   "ok": true,
+   "elapsed_s": 3458.3284649350003,
+   "obj_value": 380019.0,
+   "R1": 163753.0,
+   "R2": 216266.0,
+   "initial_R1_plus_R2": 576222.0
+  },
+  {
+   "seed": 200,
+   "ok": true,
+   "elapsed_s": 3319.3748599299997,
+   "obj_value": 381585.0,
+   "R1": 167464.0,
+   "R2": 214121.0,
+   "initial_R1_plus_R2": 599828.0
+  },
+  {
+   "seed": 300,
+   "ok": true,
+   "elapsed_s": 3601.0662155259997,
+   "obj_value": 383864.0,
+   "R1": 163743.0,
+   "R2": 220121.0,
+   "initial_R1_plus_R2": 534749.0
+  },
+  {
+   "seed": 400,
+   "ok": true,
+   "elapsed_s": 3246.356447874,
+   "obj_value": 383901.0,
+   "R1": 164949.0,
+   "R2": 218952.0,
+   "initial_R1_plus_R2": 538761.0
+  },
+  {
+   "seed": 500,
+   "ok": true,
+   "elapsed_s": 3400.6226030999997,
+   "obj_value": 380183.0,
+   "R1": 167600.0,
+   "R2": 212583.0,
+   "initial_R1_plus_R2": 486904.0
+  },
+  {
+   "seed": 600,
+   "ok": true,
+   "elapsed_s": 3287.22204823,
+   "obj_value": 367188.0,
+   "R1": 155194.0,
+   "R2": 211994.0,
+   "initial_R1_plus_R2": 511981.0
+  },
+  {
+   "seed": 700,
+   "ok": true,
+   "elapsed_s": 3472.2314464,
+   "obj_value": 378447.0,
+   "R1": 166310.0,
+   "R2": 212137.0,
+   "initial_R1_plus_R2": 537831.0
+  },
+  {
+   "seed": 800,
+   "ok": true,
+   "elapsed_s": 3290.950890264,
+   "obj_value": 379538.0,
+   "R1": 159362.0,
+   "R2": 220176.0,
+   "initial_R1_plus_R2": 538623.0
+  }
+ ],
+ "best": 367188.0,
+ "median": 380101.0,
+ "worst": 383901.0
+}
