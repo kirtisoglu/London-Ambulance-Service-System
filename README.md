@@ -47,13 +47,13 @@ The candidate set is the 66 real stations; no artificial candidates are
 added (the counting predicate of the tree cut keeps the recursion from
 stranding a candidate-free residual).
 
-1. `python -m falcomchain_experiments.las.run_real_stations --seed S --steps 40000 --snap-every 40 --tag real`
+1. `python -m falcomchain_experiments.las.run_real_stations --seed S --steps 80000 --snap-every 40 --tag real`
    for `S = 1 2 3 4` (about one hour per chain on one core; the four
    chains can run in parallel). Initial plans are built sector by sector
    (`--init sectors`, the default). Each run writes
-   `summary_real_sS_T40000.json`, a per-step `trace_*.csv` and a compact
+   `summary_real_sS_T80000.json`, a per-step `trace_*.csv` and a compact
    `snap_*.npz` of every 40th plan to `data/derived/real_stations/`.
-2. `python -m falcomchain_experiments.las.postprocess_real_stations --tag real --steps 40000`
+2. `python -m falcomchain_experiments.las.postprocess_real_stations --tag real --steps 80000`
    computes the diagnostics reported in the paper (cross-chain KS distances,
    split-R-hat and ESS, forgetting curves, boundary frequencies, contested
    LSOAs, station opening frequencies and capacity mixes, Group

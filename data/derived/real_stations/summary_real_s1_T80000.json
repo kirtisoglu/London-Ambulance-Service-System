@@ -1,7 +1,7 @@
 {
   "tag": "real",
-  "seed": 3,
-  "steps": 40000,
+  "seed": 1,
+  "steps": 80000,
   "snap_every": 40,
   "max_attempts_base": 1000,
   "counting": true,
@@ -21,24 +21,24 @@
   },
   "init": "sectors",
   "init_attempts": 1,
-  "init_seconds": 3.1,
-  "runtime_seconds": 3418.6,
-  "steps_per_second": 11.7,
-  "acceptance_rate": 0.667,
+  "init_seconds": 4.3,
+  "runtime_seconds": 3505.6,
+  "steps_per_second": 22.82,
+  "acceptance_rate": 0.6703,
   "rejection_causes": {
-    "super_district_below_kappa": 2372,
-    "cut_search_exhausted:super": 10941,
-    "cut_search_exhausted:base": 7
+    "cut_search_exhausted:super": 21788,
+    "super_district_below_kappa": 4565,
+    "cut_search_exhausted:base": 26
   },
   "travel_pairs_missing_from_road_matrix": 264,
-  "travel_fallback_lookups": 483851,
+  "travel_fallback_lookups": 973169,
   "P1_range": [
-    44,
+    45,
     61
   ],
   "P2_range": [
     5,
-    27
+    28
   ],
-  "E_final": 9801725.449647956
+  "E_final": 9700598.5082815
 }
