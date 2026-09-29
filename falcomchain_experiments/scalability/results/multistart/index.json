@@ -1,0 +1,35 @@
+{
+  "experiment": "scalability",
+  "paper_section": "7",
+  "ran_at": "2026-09-29T02:10:22.429813+00:00",
+  "T_steps": 30000,
+  "sizes": [
+    10000
+  ],
+  "seed": 43,
+  "environment": {
+    "python": "3.12.3",
+    "platform": "Linux-6.18.44-fc-v49-x86_64-with-glibc2.39",
+    "pythonhashseed": "0",
+    "packages": {
+      "networkx": "3.7",
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "matplotlib": "3.11.2",
+      "falcomchain": "0.1.0",
+      "pymetis": null
+    }
+  },
+  "total_wall_time_s": 1973.2819683200005,
+  "runs": [
+    {
+      "n_nodes": 10000,
+      "seed": 43,
+      "n_chain_steps_succeeded": 30000,
+      "chain_total_time_s": 1907.9707040589992,
+      "n_districts_initial": 39,
+      "n_l1_candidates": 77,
+      "n_l2_candidates": 77
+    }
+  ]
+}
