@@ -82,7 +82,8 @@ def _sha256(path: Path) -> str:
     return h.hexdigest()
 
 
-def build_one(name: str, spec: dict, out_dir: Path, regime: str = "sparse") -> dict:
+def build_one(name: str, spec: dict, out_dir: Path, regime: str = "sparse",
+              cpt: float = CANDIDATES_PER_TEAM, suffix: str = "") -> dict:
     n, seed, w, eps = spec["n_nodes"], spec["seed"], spec["w"], spec["eps"]
     print(f"\n=== building grid_{name} (seed={seed}, w={w}, eps={eps}, regime={regime}) ===")
 
@@ -102,7 +103,7 @@ def build_one(name: str, spec: dict, out_dir: Path, regime: str = "sparse") -> d
 
     if regime == "sparse":
         # --- 2a. sparse candidates: ceil(1.5 k) sites uniformly at random --
-        n_cand = math.ceil(CANDIDATES_PER_TEAM * k_teams)
+        n_cand = math.ceil(cpt * k_teams)
         rng = random.Random(seed * 1000 + 7)
         chosen = set(rng.sample(sorted(g.nodes()), k=n_cand))
         for node, d in g.nodes(data=True):
@@ -115,7 +116,7 @@ def build_one(name: str, spec: dict, out_dir: Path, regime: str = "sparse") -> d
         V_max = d_max = None
         repair = "none"
         print(f"  sparse: L1 = L2 = {n_cand} sites ({100.0 * n_cand / n:.1f}% of nodes, "
-              f"{CANDIDATES_PER_TEAM} per team); Assumption 6.1 "
+              f"{cpt} per team); Assumption 6.1 "
               f"{'holds' if chk.passes else 'does not hold'} "
               f"(worst candidate-free demand {chk.worst_demand:.0f} vs threshold {chk.threshold:.0f})")
     else:
@@ -146,7 +147,7 @@ def build_one(name: str, spec: dict, out_dir: Path, regime: str = "sparse") -> d
         repair = "cdba_two_phase + fast_center patch"
 
     # --- 3. serialise + consistent meta --------------------------------
-    grid_path = out_dir / f"grid_{name}.json"
+    grid_path = out_dir / f"grid_{name}{suffix}.json"
     with open(grid_path, "w") as f:
         json.dump(nx.node_link_data(g, edges="adjacency"), f)
     sha = _sha256(grid_path)
@@ -157,7 +158,8 @@ def build_one(name: str, spec: dict, out_dir: Path, regime: str = "sparse") -> d
         "n_edges": g.number_of_edges(),
         "total_demand": total_d, "d_max_node": d_max_node,
         "k_teams": k_teams,
-        "candidates_per_team": CANDIDATES_PER_TEAM if regime == "sparse" else None,
+        "candidates_per_team": cpt if regime == "sparse" else None,
+        "variant": suffix,
         "rho": spec["rho"] if regime != "sparse" else None,
         "n_l1_real": n_real,
         "n_l1_artificial": n_l1 - n_real,
@@ -180,7 +182,7 @@ def build_one(name: str, spec: dict, out_dir: Path, regime: str = "sparse") -> d
         "pythonhashseed": os.environ.get("PYTHONHASHSEED", "unset"),
         "built_at": _dt.datetime.now(_dt.timezone.utc).isoformat(),
     }
-    meta_path = out_dir / f"grid_{name}.meta.json"
+    meta_path = out_dir / f"grid_{name}{suffix}.meta.json"
     with open(meta_path, "w") as f:
         json.dump(meta, f, indent=2)
     print(f"  wrote {grid_path.name} (sha256={sha[:16]}...) and {meta_path.name}")
@@ -194,6 +196,10 @@ def main():
     ap.add_argument("--regime", choices=["sparse", "augmented"], default="sparse")
     ap.add_argument("--out-dir", default=None,
                     help="default: data/ (sparse) or data/augmented/ (augmented)")
+    ap.add_argument("--candidates-per-team", type=float, default=CANDIDATES_PER_TEAM,
+                    help="sparse regime only: |F1| = ceil(this * k); the paper uses 1.5")
+    ap.add_argument("--suffix", default="",
+                    help="instance-name suffix for variants, e.g. _d07 writes grid_{name}_d07.json")
     args = ap.parse_args()
     if os.environ.get("PYTHONHASHSEED") != "0":
         print("ERROR: set PYTHONHASHSEED=0 for deterministic builds.\n"
@@ -204,10 +210,11 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
     names = args.names or list(INSTANCES)
     for name in names:
-        build_one(name, INSTANCES[name], out_dir, regime=args.regime)
+        build_one(name, INSTANCES[name], out_dir, regime=args.regime,
+                  cpt=args.candidates_per_team, suffix=args.suffix)
     all_meta = []
     for name in INSTANCES:
-        mp = out_dir / f"grid_{name}.meta.json"
+        mp = out_dir / f"grid_{name}{args.suffix}.meta.json"
         if mp.exists():
             all_meta.append(json.load(open(mp)))
     index = {
@@ -217,7 +224,7 @@ def main():
         "pythonhashseed": "0",
         "instances": all_meta,
     }
-    with open(out_dir / "index.json", "w") as f:
+    with open(out_dir / f"index{args.suffix}.json", "w") as f:
         json.dump(index, f, indent=2)
     print("\n=== summary (all grids on disk) ===")
     for m in all_meta:
