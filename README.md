@@ -15,6 +15,9 @@ travel-time computation additionally uses `falcomtravel` and OSMnx.
   ensemble in `derived/chain_v3/`.
 - `analysis/` — instance-construction scripts (sectors, Groups, station
   catchments, demand attachment).
+  `analysis/repair_catchment_contiguity.py` makes every station catchment of
+  the benchmark state contiguous on the rook graph (17 LSOAs moved; log in
+  `data/derived/lsoa_to_station_contiguity_moves.csv`).
 - `falcomchain_experiments/las/` — the LAS case-study pipeline (see below).
 - `falcomchain_experiments/validation/` — exact-enumeration validation of
   the sampler on a 3x4 grid.
