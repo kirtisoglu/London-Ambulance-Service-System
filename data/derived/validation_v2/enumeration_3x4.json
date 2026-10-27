@@ -29,7 +29,7 @@
   "runs": {
     "first": {
       "steps": 200000,
-      "seconds": 150.0,
+      "seconds": 149.6,
       "acceptance_rate": 0.9663498317491588,
       "rejection_causes": {
         "super_district_below_kappa": 6730
@@ -47,7 +47,7 @@
     },
     "last": {
       "steps": 200000,
-      "seconds": 148.3,
+      "seconds": 147.9,
       "acceptance_rate": 0.9660998304991525,
       "rejection_causes": {
         "super_district_below_kappa": 6780
@@ -65,7 +65,7 @@
     },
     "middle": {
       "steps": 200000,
-      "seconds": 148.5,
+      "seconds": 153.1,
       "acceptance_rate": 0.9671348356741784,
       "rejection_causes": {
         "super_district_below_kappa": 6573
@@ -86,6 +86,20 @@
     "first-last": 0.01075505377526888,
     "first-middle": 0.009890049450247245,
     "last-middle": 0.011865059325296622
+  },
+  "iid_noise_floor": {
+    "level1": {
+      "tv_between_two_samples": 0.010545749999999998,
+      "tv_between_halves": 0.015064999999999999,
+      "expected_unvisited": 3.075254956976652e-39,
+      "states": 93
+    },
+    "joint": {
+      "tv_between_two_samples": 0.010775000000000003,
+      "tv_between_halves": 0.015947999999999997,
+      "expected_unvisited": 3.075254956976652e-39,
+      "states": 119
+    }
   },
   "pooled_tv_to_uniform": 0.4049280999093168,
   "pooled_tv_to_spanning_tree_law": 0.37097800512476736,

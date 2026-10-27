@@ -200,6 +200,9 @@ def main():
                     help="sparse regime only: |F1| = ceil(this * k); the paper uses 1.5")
     ap.add_argument("--suffix", default="",
                     help="instance-name suffix for variants, e.g. _d07 writes grid_{name}_d07.json")
+    ap.add_argument("--w", type=float, default=None,
+                    help="override the per-team workload w of the named instances (fixed-size, "
+                         "growing-team-count variants; candidates are placed at --candidates-per-team per team)")
     args = ap.parse_args()
     if os.environ.get("PYTHONHASHSEED") != "0":
         print("ERROR: set PYTHONHASHSEED=0 for deterministic builds.\n"
@@ -210,7 +213,10 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
     names = args.names or list(INSTANCES)
     for name in names:
-        build_one(name, INSTANCES[name], out_dir, regime=args.regime,
+        spec = dict(INSTANCES[name])
+        if args.w is not None:
+            spec["w"] = args.w
+        build_one(name, spec, out_dir, regime=args.regime,
                   cpt=args.candidates_per_team, suffix=args.suffix)
     all_meta = []
     for name in INSTANCES:

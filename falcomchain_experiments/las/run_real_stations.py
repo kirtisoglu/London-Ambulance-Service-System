@@ -168,6 +168,43 @@ def sector_zones(g) -> dict:
     return {n: sector_of[g.nodes[n]["LSOA21CD"]] for n in g.nodes}
 
 
+def group_zones(g, log=print) -> dict:
+    """LSOA -> real LAS Group, with Groups that cannot host their own units merged into
+    the neighbouring Group they share the most edges with. A Group is merged when it has
+    fewer than two stations or when its demand, in units of the global per-unit demand,
+    exceeds three units per station (a district carries at most three units and must
+    contain a station). Used for a start whose level-2 structure (about eighteen zones)
+    differs from the five-sector start."""
+    grp = pd.read_csv(LSOA_GROUP)
+    group_of = dict(zip(grp["LSOA21CD"], grp["group"]))
+    zone = {n: str(group_of[g.nodes[n]["LSOA21CD"]]).strip() for n in g.nodes}
+    total = sum(g.nodes[n]["demand"] for n in g.nodes)
+    d_bar = total / math.ceil(total / W)
+    while True:
+        stations, demand = Counter(), Counter()
+        for n in g.nodes:
+            demand[zone[n]] += g.nodes[n]["demand"]
+            if g.nodes[n]["candidate"] == 1:
+                stations[zone[n]] += 1
+        bad = [z for z in demand if stations[z] < 2 or demand[z] / d_bar > 3 * stations[z]]
+        if not bad:
+            break
+        z = sorted(bad, key=lambda q: demand[q])[0]
+        shared = Counter()
+        for u, v in g.edges():
+            if zone[u] == z and zone[v] != z:
+                shared[zone[v]] += 1
+            elif zone[v] == z and zone[u] != z:
+                shared[zone[u]] += 1
+        target = shared.most_common(1)[0][0]
+        log(f"  zone {z} ({stations[z]} stations, {demand[z] / d_bar:.1f} units) merged into {target}")
+        for n in g.nodes:
+            if zone[n] == z:
+                zone[n] = target
+    log(f"  group zones: {len(set(zone.values()))} zones")
+    return zone
+
+
 def build_initial_state(g, seed, max_attempts, retries=30, log=print, init="sectors",
                         total_teams=None):
     """Feasible initial state. ``init="sectors"`` (default) partitions each of
@@ -175,7 +212,7 @@ def build_initial_state(g, seed, max_attempts, retries=30, log=print, init="sect
     (about 1,000 LSOAs and 11-17 stations each); the first accepted step
     replaces this level-2 grouping by a sampled one. ``init="global"`` runs
     the recursion on the whole graph, which is much slower on 66 candidates."""
-    zones = sector_zones(g) if init == "sectors" else None
+    zones = sector_zones(g) if init == "sectors" else (group_zones(g, log) if init == "groups" else None)
     for r in range(retries):
         s = seed * 1000 + 17 * r + 1
         set_seed(s)
@@ -406,7 +443,7 @@ def main() -> int:
     ap.add_argument("--max-attempts", type=int, default=1000)
     ap.add_argument("--out-dir", default=str(OUT_DIR))
     ap.add_argument("--tag", default="real")
-    ap.add_argument("--init", choices=["sectors", "global"], default="sectors")
+    ap.add_argument("--init", choices=["sectors", "groups", "global"], default="sectors")
     ap.add_argument("--eps", type=float, default=None,
                     help="override the calibrated tolerance at both levels (sensitivity runs)")
     ap.add_argument("--zone-units", choices=["exact", "ceil"], default="exact",
