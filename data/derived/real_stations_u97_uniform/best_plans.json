@@ -1,0 +1,924 @@
+{
+ "in_dir": "data/derived/real_stations_u97_uniform",
+ "steps": 80000,
+ "burn_in": 16000,
+ "n_plans": 6400,
+ "E1_trace_vs_recomputed_max_rel_diff": 4.4276534421671885e-16,
+ "best_by_E": {
+  "chain_seed": 4,
+  "step": 24640,
+  "E": 8736949.864381582,
+  "E1": 3902661.16457121,
+  "E2": 4834288.699810372,
+  "T_mean": 3.695736857897528,
+  "T90": 6.311981095676059,
+  "C8": 0.9714220778605858,
+  "n_open": 54,
+  "n_groups": 23,
+  "capacity_counts": {
+   "3": 10,
+   "1": 21,
+   "2": 23
+  }
+ },
+ "best_by_E1": {
+  "chain_seed": 1,
+  "step": 34840,
+  "E": 8906900.464420047,
+  "E1": 3773658.1525765816,
+  "E2": 5133242.311843465,
+  "T_mean": 3.573573757873257,
+  "T90": 6.174760798751424,
+  "C8": 0.9820538073277209,
+  "n_open": 57,
+  "n_groups": 23,
+  "capacity_counts": {
+   "2": 24,
+   "1": 25,
+   "3": 8
+  }
+ },
+ "best_by_T_mean": {
+  "chain_seed": 1,
+  "step": 34840,
+  "E": 8906900.464420047,
+  "E1": 3773658.1525765816,
+  "E2": 5133242.311843465,
+  "T_mean": 3.573573757873257,
+  "T90": 6.174760798751424,
+  "C8": 0.9820538073277209,
+  "n_open": 57,
+  "n_groups": 23,
+  "capacity_counts": {
+   "2": 24,
+   "1": 25,
+   "3": 8
+  }
+ },
+ "best_by_T90": {
+  "chain_seed": 1,
+  "step": 30320,
+  "E": 9105902.871218266,
+  "E1": 3922746.007340282,
+  "E2": 5183156.863877984,
+  "T_mean": 3.714756775481096,
+  "T90": 6.109728469760352,
+  "C8": 0.9743681284860652,
+  "n_open": 53,
+  "n_groups": 23,
+  "capacity_counts": {
+   "2": 16,
+   "1": 23,
+   "3": 14
+  }
+ },
+ "best_by_C8": {
+  "chain_seed": 4,
+  "step": 32000,
+  "E": 9193069.298074167,
+  "E1": 3856152.132116248,
+  "E2": 5336917.165957919,
+  "T_mean": 3.6516937964528524,
+  "T90": 6.144460779640486,
+  "C8": 0.9835452987244198,
+  "n_open": 54,
+  "n_groups": 22,
+  "capacity_counts": {
+   "2": 19,
+   "1": 23,
+   "3": 12
+  }
+ },
+ "sample_extremes": {
+  "E_min": 8736949.864381582,
+  "E_q01": 9076101.463440163,
+  "E1_min": 3773658.1525765816,
+  "E1_q01": 3922736.4303369205,
+  "T_mean_min": 3.573573757873257,
+  "T_mean_q01": 3.714747706263242,
+  "T90_min": 6.109728469760352,
+  "C8_max": 0.9835452987244198,
+  "C8_q99": 0.9739208894023618,
+  "T_mean_mean": 4.002587899194229,
+  "T90_mean": 6.9870330032689525,
+  "C8_mean": 0.9440721272218486,
+  "corr_E_T_mean": 0.7277121076430583,
+  "corr_E1_T_mean": 1.0,
+  "corr_E_n_open": -0.274098813291133
+ },
+ "n_groups_distribution": {
+  "18": 1,
+  "19": 29,
+  "20": 297,
+  "21": 1279,
+  "22": 2070,
+  "23": 1826,
+  "24": 722,
+  "25": 154,
+  "26": 22
+ },
+ "n_open_distribution": {
+  "44": 2,
+  "45": 6,
+  "46": 13,
+  "47": 50,
+  "48": 184,
+  "49": 338,
+  "50": 673,
+  "51": 852,
+  "52": 1070,
+  "53": 1160,
+  "54": 871,
+  "55": 598,
+  "56": 366,
+  "57": 148,
+  "58": 45,
+  "59": 18,
+  "60": 5,
+  "62": 1
+ },
+ "ari": {
+  "all_plans_mean": 0.27755436121959076,
+  "all_plans_q05_q95": [
+   0.17000759014238745,
+   0.3974960876369327
+  ],
+  "all_plans_min_max": [
+   0.0699847120774588,
+   0.5464695769025552
+  ],
+  "plans_with_21_groups_n": 1279,
+  "plans_with_21_groups_mean": 0.2843708135982015
+ },
+ "pairs": {
+  "top_conditional_same_group": [
+   {
+    "conditional": 0.6873108265424913,
+    "unconditional": 0.46125,
+    "both_open_share": 0.67109375,
+    "a": "Hornchurch",
+    "b": "Romford",
+    "group_a": "Romford",
+    "group_b": "Romford",
+    "same_group": true
+   },
+   {
+    "conditional": 0.5733842010771992,
+    "unconditional": 0.39921875,
+    "both_open_share": 0.69625,
+    "a": "Barnehurst",
+    "b": "Woolwich",
+    "group_a": "Greenwich",
+    "group_b": "Greenwich",
+    "same_group": true
+   },
+   {
+    "conditional": 0.5430382833455255,
+    "unconditional": 0.34796875,
+    "both_open_share": 0.64078125,
+    "a": "Becontree",
+    "b": "Hornchurch",
+    "group_a": "Romford",
+    "group_b": "Romford",
+    "same_group": true
+   },
+   {
+    "conditional": 0.5144628099173554,
+    "unconditional": 0.3890625,
+    "both_open_share": 0.75625,
+    "a": "Oval",
+    "b": "Waterloo",
+    "group_a": "Oval",
+    "group_b": "Oval",
+    "same_group": true
+   },
+   {
+    "conditional": 0.4882882882882883,
+    "unconditional": 0.169375,
+    "both_open_share": 0.346875,
+    "a": "Ponders End",
+    "b": "Chase Farm",
+    "group_a": "Edmonton",
+    "group_b": "Edmonton",
+    "same_group": true
+   },
+   {
+    "conditional": 0.4719435154217763,
+    "unconditional": 0.1984375,
+    "both_open_share": 0.42046875,
+    "a": "Greenwich",
+    "b": "Woolwich",
+    "group_a": "Greenwich",
+    "group_b": "Greenwich",
+    "same_group": true
+   },
+   {
+    "conditional": 0.4567233384853168,
+    "unconditional": 0.369375,
+    "both_open_share": 0.80875,
+    "a": "Becontree",
+    "b": "Romford",
+    "group_a": "Romford",
+    "group_b": "Romford",
+    "same_group": true
+   },
+   {
+    "conditional": 0.43808777429467083,
+    "unconditional": 0.08734375,
+    "both_open_share": 0.199375,
+    "a": "Hillingdon",
+    "b": "Heathrow Airport",
+    "group_a": "Hillingdon",
+    "group_b": "Hillingdon",
+    "same_group": true
+   },
+   {
+    "conditional": 0.42996108949416345,
+    "unconditional": 0.24171875,
+    "both_open_share": 0.5621875,
+    "a": "Coulsdon",
+    "b": "South Croydon",
+    "group_a": "Croydon",
+    "group_b": "Croydon",
+    "same_group": true
+   },
+   {
+    "conditional": 0.4270214414879876,
+    "unconditional": 0.25828125,
+    "both_open_share": 0.60484375,
+    "a": "West Ham",
+    "b": "Silvertown",
+    "group_a": "Newham",
+    "group_b": "Newham",
+    "same_group": true
+   },
+   {
+    "conditional": 0.42697768762677485,
+    "unconditional": 0.19734375,
+    "both_open_share": 0.4621875,
+    "a": "Hillingdon",
+    "b": "Hayes",
+    "group_a": "Hillingdon",
+    "group_b": "Hillingdon",
+    "same_group": true
+   },
+   {
+    "conditional": 0.42213366033108524,
+    "unconditional": 0.21515625,
+    "both_open_share": 0.5096875,
+    "a": "Hillingdon",
+    "b": "Ruislip",
+    "group_a": "Hillingdon",
+    "group_b": "Hillingdon",
+    "same_group": true
+   }
+  ],
+  "top_conditional_cross_group": [
+   {
+    "conditional": 0.48856209150326796,
+    "unconditional": 0.23359375,
+    "both_open_share": 0.478125,
+    "a": "Richmond",
+    "b": "Putney",
+    "group_a": "New Malden",
+    "group_b": "Wimbledon",
+    "same_group": false
+   },
+   {
+    "conditional": 0.48824214202561117,
+    "unconditional": 0.32765625,
+    "both_open_share": 0.67109375,
+    "a": "Barnehurst",
+    "b": "St Pauls Cray",
+    "group_a": "Greenwich",
+    "group_b": "Bromley",
+    "same_group": false
+   },
+   {
+    "conditional": 0.4711890537675853,
+    "unconditional": 0.38203125,
+    "both_open_share": 0.81078125,
+    "a": "Fulham",
+    "b": "Westminster",
+    "group_a": "Fulham",
+    "group_b": "Westminster",
+    "same_group": false
+   },
+   {
+    "conditional": 0.4163265306122449,
+    "unconditional": 0.31875,
+    "both_open_share": 0.765625,
+    "a": "Waterloo",
+    "b": "Deptford",
+    "group_a": "Oval",
+    "group_b": "Deptford",
+    "same_group": false
+   },
+   {
+    "conditional": 0.37122844827586204,
+    "unconditional": 0.2153125,
+    "both_open_share": 0.58,
+    "a": "Pinner",
+    "b": "Ruislip",
+    "group_a": "Brent",
+    "group_b": "Hillingdon",
+    "same_group": false
+   },
+   {
+    "conditional": 0.3691014867485456,
+    "unconditional": 0.08921875,
+    "both_open_share": 0.24171875,
+    "a": "Barnet",
+    "b": "Chase Farm",
+    "group_a": "Friern Barnet",
+    "group_b": "Edmonton",
+    "same_group": false
+   },
+   {
+    "conditional": 0.36478555304740407,
+    "unconditional": 0.12625,
+    "both_open_share": 0.34609375,
+    "a": "Isleworth",
+    "b": "Twickenham",
+    "group_a": "Hanwell",
+    "group_b": "New Malden",
+    "same_group": false
+   },
+   {
+    "conditional": 0.35887384176764076,
+    "unconditional": 0.15734375,
+    "both_open_share": 0.4384375,
+    "a": "Bromley",
+    "b": "New Addington",
+    "group_a": "Bromley",
+    "group_b": "Croydon",
+    "same_group": false
+   },
+   {
+    "conditional": 0.3551351351351351,
+    "unconditional": 0.30796875,
+    "both_open_share": 0.8671875,
+    "a": "Romford",
+    "b": "Ilford",
+    "group_a": "Romford",
+    "group_b": "Ilford",
+    "same_group": false
+   },
+   {
+    "conditional": 0.3546042003231018,
+    "unconditional": 0.06859375,
+    "both_open_share": 0.1934375,
+    "a": "Heathrow Airport",
+    "b": "Feltham",
+    "group_a": "Hillingdon",
+    "group_b": "Hanwell",
+    "same_group": false
+   },
+   {
+    "conditional": 0.32902097902097904,
+    "unconditional": 0.14703125,
+    "both_open_share": 0.446875,
+    "a": "St Pauls Cray",
+    "b": "New Addington",
+    "group_a": "Bromley",
+    "group_b": "Croydon",
+    "same_group": false
+   },
+   {
+    "conditional": 0.3250511546331482,
+    "unconditional": 0.17375,
+    "both_open_share": 0.53453125,
+    "a": "Tolworth",
+    "b": "St Helier",
+    "group_a": "New Malden",
+    "group_b": "St Helier",
+    "same_group": false
+   }
+  ],
+  "top_unconditional_same_group": [
+   {
+    "conditional": 0.6873108265424913,
+    "unconditional": 0.46125,
+    "both_open_share": 0.67109375,
+    "a": "Hornchurch",
+    "b": "Romford",
+    "group_a": "Romford",
+    "group_b": "Romford",
+    "same_group": true
+   },
+   {
+    "conditional": 0.5733842010771992,
+    "unconditional": 0.39921875,
+    "both_open_share": 0.69625,
+    "a": "Barnehurst",
+    "b": "Woolwich",
+    "group_a": "Greenwich",
+    "group_b": "Greenwich",
+    "same_group": true
+   },
+   {
+    "conditional": 0.5144628099173554,
+    "unconditional": 0.3890625,
+    "both_open_share": 0.75625,
+    "a": "Oval",
+    "b": "Waterloo",
+    "group_a": "Oval",
+    "group_b": "Oval",
+    "same_group": true
+   },
+   {
+    "conditional": 0.4567233384853168,
+    "unconditional": 0.369375,
+    "both_open_share": 0.80875,
+    "a": "Becontree",
+    "b": "Romford",
+    "group_a": "Romford",
+    "group_b": "Romford",
+    "same_group": true
+   },
+   {
+    "conditional": 0.5430382833455255,
+    "unconditional": 0.34796875,
+    "both_open_share": 0.64078125,
+    "a": "Becontree",
+    "b": "Hornchurch",
+    "group_a": "Romford",
+    "group_b": "Romford",
+    "same_group": true
+   },
+   {
+    "conditional": 0.3488779803646564,
+    "unconditional": 0.3109375,
+    "both_open_share": 0.89125,
+    "a": "Fulham",
+    "b": "Chiswick",
+    "group_a": "Fulham",
+    "group_b": "Fulham",
+    "same_group": true
+   },
+   {
+    "conditional": 0.38202247191011235,
+    "unconditional": 0.2921875,
+    "both_open_share": 0.76484375,
+    "a": "Ponders End",
+    "b": "Edmonton",
+    "group_a": "Edmonton",
+    "group_b": "Edmonton",
+    "same_group": true
+   },
+   {
+    "conditional": 0.3508982035928144,
+    "unconditional": 0.2746875,
+    "both_open_share": 0.7828125,
+    "a": "Shoreditch",
+    "b": "Poplar",
+    "group_a": "Homerton",
+    "group_b": "Homerton",
+    "same_group": true
+   },
+   {
+    "conditional": 0.4270214414879876,
+    "unconditional": 0.25828125,
+    "both_open_share": 0.60484375,
+    "a": "West Ham",
+    "b": "Silvertown",
+    "group_a": "Newham",
+    "group_b": "Newham",
+    "same_group": true
+   },
+   {
+    "conditional": 0.39634439634439633,
+    "unconditional": 0.2575,
+    "both_open_share": 0.6496875,
+    "a": "Putney",
+    "b": "Battersea",
+    "group_a": "Wimbledon",
+    "group_b": "Wimbledon",
+    "same_group": true
+   },
+   {
+    "conditional": 0.31638964051024354,
+    "unconditional": 0.25578125,
+    "both_open_share": 0.8084375,
+    "a": "Newham",
+    "b": "West Ham",
+    "group_a": "Newham",
+    "group_b": "Newham",
+    "same_group": true
+   },
+   {
+    "conditional": 0.42196531791907516,
+    "unconditional": 0.2509375,
+    "both_open_share": 0.5946875,
+    "a": "Newham",
+    "b": "Silvertown",
+    "group_a": "Newham",
+    "group_b": "Newham",
+    "same_group": true
+   }
+  ],
+  "top_unconditional_cross_group": [
+   {
+    "conditional": 0.4711890537675853,
+    "unconditional": 0.38203125,
+    "both_open_share": 0.81078125,
+    "a": "Fulham",
+    "b": "Westminster",
+    "group_a": "Fulham",
+    "group_b": "Westminster",
+    "same_group": false
+   },
+   {
+    "conditional": 0.48824214202561117,
+    "unconditional": 0.32765625,
+    "both_open_share": 0.67109375,
+    "a": "Barnehurst",
+    "b": "St Pauls Cray",
+    "group_a": "Greenwich",
+    "group_b": "Bromley",
+    "same_group": false
+   },
+   {
+    "conditional": 0.4163265306122449,
+    "unconditional": 0.31875,
+    "both_open_share": 0.765625,
+    "a": "Waterloo",
+    "b": "Deptford",
+    "group_a": "Oval",
+    "group_b": "Deptford",
+    "same_group": false
+   },
+   {
+    "conditional": 0.3551351351351351,
+    "unconditional": 0.30796875,
+    "both_open_share": 0.8671875,
+    "a": "Romford",
+    "b": "Ilford",
+    "group_a": "Romford",
+    "group_b": "Ilford",
+    "same_group": false
+   },
+   {
+    "conditional": 0.48856209150326796,
+    "unconditional": 0.23359375,
+    "both_open_share": 0.478125,
+    "a": "Richmond",
+    "b": "Putney",
+    "group_a": "New Malden",
+    "group_b": "Wimbledon",
+    "same_group": false
+   },
+   {
+    "conditional": 0.25895707697765163,
+    "unconditional": 0.228125,
+    "both_open_share": 0.8809375,
+    "a": "North Kensington",
+    "b": "St Johns Wood",
+    "group_a": "Fulham",
+    "group_b": "Westminster",
+    "same_group": false
+   },
+   {
+    "conditional": 0.28188595607495465,
+    "unconditional": 0.21859375,
+    "both_open_share": 0.77546875,
+    "a": "South Croydon",
+    "b": "St Helier",
+    "group_a": "Croydon",
+    "group_b": "St Helier",
+    "same_group": false
+   },
+   {
+    "conditional": 0.37122844827586204,
+    "unconditional": 0.2153125,
+    "both_open_share": 0.58,
+    "a": "Pinner",
+    "b": "Ruislip",
+    "group_a": "Brent",
+    "group_b": "Hillingdon",
+    "same_group": false
+   },
+   {
+    "conditional": 0.259927105313639,
+    "unconditional": 0.21171875,
+    "both_open_share": 0.81453125,
+    "a": "West Ham",
+    "b": "Poplar",
+    "group_a": "Newham",
+    "group_b": "Homerton",
+    "same_group": false
+   },
+   {
+    "conditional": 0.26900119379228016,
+    "unconditional": 0.21125,
+    "both_open_share": 0.7853125,
+    "a": "Becontree",
+    "b": "Newham",
+    "group_a": "Romford",
+    "group_b": "Newham",
+    "same_group": false
+   },
+   {
+    "conditional": 0.28832116788321166,
+    "unconditional": 0.20984375,
+    "both_open_share": 0.7278125,
+    "a": "Mill Hill",
+    "b": "Kenton",
+    "group_a": "Friern Barnet",
+    "group_b": "Brent",
+    "same_group": false
+   },
+   {
+    "conditional": 0.2381581430458577,
+    "unconditional": 0.1971875,
+    "both_open_share": 0.82796875,
+    "a": "Becontree",
+    "b": "Ilford",
+    "group_a": "Romford",
+    "group_b": "Ilford",
+    "same_group": false
+   }
+  ],
+  "mean_conditional_same": 0.2752315524640274,
+  "mean_conditional_cross": 0.02014992632236394,
+  "mean_unconditional_same": 0.16038876488095238,
+  "mean_unconditional_cross": 0.012510234716157207,
+  "n_cross_group_pairs_conditional_above_0.3": 14,
+  "n_same_group_pairs_conditional_above_0.3": 32
+ },
+ "fallback": {
+  "n_lsoas": 4,
+  "n_pairs": 264,
+  "lsoas": [
+   {
+    "code": "E01002444",
+    "name": "Hillingdon 031A",
+    "stations_missing": 66,
+    "is_station_host": false,
+    "demand": 248.0
+   },
+   {
+    "code": "E01003497",
+    "name": "Newham 034A",
+    "stations_missing": 66,
+    "is_station_host": false,
+    "demand": 221.0
+   },
+   {
+    "code": "E01034385",
+    "name": "Bromley 018F",
+    "stations_missing": 66,
+    "is_station_host": false,
+    "demand": 173.0
+   },
+   {
+    "code": "E01035711",
+    "name": "Camden 026E",
+    "stations_missing": 66,
+    "is_station_host": false,
+    "demand": 268.0
+   }
+  ],
+  "share_of_demand": 0.0008617505847593254
+ },
+ "per_chain_readouts": {
+  "1": {
+   "l1_interior_share": 0.12577319587628866,
+   "l1_max_cut_freq": 0.473125,
+   "l2_interior_share": 0.325360824742268,
+   "l2_max_cut_freq": 0.384375,
+   "modal_share_mean": 0.4849037595114137,
+   "lsoas_modal_below_half": 0.5820985182218662,
+   "lsoas_modal_above_0.9": 0.003404084901882259,
+   "n_open_mean": 52.535,
+   "n_groups_mean": 22.333125,
+   "cap_share_1": 0.4196844960502522,
+   "cap_share_2": 0.3142428856952508,
+   "cap_share_3": 0.266072618254497,
+   "co_same_group": 0.2724877176702479,
+   "co_cross_group": 0.0202062766957695,
+   "ari_mean": 0.27524692285677466,
+   "E_mean": 9695367.837026298,
+   "E1_mean": 4220147.965582131,
+   "T_mean_mean": 3.996390084737669,
+   "C8_mean": 0.9447748481282966
+  },
+  "2": {
+   "l1_interior_share": 0.1281786941580756,
+   "l1_max_cut_freq": 0.474375,
+   "l2_interior_share": 0.3222680412371134,
+   "l2_max_cut_freq": 0.3775,
+   "modal_share_mean": 0.4849441830196235,
+   "lsoas_modal_below_half": 0.5877052462955547,
+   "lsoas_modal_above_0.9": 0.0038045654785742893,
+   "n_open_mean": 52.60125,
+   "n_groups_mean": 22.3225,
+   "cap_share_1": 0.42155604667189467,
+   "cap_share_2": 0.31282526555927853,
+   "cap_share_3": 0.2656186877688268,
+   "co_same_group": 0.2757484489478659,
+   "co_cross_group": 0.02008473234079241,
+   "ari_mean": 0.27740239297921526,
+   "E_mean": 9695256.461876497,
+   "E1_mean": 4223366.557093391,
+   "T_mean_mean": 3.9994380222288,
+   "C8_mean": 0.9438348978210022
+  },
+  "3": {
+   "l1_interior_share": 0.12879725085910654,
+   "l1_max_cut_freq": 0.483125,
+   "l2_interior_share": 0.32261168384879724,
+   "l2_max_cut_freq": 0.376875,
+   "modal_share_mean": 0.48353724469363235,
+   "lsoas_modal_below_half": 0.5849018822587104,
+   "lsoas_modal_above_0.9": 0.0032038446135362435,
+   "n_open_mean": 52.321875,
+   "n_groups_mean": 22.243125,
+   "cap_share_1": 0.415528877739951,
+   "cap_share_2": 0.3150331481813295,
+   "cap_share_3": 0.26943797407871944,
+   "co_same_group": 0.2759252515868479,
+   "co_cross_group": 0.02014566208605142,
+   "ari_mean": 0.278481780141899,
+   "E_mean": 9715879.226935316,
+   "E1_mean": 4231368.470218353,
+   "T_mean_mean": 4.007015663233887,
+   "C8_mean": 0.9439901117671569
+  },
+  "4": {
+   "l1_interior_share": 0.1279725085910653,
+   "l1_max_cut_freq": 0.506875,
+   "l2_interior_share": 0.3263230240549828,
+   "l2_max_cut_freq": 0.39625,
+   "modal_share_mean": 0.4838169553464157,
+   "lsoas_modal_below_half": 0.5830997196635963,
+   "lsoas_modal_above_0.9": 0.004004805766920304,
+   "n_open_mean": 52.424375,
+   "n_groups_mean": 22.26125,
+   "cap_share_1": 0.4205343411342529,
+   "cap_share_2": 0.3086469795777251,
+   "cap_share_3": 0.27081867928802206,
+   "co_same_group": 0.27684521530156675,
+   "co_cross_group": 0.020171107678591753,
+   "ari_mean": 0.27908634890047407,
+   "E_mean": 9706010.437513823,
+   "E1_mean": 4231888.189786582,
+   "T_mean_mean": 4.0075078265765605,
+   "C8_mean": 0.9436886511709391
+  }
+ },
+ "mc_standard_error": {
+  "l1_interior_share": {
+   "mean_of_chains": 0.12768041237113403,
+   "se": 0.0006594447100479561,
+   "range": [
+    0.12577319587628866,
+    0.12879725085910654
+   ]
+  },
+  "l1_max_cut_freq": {
+   "mean_of_chains": 0.484375,
+   "se": 0.007822909731466068,
+   "range": [
+    0.473125,
+    0.506875
+   ]
+  },
+  "l2_interior_share": {
+   "mean_of_chains": 0.32414089347079034,
+   "se": 0.0010039913574819903,
+   "range": [
+    0.3222680412371134,
+    0.3263230240549828
+   ]
+  },
+  "l2_max_cut_freq": {
+   "mean_of_chains": 0.38375000000000004,
+   "se": 0.004499710638844824,
+   "range": [
+    0.376875,
+    0.39625
+   ]
+  },
+  "modal_share_mean": {
+   "mean_of_chains": 0.4843005356427713,
+   "se": 0.0003645344013817923,
+   "range": [
+    0.48353724469363235,
+    0.4849441830196235
+   ]
+  },
+  "lsoas_modal_below_half": {
+   "mean_of_chains": 0.584451341609932,
+   "se": 0.0012299573963002555,
+   "range": [
+    0.5820985182218662,
+    0.5877052462955547
+   ]
+  },
+  "lsoas_modal_above_0.9": {
+   "mean_of_chains": 0.0036043251902282743,
+   "se": 0.0001827935380807523,
+   "range": [
+    0.0032038446135362435,
+    0.004004805766920304
+   ]
+  },
+  "n_open_mean": {
+   "mean_of_chains": 52.470625,
+   "se": 0.061558005335076896,
+   "range": [
+    52.321875,
+    52.60125
+   ]
+  },
+  "n_groups_mean": {
+   "mean_of_chains": 22.290000000000003,
+   "se": 0.022248302837894685,
+   "range": [
+    22.243125,
+    22.333125
+   ]
+  },
+  "cap_share_1": {
+   "mean_of_chains": 0.41932594039908766,
+   "se": 0.00132224094240148,
+   "range": [
+    0.415528877739951,
+    0.42155604667189467
+   ]
+  },
+  "cap_share_2": {
+   "mean_of_chains": 0.312687069753396,
+   "se": 0.001422031233343715,
+   "range": [
+    0.3086469795777251,
+    0.3150331481813295
+   ]
+  },
+  "cap_share_3": {
+   "mean_of_chains": 0.26798698984751634,
+   "se": 0.0012713999390028098,
+   "range": [
+    0.2656186877688268,
+    0.27081867928802206
+   ]
+  },
+  "co_same_group": {
+   "mean_of_chains": 0.27525165837663207,
+   "se": 0.0009521607263626981,
+   "range": [
+    0.2724877176702479,
+    0.27684521530156675
+   ]
+  },
+  "co_cross_group": {
+   "mean_of_chains": 0.020151944700301273,
+   "se": 2.561926030203646e-05,
+   "range": [
+    0.02008473234079241,
+    0.0202062766957695
+   ]
+  },
+  "ari_mean": {
+   "mean_of_chains": 0.27755436121959076,
+   "se": 0.0008443171923765721,
+   "range": [
+    0.27524692285677466,
+    0.27908634890047407
+   ]
+  },
+  "E_mean": {
+   "mean_of_chains": 9703128.490837984,
+   "se": 4942.026197333023,
+   "range": [
+    9695256.461876497,
+    9715879.226935316
+   ]
+  },
+  "E1_mean": {
+   "mean_of_chains": 4226692.795670114,
+   "se": 2926.2136578452914,
+   "range": [
+    4220147.965582131,
+    4231888.189786582
+   ]
+  },
+  "T_mean_mean": {
+   "mean_of_chains": 4.002587899194229,
+   "se": 0.0027710619019548437,
+   "range": [
+    3.996390084737669,
+    4.0075078265765605
+   ]
+  },
+  "C8_mean": {
+   "mean_of_chains": 0.9440721272218487,
+   "se": 0.0002421905030849442,
+   "range": [
+    0.9436886511709391,
+    0.9447748481282966
+   ]
+  }
+ }
+}
