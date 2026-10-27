@@ -1,0 +1,43 @@
+
+\begin{table}[ht]
+\centering
+\caption{Model parameters and sets.}
+\label{tab:parameters}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Notation & Description \\
+\midrule
+$L = \{1, \ldots, h\}$ & set of hierarchy levels \\
+$G^\ell = (V^\ell, E^\ell)$ & dual graph at level $\ell \in L$ and $G^1$ is the base graph \\
+$V^\ell$ & node set at level $\ell \in L$ \\
+$E^\ell$ & edge set at level $\ell \in L$; adjacency inherited from $G^1$ \\
+$F^\ell \subseteq V^1$ & candidate facility sites at level $\ell \in L$ \\
+$d_i$ & demand of unit $i \in V^1$; aggregated for $i \in V^\ell$, $\ell \geq 2$ \\
+$d = \sum_{i \in V^1} d_i$ & total demand \\
+$w$ & nominal workload of one service team \\
+$c^{\ell}_{\min}$ & minimum capacity level per facility at level $\ell \in L$ \\
+$c^{\ell}_{\max}$ & maximum capacity level per facility at level $\ell \in L$ \\
+$\varepsilon^\ell$ & demand-balance tolerance at level $\ell \in L$ \\
+$\kappa^\ell_{\min}$ & minimum number of open districts at level $(\ell-1)$ per open district at level $\ell \geq 2$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Decision variables, defined for each level $\ell \in L$.}
+\label{tab:variables}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Variable & Description \\
+\midrule
+$x_{ij}^\ell \in \{0,1\}$ & 1 if unit $i \in V^1$ is assigned to facility $j \in F^\ell$ \\
+$y_j^\ell \in \{0,1\}$ & 1 if facility $j \in F^\ell$ is open \\
+$c^\ell_j \in \{0, 1, \ldots, c^\ell_{\max}\}$ & capacity level (number of service teams) at facility $j$; at level $2$ the aggregate of the member districts' capacities \\
+$u_{j'j} \in \{0, \ldots, c^1_{\max}\}$ & capacity of facility $j' \in F^1$ counted toward $j \in F^2$, $u_{j'j} = c^1_{j'} z_{j'j}$ \\
+$z_{j'j} \in \{0,1\}$ & 1 if facility $j' \in F^{\ell-1}$ is open and assigned to facility $j \in F^\ell$ \\
+&
+for $\ell \geq 2$; linearizes $y^{\ell-1}_{j'} \wedge x^\ell_{j'j}$ \\
+\bottomrule
+\end{tabular}
+\end{table}

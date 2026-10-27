@@ -1,0 +1,396 @@
+\begin{figure}[t]
+\centering
+
+%% Color palette
+\definecolor{super}{RGB}{100,100,100} 
+\definecolor{colA}{RGB}{255,220,80}    % yellow  - D1
+\definecolor{colB}{RGB}{130,200,130}   % green   - D2
+\definecolor{colC}{RGB}{100,160,220}   % blue    - D3
+\definecolor{colD}{RGB}{255,160,80}    % orange  - D4
+\definecolor{colE}{RGB}{180,130,210}   % purple  - D5
+\definecolor{colF}{RGB}{220,120,120}   % red     - D6
+\definecolor{colG}{RGB}{160,210,200}   % teal    - D7 (bottom strip)
+\definecolor{merged}{RGB}{210,210,210} % merged (gray)
+\definecolor{treeedge}{RGB}{100,100,100}
+\definecolor{cutedge}{RGB}{200,30,30}
+\definecolor{newA}{RGB}{255,240,150}
+\definecolor{newB}{RGB}{150,220,200}
+
+%% ------------------------------------------------------------------
+%% Helpers
+%% ------------------------------------------------------------------
+\newcommand{\gridnode}[3]{% x, y, color
+  \node[circle, draw=black, fill=#3, inner sep=0pt, minimum size=8pt] at (#1,#2) {};
+}
+
+\newcommand{\facilitynode}[3]{% x, y, color  (facility candidate = thick border + star)
+  \node[star, star points=6, draw=black, fill=#3, inner sep=0pt,
+        minimum size=10pt, line width=1pt] at (#1,#2) {};
+}
+
+
+%% ==================================================================
+%%  ReCom VERSION  – no hierarchy, no capacity, no facility stars
+%%  4 panels arranged horizontally
+%% ==================================================================
+\scalebox{0.8}{
+\begin{tikzpicture}[
+  arrow/.style={-{Stealth[length=6pt]}, thick, gray!70},
+  label/.style={font=\small\bfseries},
+  every node/.style={font=\small}
+]
+
+
+
+\def\s{0.58}   % node spacing (cm)
+
+%% ================================================================
+%%  PANEL 1 – Current partition state
+%% ================================================================
+\begin{scope}[xshift=0cm]
+
+  %% District fills – rows 0-3
+  \fill[colA, opacity=0.35, rounded corners=2pt]
+    (-0.22*\s, 2*\s-0.22*\s) rectangle (1*\s+0.22*\s, 3*\s+0.22*\s);
+  \fill[colB, opacity=0.35, rounded corners=2pt]
+    (2*\s-0.22*\s, 2*\s-0.22*\s) rectangle (3*\s+0.22*\s, 3*\s+0.22*\s);
+  \fill[colC, opacity=0.35, rounded corners=2pt]
+    (4*\s-0.22*\s, 2*\s-0.22*\s) rectangle (5*\s+0.22*\s, 3*\s+0.22*\s);
+  \fill[colD, opacity=0.35, rounded corners=2pt]
+    (-0.22*\s, 0*\s-0.22*\s) rectangle (1*\s+0.22*\s, 1*\s+0.22*\s);
+  \fill[colE, opacity=0.35, rounded corners=2pt]
+    (2*\s-0.22*\s, 0*\s-0.22*\s) rectangle (3*\s+0.22*\s, 1*\s+0.22*\s);
+  \fill[colF, opacity=0.35, rounded corners=2pt]
+    (4*\s-0.22*\s, 0*\s-0.22*\s) rectangle (5*\s+0.22*\s, 1*\s+0.22*\s);
+  %% Bottom strip district
+  \fill[colG, opacity=0.55, rounded corners=2pt]
+    (-0.22*\s, -2*\s-0.22*\s) rectangle (5*\s+0.22*\s, -1*\s+0.22*\s);
+
+%% Superdistrict 1 (cols 0-3, rows 0-3)
+  \draw[super, ultra thick, rounded corners=3pt]
+    (-0.35*\s, -0.35*\s) rectangle (3*\s+0.35*\s, 3*\s+0.35*\s);
+  \node[font=\tiny\bfseries, text=super] at (1.5*\s, 3.2*\s+0.45) {\normalsize$D^2_1$};
+  %% Superdistrict 2 (cols 0-3, rows 0-3)
+  \draw[super, ultra thick, rounded corners=3pt]
+    (3.65*\s, -0.35*\s) rectangle (5*\s+0.35*\s, 3*\s+0.35*\s);
+  \node[font=\tiny\bfseries, text=super] at (4.6*\s, 3.2*\s+0.45) {\normalsize$D^2_2$};
+  %% Superdistrict 3 (cols 0-3, rows 0-3)
+  \draw[super, ultra thick, rounded corners=3pt]
+    (-0.3*\s, -2.15*\s-0.22*\s) rectangle (5.1*\s+0.22*\s, -0.86*\s+0.22*\s);
+  \node[font=\tiny\bfseries, text=super] at (-1*\s, -2.3*\s+0.45) {\normalsize$D^2_3$};
+
+  
+  
+  %% Grid edges – rows 0-3
+  \foreach \r in {0,1,2,3} {
+    \foreach \c in {0,...,4} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s+\s, \r*\s);
+    }
+  }
+  \foreach \c in {0,...,5} {
+    \foreach \r in {0,1,2} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s, \r*\s+\s);
+    }
+  }
+  %% Grid edges – bottom strip
+  \foreach \r in {-2,-1} {
+    \foreach \c in {0,...,4} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s+\s, \r*\s);
+    }
+  }
+  \foreach \c in {0,...,5} {
+    \draw[gray!40, thin] (\c*\s, -2*\s) -- (\c*\s, -1*\s);
+    \draw[gray!40, thin] (\c*\s, -1*\s) -- (\c*\s, 0);
+  }
+
+  %% Nodes – rows 0-3
+  \foreach \r in {2,3} {
+    \gridnode{0*\s}{\r*\s}{colA}
+    \gridnode{1*\s}{\r*\s}{colA}
+    \gridnode{2*\s}{\r*\s}{colB}
+    \gridnode{3*\s}{\r*\s}{colB}
+    \gridnode{4*\s}{\r*\s}{colC}
+    \gridnode{5*\s}{\r*\s}{colC}
+  }
+  \foreach \r in {0,1} {
+    \gridnode{0*\s}{\r*\s}{colD}
+    \gridnode{1*\s}{\r*\s}{colD}
+    \gridnode{2*\s}{\r*\s}{colE}
+    \gridnode{3*\s}{\r*\s}{colE}
+    \gridnode{4*\s}{\r*\s}{colF}
+    \gridnode{5*\s}{\r*\s}{colF}
+  }
+  %% Nodes – bottom strip
+  \foreach \r in {-2,-1} {
+    \foreach \c in {0,...,5} {
+      \gridnode{\c*\s}{\r*\s}{colG}
+    }
+  }
+
+%% Facility candidates (stars): one per district
+  \facilitynode{0*\s}{3*\s}{colA}
+  \facilitynode{2*\s}{2*\s}{colB}
+  \facilitynode{5*\s}{3*\s}{colC}
+  \facilitynode{1*\s}{0*\s}{colD}
+  \facilitynode{3*\s}{1*\s}{colE}
+  \facilitynode{4*\s}{0*\s}{colF}
+  \facilitynode{2*\s}{-2*\s}{colG}
+
+  
+  \node[label] at (2.5*\s, -2*\s-0.7) {(1) Partition $V^{2}$};
+
+\end{scope}
+
+%% Arrow 1→2
+\draw[arrow] (5*\s+0.45, 0.5*\s) -- +(0.45,0);
+
+%% ================================================================
+%%  PANEL 2 – Select merge pair (districts D1+D2 highlighted)
+%% ================================================================
+\begin{scope}[xshift=4.5cm]
+
+  %% Unchanged districts (faded)
+  \fill[colC, opacity=0.35, rounded corners=2pt]
+    (4*\s-0.22*\s, 2*\s-0.22*\s) rectangle (5*\s+0.22*\s, 3*\s+0.22*\s);
+  \fill[colF, opacity=0.35, rounded corners=2pt]
+    (4*\s-0.22*\s, 0*\s-0.22*\s) rectangle (5*\s+0.22*\s, 1*\s+0.22*\s);
+  \fill[colG, opacity=0.35, rounded corners=2pt]
+    (-0.22*\s, -2*\s-0.22*\s) rectangle (5*\s+0.22*\s, -1*\s+0.22*\s);
+
+  %% Merge region highlight (cols 0-3, rows 0-3)
+  \fill[colA!30, opacity=0, rounded corners=3pt]
+    (-0.35*\s, -0.35*\s) rectangle (3*\s+0.35*\s, 3*\s+0.35*\s);
+  \draw[colA!60!colB, ultra thick, rounded corners=3pt]
+    (-0.35*\s, -0.35*\s) rectangle (3*\s+0.35*\s, 3*\s+0.35*\s);
+  \node[font=\tiny\bfseries, text=colA!60!colB] at (1.5*\s, 3*\s+0.5) {merged \normalsize $D^2_1$};
+
+  %% Grid edges – rows 0-3
+  \foreach \r in {0,1,2,3} {
+    \foreach \c in {0,1,2,4} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s+\s, \r*\s);
+    }
+  }
+  \foreach \c in {0,...,5} {
+    \foreach \r in {0,1,2} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s, \r*\s+\s);
+    }
+  }
+  %% Grid edges – bottom strip
+  \foreach \r in {-2,-1} {
+    \foreach \c in {0,...,4} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s+\s, \r*\s);
+    }
+  }
+  \foreach \c in {0,...,5} {
+    \foreach \r in {-2,1} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s, \r*\s+\s);
+    }
+  }
+\foreach \c in {4,5} {
+    \foreach \r in {-1,0} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s, \r*\s+\s);
+    }
+  }
+
+  %% Nodes – merge region gray, right strip colored
+  \foreach \r in {0,...,3} {
+    \foreach \c in {0,...,3} {
+      \gridnode{\c*\s}{\r*\s}{gray!55}
+    }
+  }
+  \foreach \r in {2,3} {
+    \gridnode{4*\s}{\r*\s}{colC}
+    \gridnode{5*\s}{\r*\s}{colC}
+  }
+  \foreach \r in {0,1} {
+    \gridnode{4*\s}{\r*\s}{colF}
+    \gridnode{5*\s}{\r*\s}{colF}
+  }
+  \foreach \r in {-2,-1} {
+    \foreach \c in {0,...,5} {
+      \gridnode{\c*\s}{\r*\s}{colG}
+    }
+  }
+
+
+% facility nodes
+  \facilitynode{5*\s}{3*\s}{colC}
+  \facilitynode{4*\s}{0*\s}{colF}
+  \facilitynode{2*\s}{-2*\s}{colG}
+  
+
+  \node[label] at (2.5*\s, -2*\s-0.7) {(2) Merge superdistrict};
+\end{scope}
+
+%% Arrow 2→3
+\draw[arrow] (4.5cm + 160*\s+0.45, 0.5*\s) -- +(0.45,0);
+
+%% ================================================================
+%%  PANEL 3 – Spanning tree + cut on merged region
+%% ================================================================
+\begin{scope}[xshift=9.0cm]
+
+  %% Unchanged districts (right strip + bottom)
+  \fill[colC, opacity=0.35, rounded corners=2pt]
+    (4*\s-0.22*\s, 2*\s-0.22*\s) rectangle (5*\s+0.22*\s, 3*\s+0.22*\s);
+  \fill[colF, opacity=0.35, rounded corners=2pt]
+    (4*\s-0.22*\s, 0*\s-0.22*\s) rectangle (5*\s+0.22*\s, 1*\s+0.22*\s);
+  \fill[colG, opacity=0.35, rounded corners=2pt]
+    (-0.22*\s, -2*\s-0.22*\s) rectangle (5*\s+0.22*\s, -1*\s+0.22*\s);
+
+  %% Spanning tree edges on the merged 4×4 block
+  \draw[treeedge, very thick]
+    (0,3*\s) -- (1*\s,3*\s) 
+    (2*\s,3*\s) -- (3*\s,3*\s)
+    (0,3*\s) -- (0,2*\s)
+    (1*\s,3*\s) -- (1*\s,2*\s)
+    (2*\s,3*\s) -- (2*\s,2*\s) 
+    (3*\s,3*\s) -- (3*\s,2*\s) -- (3*\s,1*\s) -- (3*\s,0)
+    (0,2*\s) -- (0,1*\s) -- (0,0)
+    (1*\s,2*\s) -- (1*\s,1*\s)
+    (2*\s,1*\s) -- (2*\s,0)
+    (1*\s,0) -- (1*\s,1*\s)
+    (2*\s,0) -- (3*\s,0);
+  %% Cut edge (red)
+  \draw[cutedge, very thick, line cap=round] (1*\s,1*\s) -- (2*\s,1*\s);
+  \node[font=\tiny, text=cutedge] at (1.5*\s, 0.8*\s+0.38) {Cut};
+
+
+  \foreach \c in {4,5} {
+    \foreach \r in {0,1,2} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s, \r*\s+\s);
+    }
+  }
+  %% Grid edges – bottom strip
+  \foreach \r in {-2,-1} {
+    \foreach \c in {0,...,4} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s+\s, \r*\s);
+    }
+  }
+  \foreach \c in {4,5} {
+    \draw[gray!40, thin] (\c*\s, -2*\s) -- (\c*\s, -1*\s);
+    \draw[gray!40, thin] (\c*\s, -1*\s) -- (\c*\s, 0);
+  }
+
+  %% Nodes
+  \foreach \r in {0,...,3} {
+    \foreach \c in {0,...,3} {
+      \gridnode{\c*\s}{\r*\s}{gray!55}
+    }
+  }
+  \foreach \r in {2,3} {
+    \gridnode{4*\s}{\r*\s}{colC}
+    \gridnode{5*\s}{\r*\s}{colC}
+  }
+  \foreach \r in {0,1} {
+    \gridnode{4*\s}{\r*\s}{colF}
+    \gridnode{5*\s}{\r*\s}{colF}
+  }
+  \foreach \r in {-2,-1} {
+    \foreach \c in {0,...,5} {
+      \gridnode{\c*\s}{\r*\s}{colG}
+    }
+  }
+
+  \facilitynode{5*\s}{3*\s}{colC}
+  \facilitynode{4*\s}{0*\s}{colF}
+  \facilitynode{2*\s}{-2*\s}{colG}
+
+  \node[label] at (2.5*\s, -2*\s-0.7) {(3) Cut spanning tree};
+\end{scope}
+
+%% Arrow 3→4
+\draw[arrow] (9.0cm + 160*\s+0.45, 0.5*\s) -- +(0.45,0);
+
+%% ================================================================
+%%  PANEL 4 – New partition state
+%% ================================================================
+\begin{scope}[xshift=13.5cm]
+
+  %% New districts from cut (cols 0-1 → newA, cols 2-3 → colD, full rows 0-3)
+  \fill[newA, opacity=0.35, rounded corners=2pt]
+    (-0.22*\s, -0.22*\s) rectangle (1*\s+0.22*\s, 3*\s+0.22*\s);
+  \fill[colD, opacity=0.35, rounded corners=2pt]
+    (2*\s-0.22*\s, -0.22*\s) rectangle (3*\s+0.22*\s, 3*\s+0.22*\s);
+
+  %% Unchanged right strip + bottom
+  \fill[colC, opacity=0.35, rounded corners=2pt]
+    (4*\s-0.22*\s, 2*\s-0.22*\s) rectangle (5*\s+0.22*\s, 3*\s+0.22*\s);
+  \fill[colF, opacity=0.35, rounded corners=2pt]
+    (4*\s-0.22*\s, 0*\s-0.22*\s) rectangle (5*\s+0.22*\s, 1*\s+0.22*\s);
+  \fill[colG, opacity=0.35, rounded corners=2pt]
+    (-0.22*\s, -2*\s-0.22*\s) rectangle (5*\s+0.22*\s, -1*\s+0.22*\s);
+
+  %% Grid edges – rows 0-3
+  \foreach \r in {0,1,2,3} {
+    \foreach \c in {0,...,4} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s+\s, \r*\s);
+    }
+  }
+  \foreach \c in {0,...,5} {
+    \foreach \r in {0,1,2} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s, \r*\s+\s);
+    }
+  }
+  %% Grid edges – bottom strip
+  \foreach \r in {-2,-1} {
+    \foreach \c in {0,...,4} {
+      \draw[gray!40, thin] (\c*\s, \r*\s) -- (\c*\s+\s, \r*\s);
+    }
+  }
+  \foreach \c in {0,...,5} {
+    \draw[gray!40, thin] (\c*\s, -2*\s) -- (\c*\s, -1*\s);
+    \draw[gray!40, thin] (\c*\s, -1*\s) -- (\c*\s, 0);
+  }
+
+  %% Nodes
+  \foreach \r in {0,...,3} {
+    \gridnode{0*\s}{\r*\s}{newA}
+    \gridnode{1*\s}{\r*\s}{newA}
+    \gridnode{2*\s}{\r*\s}{colD}
+    \gridnode{3*\s}{\r*\s}{colD}
+  }
+  \foreach \r in {2,3} {
+    \gridnode{4*\s}{\r*\s}{colC}
+    \gridnode{5*\s}{\r*\s}{colC}
+  }
+  \foreach \r in {0,1} {
+    \gridnode{4*\s}{\r*\s}{colF}
+    \gridnode{5*\s}{\r*\s}{colF}
+  }
+  \foreach \r in {-2,-1} {
+    \foreach \c in {0,...,5} {
+      \gridnode{\c*\s}{\r*\s}{colG}
+    }
+  }
+
+%% New facility candidates (stars)
+  \facilitynode{0*\s}{3*\s}{newA}
+  \facilitynode{2*\s}{3*\s}{colD}
+  \facilitynode{1*\s}{0*\s}{newA}
+  \facilitynode{3*\s}{0*\s}{colD}
+  \facilitynode{5*\s}{3*\s}{colC}
+  \facilitynode{4*\s}{0*\s}{colF}
+  \facilitynode{2*\s}{-2*\s}{colG}
+  
+  \node[label] at (2.5*\s, -2*\s-0.7) {(4) 5 new districts};
+\end{scope}
+
+%% ================================================================
+%%  LEGEND
+%% ================================================================
+\begin{scope}[xshift=0cm, yshift=-2.4cm]
+
+\end{scope}
+
+
+  
+\end{tikzpicture}
+}
+\caption{One iteration of FalCom: (1)~Partition supergraph;
+         (2)~Merge a superdistrict;
+         (3)~a spanning tree is built on the merged region and a feasible
+         cut edge is sampled;
+         (4)~the resulting new state $s_{i+1}$. Star-nodes indicate candidate facilities.}
+\label{fig:bottom}
+\end{figure}

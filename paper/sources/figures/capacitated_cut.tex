@@ -1,0 +1,147 @@
+
+
+%% =====================================================================
+%%  Figure: One-sided vs Two-sided Capacitated Tree Cut
+%% =====================================================================
+
+\begin{figure}[t]
+\centering
+
+\begin{subfigure}{0.48\textwidth}
+\centering
+\scalebox{1.1}{
+\begin{tikzpicture}[
+  arrow/.style={-{Stealth[length=5pt]}, thick, gray!70},
+  lbl/.style={font=\scriptsize\bfseries},
+  every node/.style={font=\scriptsize}
+]
+\def\s{0.65}
+
+%% LEFT: One-sided cut
+\begin{scope}[xshift=0cm]
+
+  %% Residual background
+  \fill[residual, opacity=0.4, rounded corners=2pt]
+    (-0.3*\s,-0.3*\s) rectangle (4*\s+0.3*\s, 3*\s+0.3*\s);
+
+  %% Spanning tree
+  \draw[treecol, very thick]
+    (0,3*\s) -- (1*\s,3*\s) -- (2*\s,3*\s)
+    (3*\s,3*\s) -- (4*\s,3*\s)
+    (0,3*\s) -- (0,2*\s) -- (0,1*\s)
+    (1*\s,3*\s) -- (1*\s,2*\s) -- (1*\s,1*\s) -- (1*\s,0)
+    (2*\s,3*\s) -- (2*\s,2*\s) -- (2*\s,1*\s) -- (2*\s,0)
+    (3*\s,3*\s) -- (3*\s,2*\s) -- (3*\s,1*\s) -- (3*\s,0)
+    (4*\s,3*\s) -- (4*\s,2*\s) -- (4*\s,1*\s) -- (4*\s,0)
+    (0,0) -- (1*\s,0);
+
+  %% Cut edge
+  \draw[cutcol, very thick, line cap=round] (2*\s,3*\s) -- (3*\s,3*\s);
+  \node[font=\tiny, text=cutcol] at (2.5*\s, 2.3*\s+0.3) {cut};
+  \node[font=\tiny, text=cutcol] at (2.1*\s, 2.9*\s+0.3) {$u$};
+  \node[font=\tiny, text=cutcol] at (2.9*\s, 3*\s+0.3) {$u^{\prime}$};
+
+  %% Highlight extracted component (right side)
+  \fill[distA, opacity=0.3, rounded corners=2pt]
+    (3*\s-0.2*\s, -0.2*\s) rectangle (4*\s+0.2*\s, 3*\s+0.2*\s);
+
+  %% Nodes
+  \foreach \r in {0,...,3} {
+    \foreach \c in {0,...,2} {
+      \gnode{\c*\s}{\r*\s}{residual}
+    }
+    \gnode{3*\s}{\r*\s}{distA}
+    \gnode{4*\s}{\r*\s}{distA}
+  }
+
+  %% Candidates
+  \cand{1*\s}{2*\s}  \cand{4*\s}{1*\s}
+
+  %% Annotations
+  \draw[decorate, decoration={brace, amplitude=4pt, mirror}, thick, distA!70!black]
+    (4*\s+0.4*\s, -0.2*\s) -- (4*\s+0.4*\s, 3*\s+0.2*\s);
+  \node[font=\tiny, distA!70!black, anchor=west] at (4*\s+0.55*\s, 1.5*\s)
+    {$T_{u^\prime}$ admissible};
+
+  \draw[decorate, decoration={brace, amplitude=4pt}, thick, gray!60]
+    (-0.4*\s, -0.2*\s) -- (-0.4*\s, 3*\s+0.2*\s);
+  \node[font=\tiny, gray!60!black, anchor=east, align=center] at (-0.55*\s, 1.5*\s)
+    {residual \\continues};
+
+  \node[lbl] at (2*\s, -0.7) {$c^{(r)} > c_{\max}^{\ell}$};
+\end{scope}
+\end{tikzpicture}
+}
+\subcaption{One-sided cut}\label{fig:4a}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.48\textwidth}
+\centering
+\scalebox{1.1}{
+\begin{tikzpicture}[
+  arrow/.style={-{Stealth[length=5pt]}, thick, gray!70},
+  lbl/.style={font=\scriptsize\bfseries},
+  every node/.style={font=\scriptsize}
+]
+\def\s{0.65}
+
+%% RIGHT: Two-sided cut
+\begin{scope}[xshift=0cm]
+
+  %% Component backgrounds
+  \fill[distC, opacity=0.3, rounded corners=2pt]
+    (-0.2*\s,-0.2*\s) rectangle (2*\s+0.2*\s, 3*\s+0.2*\s);
+  \fill[distD, opacity=0.3, rounded corners=2pt]
+    (3*\s-0.2*\s,-0.2*\s) rectangle (4*\s+0.2*\s, 3*\s+0.2*\s);
+
+  %% Spanning tree
+  \draw[treecol, very thick]
+    (0,3*\s) -- (1*\s,3*\s) -- (2*\s,3*\s)
+    (3*\s,3*\s) -- (4*\s,3*\s)
+    (0,3*\s) -- (0,2*\s) -- (0,1*\s) 
+    (1*\s,3*\s) -- (1*\s,2*\s) -- (1*\s,1*\s) -- (1*\s,0)
+    (2*\s,3*\s) -- (2*\s,2*\s) -- (2*\s,1*\s) -- (2*\s,0)
+    (3*\s,3*\s) -- (3*\s,2*\s) -- (3*\s,1*\s) -- (3*\s,0)
+    (4*\s,3*\s) -- (4*\s,2*\s) -- (4*\s,1*\s) -- (4*\s,0)
+    (0,0) -- (1*\s,0);
+
+  %% Cut edge
+  \draw[cutcol, very thick, line cap=round] (2*\s,3*\s) -- (3*\s,3*\s);
+  \node[font=\tiny, text=cutcol] at (2.5*\s, 2.3*\s+0.3) {cut};
+  \node[font=\tiny, text=cutcol] at (2.1*\s, 2.9*\s+0.3) {$u$};
+  \node[font=\tiny, text=cutcol] at (2.9*\s, 3*\s+0.3) {$u^{\prime}$};
+
+  %% Nodes
+  \foreach \r in {0,...,3} {
+    \foreach \c in {0,...,2} {
+      \gnode{\c*\s}{\r*\s}{distC}
+    }
+    \gnode{3*\s}{\r*\s}{distD}
+    \gnode{4*\s}{\r*\s}{distD}
+  }
+
+  %% Candidates
+  \cand{1*\s}{2*\s}  \cand{4*\s}{1*\s}
+
+  %% Annotations
+  \draw[decorate, decoration={brace, amplitude=4pt, mirror}, thick, distD!70!black]
+    (4*\s+0.4*\s, -0.2*\s) -- (4*\s+0.4*\s, 3*\s+0.2*\s);
+  \node[font=\tiny, distD!70!black, anchor=west] at (4*\s+0.55*\s, 1.5*\s)
+    {$T_{u^{\prime}}$ admissible};
+
+  \draw[decorate, decoration={brace, amplitude=4pt}, thick, distC!70!black]
+    (-0.4*\s, -0.2*\s) -- (-0.4*\s, 3*\s+0.2*\s);
+  \node[font=\tiny, distC!70!black, anchor=east] at (-0.55*\s, 1.5*\s)
+    {$T_u$ admissible};
+
+  \node[lbl] at (2*\s, -0.7) {$c^{(r)} \leq c_{\max}^{\ell}$};
+
+\end{scope}
+\end{tikzpicture}
+}
+\subcaption{Two-sided cut}\label{fig:4b}
+\end{subfigure}
+
+\caption{Capacitated tree cut modes. \textbf{(a)}~One-sided mode ($c^{(r)} > c^{\ell}_{\max}$): Feasibility must hold for only side $T_{u^\prime}$, i.e., $\phi(T_{u^\prime})>0$. The residual continues to the next recursion step. \textbf{(b)}~Two-sided mode ($c^{(r)} \leq c^{\ell}_{\max}$): Both sides must satisfy the feasibility condition, i.e., $\phi(T_u)>0$ and $\phi(T_{u^\prime})>0$. Stars (\protect\tikz\protect\node[star, star points=5, star point ratio=2.2, fill=candcol, inner sep=0pt, minimum size=5pt, draw=none] {};) mark candidate facilities.}
+\label{fig:cuts}
+\end{figure}
