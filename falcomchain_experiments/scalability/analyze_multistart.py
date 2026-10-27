@@ -75,8 +75,10 @@ def main():
                               for s, r in runs.items()}}
 
     # ---- observables: pairwise KS, split-R-hat, ESS -------------------------
-    for key in ("R1", "dspread"):
+    for key in ("R1", "dspread", "n_districts"):
         seqs = {s: np.array([x[key] for x in r["steps"] if key in x], dtype=float) for s, r in runs.items()}
+        if any(len(v) == 0 for v in seqs.values()):
+            continue
         L = min(len(v) for v in seqs.values()); b = int(args.burnin * L)
         post = {s: v[:L][b:] for s, v in seqs.items()}
         arr = np.stack([post[s] for s in args.seeds])
@@ -118,6 +120,30 @@ def main():
             hit = [st for st, sh in zip(steps[s], forgetting[s]) if sh <= 1.1 * base]
             t_forget[s] = int(hit[0]) if hit else None
         out["forgetting"]["steps_to_baseline"] = t_forget
+
+        # ---- partition-level observables on the stored plans ---------------
+        # (superdistrict count, cut-edge count, share of unit-capacity districts),
+        # one value per stored plan, post burn-in; KS between chains and between halves.
+        def plan_series(S):
+            n_sup, n_cut, cap1 = [], [], []
+            for d, su, cp in zip(S["district"], S["super"], S["capacity"]):
+                n_sup.append(len(np.unique(su)))
+                n_cut.append(int((d[edges[:, 0]] != d[edges[:, 1]]).sum()))
+                caps = {int(a): int(b) for a, b in zip(d, cp)}
+                cap1.append(sum(1 for v in caps.values() if v == 1) / max(1, len(caps)))
+            return {"n_superdistricts": np.array(n_sup, float), "cut_edges": np.array(n_cut, float),
+                    "share_unit_capacity_districts": np.array(cap1, float)}
+        series = {s: plan_series(S) for s, S in snaps.items()}
+        for key in ("n_superdistricts", "cut_edges", "share_unit_capacity_districts"):
+            post = {s: series[s][key][np.array(steps[s]) >= cut] for s in snaps}
+            ks = {f"{a}-{c}": ks_statistic(post[a], post[c]) for a, c in itertools.combinations(list(snaps), 2)}
+            halves = {s: ks_statistic(v[: len(v) // 2], v[len(v) // 2:]) for s, v in post.items()}
+            out[key] = {"means": {s: float(v.mean()) for s, v in post.items()},
+                        "pairwise_ks": ks, "max_pairwise_ks": max(ks.values()),
+                        "within_chain_halves_ks": halves,
+                        "within_chain_halves_ks_range": [min(halves.values()), max(halves.values())],
+                        "plans_per_chain": int(min(len(v) for v in post.values())),
+                        "source": "stored plans (every snap_every steps), post burn-in, no further thinning"}
 
     # ---- figure ---------------------------------------------------------------
     try:

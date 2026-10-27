@@ -30,7 +30,7 @@
   "runs": {
     "first": {
       "steps": 200000,
-      "seconds": 176.3,
+      "seconds": 174.2,
       "acceptance_rate": 0.9579447897239486,
       "rejection_causes": {
         "super_district_below_kappa": 8411
@@ -48,7 +48,7 @@
     },
     "last": {
       "steps": 200000,
-      "seconds": 173.7,
+      "seconds": 179.5,
       "acceptance_rate": 0.9589847949239746,
       "rejection_causes": {
         "super_district_below_kappa": 8203
@@ -66,7 +66,7 @@
     },
     "middle": {
       "steps": 200000,
-      "seconds": 175.5,
+      "seconds": 175.7,
       "acceptance_rate": 0.9580947904739524,
       "rejection_causes": {
         "super_district_below_kappa": 8381
@@ -87,6 +87,20 @@
     "first-last": 0.022850114250571252,
     "first-middle": 0.022955114775573878,
     "last-middle": 0.024120120600603007
+  },
+  "iid_noise_floor": {
+    "level1": {
+      "tv_between_two_samples": 0.020878,
+      "tv_between_halves": 0.0285505,
+      "expected_unvisited": 0.450445791195158,
+      "states": 435
+    },
+    "joint": {
+      "tv_between_two_samples": 0.0224615,
+      "tv_between_halves": 0.031945,
+      "expected_unvisited": 0.45853296226991835,
+      "states": 595
+    }
   },
   "pooled_tv_to_uniform": 0.5054032051769454,
   "pooled_tv_to_spanning_tree_law": 0.4321220332638541,
