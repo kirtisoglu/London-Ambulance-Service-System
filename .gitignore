@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .DS_Store
 texput.log
+
+# run logs of the chain scripts
+logs/
