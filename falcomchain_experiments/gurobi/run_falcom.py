@@ -889,7 +889,7 @@ def run(instance: str, args):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("instance", choices=["100", "400"], default="100", nargs="?")
+    ap.add_argument("instance", choices=["100", "400", "400_dense"], default="100", nargs="?")
     ap.add_argument("--rule", choices=["per_team", "main"], default="per_team")
     ap.add_argument("--eps", type=float, default=0.15)
     ap.add_argument("--steps", type=int, default=10000)

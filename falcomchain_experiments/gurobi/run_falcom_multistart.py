@@ -25,7 +25,7 @@ HERE = Path(__file__).resolve().parent
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("instance", choices=["100", "400"], default="100", nargs="?")
+    ap.add_argument("instance", choices=["100", "400", "400_dense"], default="100", nargs="?")
     ap.add_argument("--steps", type=int, default=10000)
     ap.add_argument("--beta-magnitude", type=float, default=1.0)
     ap.add_argument("--eps", type=float, default=0.15)

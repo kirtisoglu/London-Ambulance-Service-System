@@ -49,6 +49,11 @@ INSTANCES = {
                 candidates={(0, 0), (0, 3), (2, 1), (1, 2)}),
     "4x4": dict(rows=4, cols=4, unit=4, c_max=2, c_super=(2, 4), kappa=2,
                 candidates={(0, 0), (0, 3), (3, 0), (3, 3), (1, 2)}),
+    # Six capacity units with c^2 in [2, 3]: the level-2 partition has three
+    # super-districts of two units or two of three, so the supergraph
+    # recursion (one-sided extraction, residual predicate) is exercised.
+    "4x6": dict(rows=4, cols=6, unit=4, c_max=2, c_super=(2, 3), kappa=2,
+                candidates={(0, 0), (0, 5), (3, 0), (3, 5), (1, 2), (2, 3), (0, 3), (3, 2)}),
 }
 DEMAND = 100.0
 EPS = 0.15
@@ -294,14 +299,19 @@ def main() -> int:
 
     graph = Graph.from_networkx(g)
     starts = {"first": states1[0], "last": states1[-1], "middle": states1[n1 // 2]}
-    results, empirical = {}, {}
+    results, empirical, empirical_joint = {}, {}, {}
+    law_uniform_joint = {k: 1.0 / n2 for k in all2}
     for name, start in starts.items():
         c1, c2, half, rej, secs = run_chain(graph, start, a.steps, seed=hash(name) % 10_000)
         emp = normalize(c1)
         joint_keys = set()
-        for k2 in c2:
+        joint_counts = Counter()
+        for k2, v in c2.items():
             k1 = frozenset(d for blk in k2 for d in blk)
             joint_keys.add((k1, k2))
+            joint_counts[(k1, k2)] += v
+        emp_joint = normalize(joint_counts)
+        empirical_joint[name] = emp_joint
         results[name] = {
             "steps": a.steps, "seconds": round(secs, 1), "acceptance_rate": rej["acceptance_rate"],
             "rejection_causes": rej["causes"],
@@ -311,13 +321,38 @@ def main() -> int:
             "unsound_joint_visits": int(sum(1 for k in joint_keys if k not in all2)),
             "tv_first_vs_second_half": tv(normalize(half), normalize(Counter({k: c1[k] - half.get(k, 0) for k in c1}))),
             "tv_to_uniform": tv(emp, law_uniform), "tv_to_spanning_tree_law": tv(emp, law_tree),
+            "joint_tv_to_uniform": tv(emp_joint, law_uniform_joint),
         }
         empirical[name] = emp
         print(name, json.dumps(results[name]), flush=True)
     names = list(starts)
     cross = {f"{names[i]}-{names[j]}": tv(empirical[names[i]], empirical[names[j]])
              for i in range(len(names)) for j in range(i + 1, len(names))}
+    cross_joint = {f"{names[i]}-{names[j]}": tv(empirical_joint[names[i]], empirical_joint[names[j]])
+                   for i in range(len(names)) for j in range(i + 1, len(names))}
     pooled = normalize(Counter({s: sum(empirical[n].get(s, 0.0) for n in names) for s in states1}))
+    pooled_joint = normalize(Counter({k: sum(empirical_joint[n].get(k, 0.0) for n in names) for k in all2}))
+    # Level-2 law given level 1: for every level-1 state with more than one
+    # feasible grouping, the sampled conditional law against the uniform one,
+    # averaged over level-1 states with the pooled level-1 weights.
+    cond_tv_weighted, cond_mass, n_multi = 0.0, 0.0, 0
+    cond_rows = []
+    for s1 in states1:
+        groupings = level2[s1]
+        if len(groupings) < 2:
+            continue
+        n_multi += 1
+        mass = sum(pooled_joint.get((s1, g2), 0.0) for g2 in groupings)
+        if mass <= 0:
+            continue
+        cond = {g2: pooled_joint.get((s1, g2), 0.0) / mass for g2 in groupings}
+        unif = {g2: 1.0 / len(groupings) for g2 in groupings}
+        t = tv(cond, unif)
+        cond_tv_weighted += mass * t
+        cond_mass += mass
+        cond_rows.append({"sizes": sorted(len(d) for d in s1), "groupings": len(groupings),
+                          "level1_mass": mass, "tv_cond_to_uniform": t,
+                          "cond_max_over_min": max(cond.values()) / max(min(cond.values()), 1e-12)})
     # How the sampled law relates to the two reference laws, split by district-size pattern:
     # the mass each pattern receives, and the spanning-tree law *conditioned on the pattern*
     # (tree law within a pattern, pattern mass taken from the chain).
@@ -349,7 +384,22 @@ def main() -> int:
                "unvisited_level1_states": int(sum(1 for v in pooled.values() if v == 0)),
                "max_over_min_pooled_frequency": max(pooled.values()) / min(v for v in pooled.values() if v > 0),
                "pattern_mass": pattern_mass,
-               "pooled_tv_to_spanning_tree_law_within_pattern": tv(pooled, law_tree_within)}
+               "pooled_tv_to_spanning_tree_law_within_pattern": tv(pooled, law_tree_within),
+               "joint": {"tv_between_starts": cross_joint,
+                         "pooled_tv_to_uniform": tv(pooled_joint, law_uniform_joint),
+                         "unvisited_joint_states": int(sum(1 for v in pooled_joint.values() if v == 0)),
+                         "max_over_min_pooled_frequency": (max(pooled_joint.values())
+                                                           / min(v for v in pooled_joint.values() if v > 0)),
+                         "level1_states_with_several_groupings": n_multi,
+                         "mean_tv_level2_given_level1_to_uniform": (cond_tv_weighted / cond_mass if cond_mass else None),
+                         "superdistrict_count_mass": {str(k): v for k, v in sorted(Counter(
+                             {len(k2): 0.0 for (k1, k2) in all2}).items())},
+                         "conditional_rows": cond_rows}}
+    # mass by number of super-districts (joint law)
+    sd_mass = Counter()
+    for (k1, k2), v in pooled_joint.items():
+        sd_mass[len(k2)] += v
+    summary["joint"]["superdistrict_count_mass"] = {str(k): v for k, v in sorted(sd_mass.items())}
     (out_dir / f"enumeration_{INSTANCE}.json").write_text(json.dumps(summary, indent=2))
     # per-state table for a figure
     rows = []

@@ -299,6 +299,7 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
                 capacity_level=c_max_l1,
                 c_min=c_min_l1,
                 super_assignment=zones,
+                total_teams=(k_teams if zones is not None else None),
             )
             break
         except Exception:
@@ -473,6 +474,7 @@ def run_one(n: int, seed: int, steps: int, results_dir: Path,
         "n_chain_steps_hard_failed": n_failed,
         "hard_fail_error_types": err_types,
         "n_districts_initial": len(partition.parts),
+        "initial_total_capacity": int(sum(partition.teams.values())),
         "kappa_min": kappa_min,
         "snap_every": snap_every,
         "variant": variant,
