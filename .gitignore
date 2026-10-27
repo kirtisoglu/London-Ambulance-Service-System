@@ -5,3 +5,8 @@ texput.log
 
 # run logs of the chain scripts
 logs/
+
+# pooled five-chain directory: the chain files are symlinks to real_stations_u97 and real_stations_u97_groupstart
+data/derived/real_stations_u97_5chains/snap_*
+data/derived/real_stations_u97_5chains/trace_*
+data/derived/real_stations_u97_5chains/summary_*

@@ -86,7 +86,12 @@ dbar`, the default). All commands below assume `PYTHONHASHSEED=0`.
 5. A structurally different start: `--init groups --seed 5 --out-dir data/derived/real_stations_u97_groupstart`
    builds the initial plan inside the 21 real Groups (the three
    single-station Groups merged into their neighbours, 18 zones) instead of
-   the five sectors.
+   the five sectors. To compare it with the four sector-start chains, link
+   the five chains' `summary_*`, `trace_*` and `snap_*` files into one
+   directory (`data/derived/real_stations_u97_5chains`, whose links are not
+   committed) and run the post-processing and `best_plans` there; the
+   pairwise KS distances that involve seed 5 and the per-chain readouts of
+   `best_plans.json` give the comparison.
 6. FalCom as an optimizer on the same instance (the annealing rule of
    paper Section 7.3, `--optimizer`), eight seeds:
    `python -m falcomchain_experiments.las.run_real_stations --seed S --steps 50000 --snap-every 5000 --optimizer --tag opt --out-dir data/derived/real_stations_u97_opt`
