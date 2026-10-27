@@ -168,7 +168,8 @@ def sector_zones(g) -> dict:
     return {n: sector_of[g.nodes[n]["LSOA21CD"]] for n in g.nodes}
 
 
-def build_initial_state(g, seed, max_attempts, retries=30, log=print, init="sectors"):
+def build_initial_state(g, seed, max_attempts, retries=30, log=print, init="sectors",
+                        total_teams=None):
     """Feasible initial state. ``init="sectors"`` (default) partitions each of
     the five real LAS sectors separately against its own per-team target
     (about 1,000 LSOAs and 11-17 stations each); the first accepted step
@@ -186,6 +187,7 @@ def build_initial_state(g, seed, max_attempts, retries=30, log=print, init="sect
                 assignment_class=Assignment, capacity_level=C_MAX_BASE,
                 c_min=C_MIN_BASE, init_super_partition=False,
                 max_attempts=max_attempts, super_assignment=zones,
+                total_teams=(total_teams if zones is not None else None),
             )
         except ProposalRejected as exc:
             log(f"  init attempt {r + 1} failed after {time.perf_counter() - t0:.0f}s: {exc}")
@@ -199,10 +201,18 @@ def build_initial_state(g, seed, max_attempts, retries=30, log=print, init="sect
 
 
 def run(seed: int, steps: int, snap_every: int, max_attempts: int, out_dir: Path,
-        tag: str, log=print, init: str = "sectors") -> Path:
+        tag: str, log=print, init: str = "sectors", zone_units: str = "exact",
+        level2_target: str = "dbar", optimizer: bool = False,
+        demand_csv: str | None = None) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     t_load = time.perf_counter()
     g = load_las_graph()
+    if demand_csv:
+        # Alternative demand proxy (sensitivity run): LSOA21CD,demand
+        dem = pd.read_csv(demand_csv)
+        dem_of = dict(zip(dem["LSOA21CD"], dem["demand"].astype(float)))
+        for n in g.nodes:
+            g.nodes[n]["demand"] = float(dem_of[g.nodes[n]["LSOA21CD"]])
     Assignment.travel_times = load_station_travel_times(g)
     node_list = sorted(g.nodes)
     idx = {n: i for i, n in enumerate(node_list)}
@@ -210,23 +220,50 @@ def run(seed: int, steps: int, snap_every: int, max_attempts: int, out_dir: Path
         sorted(n for n in g.nodes if g.nodes[n]["candidate"] == 1))}
     edges = np.array([(idx[u], idx[v]) for u, v in g.edges()], dtype=np.int32)
     total = sum(g.nodes[n]["demand"] for n in g.nodes)
+    units = math.ceil(total / W)                 # coverage rule: sum of capacities = ceil(d / w)
+    d_bar = total / units                        # global per-unit demand, the level-2 window centre
+    l2_target = d_bar if level2_target == "dbar" else W
     log(f"instance: |V|={g.number_of_nodes()} |E|={g.number_of_edges()} "
-        f"stations={len(station_index)} demand={total:,.0f} units={math.ceil(total / W)} "
+        f"stations={len(station_index)} demand={total:,.0f} units={units} d_bar={d_bar:,.1f} "
         f"travel pairs={len(Assignment.travel_times):,} ({time.perf_counter() - t_load:.0f}s)")
 
-    state, init_tries, init_secs = build_initial_state(g, seed, max_attempts, log=log, init=init)
-    log(f"initial state: |P1|={len(state.partition.parts)} "
+    state, init_tries, init_secs = build_initial_state(
+        g, seed, max_attempts, log=log, init=init,
+        total_teams=(units if zone_units == "exact" else None))
+    init_capacity = int(sum(state.partition.teams.values()))
+    log(f"initial state: |P1|={len(state.partition.parts)} total capacity={init_capacity} "
         f"E={state.energy:,.0f} (attempt {init_tries}, {init_secs:.0f}s)")
 
     proposal = partial(
         hierarchical_recom,
-        epsilon_base=EPS_BASE, epsilon_super=EPS_SUPER, demand_target=W,
+        epsilon_base=EPS_BASE, epsilon_super=EPS_SUPER, demand_target=l2_target,
         c_min_base=C_MIN_BASE, c_min_super=C_MIN_SUPER, c_max_super=C_MAX_SUPER,
         min_districts_super=MIN_DISTRICTS_SUPER,
         gamma_base=GAMMA_BASE, gamma_super=GAMMA_SUPER,
         max_attempts_base=max_attempts, max_attempts_super=1000,
     )
-    chain = MarkovChain(proposal=proposal, constraints=[], accept=always_accept,
+    # Optimizer mode (paper, Section 7.3): improving proposals are always
+    # accepted and a worsening one with probability exp(-beta_t * dE / scale),
+    # beta_t = t / T linear, scale = E_init / |V| (the per-unit initial energy),
+    # the rule of gurobi/run_falcom.py. The best state seen is kept.
+    sa = {"k": 0, "accepted": 0, "worsening_accepted": 0, "rejected": 0,
+          "scale": max(1.0, float(state.energy) / g.number_of_nodes())}
+    sa_rng = random.Random(seed * 7919 + 1)
+
+    def sa_accept(proposed, current):
+        delta = float(proposed.energy) - float(current.energy)
+        beta = min(1.0, sa["k"] / max(1, steps))
+        if delta <= 0:
+            ok = True
+        else:
+            ok = sa_rng.random() < math.exp(-beta * delta / sa["scale"])
+            if ok:
+                sa["worsening_accepted"] += 1
+        sa["accepted" if ok else "rejected"] += 1
+        return ok
+
+    chain = MarkovChain(proposal=proposal, constraints=[],
+                        accept=(sa_accept if optimizer else always_accept),
                         initial_state=state, total_steps=steps)
 
     def vectors(st):
@@ -258,11 +295,14 @@ def run(seed: int, steps: int, snap_every: int, max_attempts: int, out_dir: Path
     rows = []
     snaps = {"step": [], "station": [], "super": [], "capacity": []}
     causes = Counter()
+    causes_detail = Counter()   # cut-search exhaustion split: residual in / out of its window
+    best = {"E": float("inf"), "E1": None, "step": None, "vectors": None}
     t0 = time.perf_counter()
     t_prev = t0
     last_print = t0
     for i, st in enumerate(chain):
         now = time.perf_counter()
+        sa["k"] = i
         if i == 0:
             accepted, cause = True, None
         else:
@@ -270,7 +310,19 @@ def run(seed: int, steps: int, snap_every: int, max_attempts: int, out_dir: Path
             accepted = cause is None
             if cause:
                 causes[cause] += 1
+                exc = getattr(chain, "last_rejection_exc", None)
+                if cause.startswith("cut_search_exhausted") and exc is not None \
+                        and hasattr(exc, "residual_in_window"):
+                    kind = "tree" if exc.residual_in_window else "demand"
+                    closing = "closing" if exc.two_sided else "open"
+                    causes_detail[f"{cause}:{kind}:{closing}"] += 1
+                else:
+                    causes_detail[cause] += 1
         e1 = float(sum(st.facility.radii.values()))
+        if float(st.energy) < best["E"]:
+            best["E"], best["E1"], best["step"] = float(st.energy), e1, i
+            if optimizer:
+                best["vectors"] = vectors(st)
         rows.append((i, int(accepted), cause or "", float(st.energy), e1,
                      len(st.partition.parts), len(st.partition.super_parts),
                      n_cut(st), now - t_prev))
@@ -290,6 +342,17 @@ def run(seed: int, steps: int, snap_every: int, max_attempts: int, out_dir: Path
     elapsed = time.perf_counter() - t0
 
     stem = f"{tag}_s{seed}_T{steps}"
+    if optimizer and best["vectors"] is not None:
+        bstation, bsup, bcap = best["vectors"]
+        np.savez_compressed(
+            out_dir / f"best_{stem}.npz",
+            step=np.array([best["step"]], dtype=np.int32),
+            station=np.stack([bstation]), super=np.stack([bsup]), capacity=np.stack([bcap]),
+            node_ids=np.array(node_list, dtype=np.int32),
+            node_lsoa=np.array([g.nodes[n]["LSOA21CD"] for n in node_list]),
+            station_node_ids=np.array(sorted(station_index, key=station_index.get), dtype=np.int32),
+            edges=edges,
+        )
     np.savez_compressed(
         out_dir / f"snap_{stem}.npz",
         step=np.array(snaps["step"], dtype=np.int32),
@@ -314,6 +377,12 @@ def run(seed: int, steps: int, snap_every: int, max_attempts: int, out_dir: Path
                         "min_districts_super": MIN_DISTRICTS_SUPER,
                         "gamma_base": GAMMA_BASE, "gamma_super": GAMMA_SUPER},
         "init": init, "init_attempts": init_tries, "init_seconds": round(init_secs, 1),
+        "zone_units": zone_units, "units": units, "initial_total_capacity": init_capacity,
+        "demand_total": float(total), "d_bar": d_bar, "level2_target": level2_target,
+        "level2_target_value": l2_target, "demand_csv": demand_csv,
+        "optimizer": optimizer, "sa": (dict(sa) if optimizer else None),
+        "best_E": best["E"], "best_E1": best["E1"], "best_step": best["step"],
+        "rejection_causes_detail": dict(causes_detail),
         "runtime_seconds": round(elapsed, 1), "steps_per_second": round(steps / elapsed, 2),
         "acceptance_rate": round(float(trace["accepted"][1:].mean()), 4),
         "rejection_causes": dict(causes),
@@ -340,11 +409,22 @@ def main() -> int:
     ap.add_argument("--init", choices=["sectors", "global"], default="sectors")
     ap.add_argument("--eps", type=float, default=None,
                     help="override the calibrated tolerance at both levels (sensitivity runs)")
+    ap.add_argument("--zone-units", choices=["exact", "ceil"], default="exact",
+                    help="exact: apportion ceil(d/w) units across the sectors by largest remainder "
+                         "(coverage rule); ceil: ceil(d_Z/w) per sector (the first-version runs)")
+    ap.add_argument("--level2-target", choices=["dbar", "w"], default="dbar",
+                    help="centre of the level-2 windows: d / ceil(d/w) (paper) or w")
+    ap.add_argument("--optimizer", action="store_true",
+                    help="annealing acceptance of Section 7.3 instead of always-accept; keeps the best state")
+    ap.add_argument("--demand-csv", default=None,
+                    help="alternative demand proxy, a CSV with columns LSOA21CD,demand")
     a = ap.parse_args()
     if a.eps is not None:
         global EPS_BASE, EPS_SUPER
         EPS_BASE = EPS_SUPER = float(a.eps)
-    run(a.seed, a.steps, a.snap_every, a.max_attempts, Path(a.out_dir), a.tag, init=a.init)
+    run(a.seed, a.steps, a.snap_every, a.max_attempts, Path(a.out_dir), a.tag, init=a.init,
+        zone_units=a.zone_units, level2_target=a.level2_target, optimizer=a.optimizer,
+        demand_csv=a.demand_csv)
     return 0
 
 
