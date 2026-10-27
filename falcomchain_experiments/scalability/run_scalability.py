@@ -39,6 +39,7 @@ import os
 import platform
 import sys
 import time
+from falcomchain.markovchain import proposals as _proposals
 from functools import partial
 from pathlib import Path
 
@@ -138,9 +139,12 @@ class ScalabilityProbe:
         merged_ids = getattr(getattr(part, "superflip", None), "merged_ids", None)
         n_merged = len(merged_ids) if merged_ids else 0
 
+        timing = getattr(_proposals, "LAST_TIMING", {})
         rec = {
             "step": len(self.records),
             "t_step": dt,
+            "t_super": float(timing.get("super_seconds", 0.0)),
+            "t_base": float(timing.get("base_seconds", 0.0)),
             "H_size": H_nodes,
             "n_districts": len(part.parts),
             "n_merged": n_merged,

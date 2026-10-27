@@ -92,6 +92,11 @@ def _per_size_aggregates(runs_for_size):
         "H_median": median(H_sizes),
         "H_max": max(H_sizes),
         "H_over_V_mean": mean(H_sizes) / n,
+        "super_share_of_step_time": (sum(s.get("t_super", 0.0) for s in all_steps)
+                                     / max(1e-12, sum(s["t_step"] for s in all_steps))),
+        "base_share_of_step_time": (sum(s.get("t_base", 0.0) for s in all_steps)
+                                    / max(1e-12, sum(s["t_step"] for s in all_steps))),
+        "t_step_p95_ms": 1000 * sorted(t_steps)[int(0.95 * (len(t_steps) - 1))],
         "projected_1000_samples_h": 1000 * median(t_steps) / 3600,
     }
 

@@ -332,6 +332,20 @@ def main() -> int:
                    for i in range(len(names)) for j in range(i + 1, len(names))}
     pooled = normalize(Counter({s: sum(empirical[n].get(s, 0.0) for n in names) for s in states1}))
     pooled_joint = normalize(Counter({k: sum(empirical_joint[n].get(k, 0.0) for n in names) for k in all2}))
+    # iid noise floor: the total-variation distance expected between two independent
+    # multinomial samples of the run length drawn from the pooled law (a lower bound for
+    # an autocorrelated chain), and the number of states such a sample leaves unvisited.
+    rng = np.random.default_rng(0)
+
+    def noise_floor(law, n, reps=20):
+        p = np.array(list(law.values()), dtype=float)
+        p = p / p.sum()
+        two = [0.5 * np.abs(rng.multinomial(n, p) / n - rng.multinomial(n, p) / n).sum() for _ in range(reps)]
+        h = n // 2
+        halves = [0.5 * np.abs(rng.multinomial(h, p) / h - rng.multinomial(h, p) / h).sum() for _ in range(reps)]
+        return {"tv_between_two_samples": float(np.mean(two)), "tv_between_halves": float(np.mean(halves)),
+                "expected_unvisited": float(((1.0 - p) ** n).sum()), "states": int(len(p))}
+    iid_noise = {"level1": noise_floor(pooled, a.steps), "joint": noise_floor(pooled_joint, a.steps)}
     # Level-2 law given level 1: for every level-1 state with more than one
     # feasible grouping, the sampled conditional law against the uniform one,
     # averaged over level-1 states with the pooled level-1 weights.
@@ -379,7 +393,7 @@ def main() -> int:
                             "c_super": [C_MIN_SUPER, C_MAX_SUPER], "kappa": KAPPA,
                             "candidates": sorted(cand)},
                "feasible_level1": n1, "feasible_joint": n2, "district_size_patterns": {str(k): v for k, v in sizes.items()},
-               "runs": results, "tv_between_starts": cross,
+               "runs": results, "tv_between_starts": cross, "iid_noise_floor": iid_noise,
                "pooled_tv_to_uniform": tv(pooled, law_uniform), "pooled_tv_to_spanning_tree_law": tv(pooled, law_tree),
                "unvisited_level1_states": int(sum(1 for v in pooled.values() if v == 0)),
                "max_over_min_pooled_frequency": max(pooled.values()) / min(v for v in pooled.values() if v > 0),

@@ -536,7 +536,7 @@ def main() -> int:
             sx = [inst["xy"][n][0] for n in station_nodes]; sy = [inst["xy"][n][1] for n in station_nodes]
             ax.scatter(sx, sy, s=12, c="cyan", edgecolors="k", linewidths=0.4, zorder=5)
             ax.set_axis_off(); ax.set_title("Contested LSOAs (stations in cyan)")
-            fig.tight_layout(); fig.savefig(out_dir / "fig_contested.png", dpi=300); plt.close(fig)
+            fig.tight_layout(); fig.savefig(out_dir / "fig_contested.png", dpi=300, bbox_inches="tight"); plt.close(fig)
 
             fig, axes = plt.subplots(1, 2, figsize=(15, 6.5))
             segs = np.array([[inst["xy"][node_ids[u]], inst["xy"][node_ids[v]]] for u, v in edges])
@@ -549,7 +549,7 @@ def main() -> int:
                 ax.add_collection(lc)
                 ax.set_axis_off(); ax.set_title(title)
             fig.colorbar(lc, ax=axes, shrink=0.6, label="share of plans in which the edge is cut")
-            fig.savefig(out_dir / "fig_boundary_freq.png", dpi=300); plt.close(fig)
+            fig.savefig(out_dir / "fig_boundary_freq.png", dpi=300, bbox_inches="tight"); plt.close(fig)
         except Exception as exc:   # maps are optional
             out["map_error"] = f"{type(exc).__name__}: {exc}"
 
