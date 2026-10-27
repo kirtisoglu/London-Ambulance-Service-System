@@ -62,12 +62,12 @@ stranding a candidate-free residual).
    `fig_*.png` figures.
 
 3. Sensitivity to the tolerance (paper Section 7.4):
-   `python -m falcomchain_experiments.las.run_real_stations --seed S --steps 20000 --snap-every 40 --tag real --eps 0.25 --out-dir data/derived/real_stations_eps25`
+   `python -m falcomchain_experiments.las.run_real_stations --seed S --steps 40000 --snap-every 40 --tag real --eps 0.25 --out-dir data/derived/real_stations_u97_eps25`
    for `S = 1 2 3 4`, then
-   `python -m falcomchain_experiments.las.postprocess_real_stations --in-dir data/derived/real_stations_eps25 --tag real --steps 20000`.
+   `python -m falcomchain_experiments.las.postprocess_real_stations --in-dir data/derived/real_stations_u97_eps25 --tag real --steps 40000`.
 
 `falcomchain_experiments/las/build_s_las.py` reconstructs the operational
-layout `s_LAS` (Appendix B of the paper); `run_cdba.py`,
+layout `s_LAS` (the appendix on the LAS data assembly in the paper); `run_cdba.py`,
 `compute_cdba_travel_times.py`, `run_chain_v3.py` and `postprocess_ensemble.py`
 are the earlier pipeline on an augmented candidate set and are kept for
 reference only.

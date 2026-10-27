@@ -1,0 +1,75 @@
+{
+  "in_dir": "data/derived/real_stations_u97",
+  "steps": 80000,
+  "burn_in": 16000,
+  "chains": {
+    "1": {
+      "n_plans": 1600,
+      "mean_visit_duration": 1.475824155551866,
+      "mean_open_time_law": 52.55249999999917,
+      "mean_open_jump_law": 52.61751642670798
+    },
+    "2": {
+      "n_plans": 1600,
+      "mean_visit_duration": 1.4703179562580408,
+      "mean_open_time_law": 52.52562499999923,
+      "mean_open_jump_law": 52.53562777759892
+    },
+    "3": {
+      "n_plans": 1600,
+      "mean_visit_duration": 1.4773230905599055,
+      "mean_open_time_law": 52.464999999999215,
+      "mean_open_jump_law": 52.528256018511605
+    },
+    "4": {
+      "n_plans": 1600,
+      "mean_visit_duration": 1.4723203769140165,
+      "mean_open_time_law": 52.37499999999921,
+      "mean_open_jump_law": 52.476005853839354
+    }
+  },
+  "realized_per_unit_load_range": [
+    0.7377016113758438,
+    1.316031750240532
+  ],
+  "share_station_loads_outside_nominal_window": 0.051660022211040615,
+  "share_plans_with_a_station_outside_nominal_window": 0.94265625,
+  "jump_chain_reweighting": {
+    "max_abs_change_open_frequency": 0.007956581203477864,
+    "mean_abs_change_open_frequency": 0.0022359464170937193,
+    "mean_open_stations_time_law": 52.479531249999205,
+    "mean_open_stations_jump_law": 52.53935151916446,
+    "capacity_share_time_law": [
+      0.41973081358949427,
+      0.31219557211044247,
+      0.26807361430006327
+    ],
+    "capacity_share_jump_law": [
+      0.42000685424541867,
+      0.31374937979846534,
+      0.266243765956116
+    ],
+    "set_open_over_90pct_unchanged": false
+  },
+  "effective_plans": {
+    "energy": 2973.6587727323717,
+    "cut_edges": 1847.9483640965123,
+    "ess_by_chain_energy": [
+      794.7811770563148,
+      786.8687433922165,
+      760.5657496261249,
+      631.4431026577154
+    ],
+    "ess_by_chain_cut_edges": [
+      464.00468105047355,
+      425.51863351735045,
+      432.34008221171996,
+      526.0849673169683
+    ]
+  },
+  "open_frequency_mc_se": {
+    "max_over_stations": 0.016286767299328885,
+    "median_over_stations": 0.0068482155883726244
+  },
+  "stations_open_over_90pct": 17
+}

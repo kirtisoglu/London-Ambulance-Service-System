@@ -152,11 +152,16 @@ def load_runs(in_dir: Path, tag: str, steps: int):
     return runs
 
 
-def load_instance(node_ids):
+def load_instance(node_ids, demand_csv=None):
     graph = json.loads(GRAPH.read_text())
     info = {n["id"]: n for n in graph["nodes"]}
     lsoa_of = {n: info[n]["LSOA21CD"] for n in node_ids}
     demand = np.array([float(info[n]["demand"]) for n in node_ids])
+    if demand_csv:   # an alternative apportionment (same LSOAs, other demands)
+        dem = pd.read_csv(demand_csv)
+        col = "demand" if "demand" in dem.columns else [c for c in dem.columns if c != "LSOA21CD"][0]
+        by_lsoa = dict(zip(dem["LSOA21CD"], dem[col]))
+        demand = np.array([float(by_lsoa[lsoa_of[n]]) for n in node_ids])
     id_of = {v: k for k, v in lsoa_of.items()}
     stations = pd.read_csv(STATIONS)
     station_node = {r.station_code: id_of[r.LSOA21CD] for r in stations.itertuples()}
@@ -200,6 +205,7 @@ def main() -> int:
     ap.add_argument("--steps", type=int, default=40_000)
     ap.add_argument("--burn-in", type=int, default=None, help="steps; default 20%% of --steps")
     ap.add_argument("--no-maps", action="store_true")
+    ap.add_argument("--demand-csv", default=None, help="demand file of the run, if not the default apportionment")
     a = ap.parse_args()
     in_dir = Path(a.in_dir)
     out_dir = Path(a.out_dir) if a.out_dir else in_dir
@@ -213,7 +219,7 @@ def main() -> int:
     station_nodes = [int(x) for x in snap0["station_node_ids"]]
     n_st = len(station_nodes)
     edges = snap0["edges"]
-    inst = load_instance(node_ids)
+    inst = load_instance(node_ids, a.demand_csv)
     demand = inst["demand"]
     st_idx_of_node = {n: i for i, n in enumerate(station_nodes)}
     code_of_station_idx = {}
@@ -407,12 +413,12 @@ def main() -> int:
     ari_null = []
     chain_of_snap = np.repeat(np.arange(len(post)), n_snap // max(1, len(post)))[:n_snap]
     for _ in range(400):
-        a, b = rng_null.integers(0, n_snap, 2)
-        if chain_of_snap[a] == chain_of_snap[b]:
+        ia, ib = rng_null.integers(0, n_snap, 2)
+        if chain_of_snap[ia] == chain_of_snap[ib]:
             continue
-        op = np.where(open_mask[a] & open_mask[b])[0]
+        op = np.where(open_mask[ia] & open_mask[ib])[0]
         if len(op) > 2:
-            ari_null.append(adjusted_rand(sup[a, st_own[op]], sup[b, st_own[op]]))
+            ari_null.append(adjusted_rand(sup[ia, st_own[op]], sup[ib, st_own[op]]))
     off = ~np.eye(n_st, dtype=bool)
     out["groups"] = {
         "ari_vs_real_groups_mean": float(np.mean(ari)) if ari else None,
@@ -424,16 +430,25 @@ def main() -> int:
         "co_membership_definition": "share of plans in which both stations are open and lie in the same superdistrict, among plans in which both are open",
     }
     grp_order = sorted(range(n_st), key=lambda i: (group_of_station[i], i))
-    fig, ax = plt.subplots(figsize=(8, 7))
-    im = ax.imshow(co_freq[np.ix_(grp_order, grp_order)], cmap="viridis", vmin=0, vmax=1)
+    fig, ax = plt.subplots(figsize=(9.5, 8.5))
+    co_plot = co_freq[np.ix_(grp_order, grp_order)].copy()
+    np.fill_diagonal(co_plot, np.nan)
+    vmax = float(np.nanmax(co_plot))
+    im = ax.imshow(co_plot, cmap="viridis", vmin=0, vmax=vmax)
     labels = [group_of_station[i] for i in grp_order]
+    st_names = [inst["station_name"].get(code_of_station_idx.get(i, ""), str(i)) for i in grp_order]
     ticks = [k for k in range(n_st) if k == 0 or labels[k] != labels[k - 1]]
-    ax.set_xticks(ticks); ax.set_xticklabels([labels[k] for k in ticks], rotation=90, fontsize=7)
-    ax.set_yticks(ticks); ax.set_yticklabels([labels[k] for k in ticks], fontsize=7)
+    centres = []
+    for t, k in enumerate(ticks):
+        end = ticks[t + 1] if t + 1 < len(ticks) else n_st
+        centres.append((k + end - 1) / 2)
+    ax.set_xticks(centres); ax.set_xticklabels([labels[k] for k in ticks], rotation=90, fontsize=6)
+    ax.set_yticks(range(n_st)); ax.set_yticklabels(st_names, fontsize=4.2)
     for k in ticks[1:]:
-        ax.axhline(k - 0.5, color="w", lw=0.4); ax.axvline(k - 0.5, color="w", lw=0.4)
-    fig.colorbar(im, ax=ax, label="share of plans with both stations in one super-district")
-    ax.set_title("Station co-membership; stations ordered by their real LAS Group")
+        ax.axhline(k - 0.5, color="w", lw=0.5); ax.axvline(k - 0.5, color="w", lw=0.5)
+    fig.colorbar(im, ax=ax, shrink=0.8,
+                 label="share of plans with both stations in one superdistrict, given both open")
+    ax.set_title("Station co-membership; stations ordered by their real LAS Group", fontsize=9)
     fig.tight_layout()
     fig.savefig(out_dir / "fig_groups.png", dpi=300)
     plt.close(fig)
@@ -516,7 +531,7 @@ def main() -> int:
             gdf = gdf[gdf.LSOA21CD.isin(set(inst["lsoa_of"].values()))].copy()
             gdf["contested"] = gdf.LSOA21CD.map({inst["lsoa_of"][n]: 1 - modal_share[i] for i, n in enumerate(node_ids)})
             fig, ax = plt.subplots(figsize=(9, 7))
-            gdf.plot(column="contested", cmap="magma_r", vmin=0, vmax=1, ax=ax, linewidth=0,
+            gdf.plot(column="contested", cmap="magma_r", vmin=0, vmax=float(gdf["contested"].max()), ax=ax, linewidth=0,
                      legend=True, legend_kwds={"label": "1 - share of plans served by the modal station", "shrink": 0.6})
             sx = [inst["xy"][n][0] for n in station_nodes]; sy = [inst["xy"][n][1] for n in station_nodes]
             ax.scatter(sx, sy, s=12, c="cyan", edgecolors="k", linewidths=0.4, zorder=5)
@@ -525,11 +540,12 @@ def main() -> int:
 
             fig, axes = plt.subplots(1, 2, figsize=(15, 6.5))
             segs = np.array([[inst["xy"][node_ids[u]], inst["xy"][node_ids[v]]] for u, v in edges])
+            fmax = max(float(f1.max()), float(f2.max()))
             for ax, f, title in [(axes[0], f1, "level-1 boundary frequency"), (axes[1], f2, "level-2 boundary frequency")]:
                 gdf.plot(ax=ax, color="0.95", linewidth=0)
                 order_e = np.argsort(f)
-                lc = LineCollection(segs[order_e], cmap="magma_r", linewidths=0.3 + 1.5 * f[order_e])
-                lc.set_array(f[order_e]); lc.set_clim(0, 1)
+                lc = LineCollection(segs[order_e], cmap="magma_r", linewidths=0.2 + 1.6 * f[order_e] / fmax)
+                lc.set_array(f[order_e]); lc.set_clim(0, fmax)
                 ax.add_collection(lc)
                 ax.set_axis_off(); ax.set_title(title)
             fig.colorbar(lc, ax=axes, shrink=0.6, label="share of plans in which the edge is cut")

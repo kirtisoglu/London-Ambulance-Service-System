@@ -35,9 +35,14 @@ def main() -> int:
     ap.add_argument("--steps", type=int, default=80_000)
     ap.add_argument("--eps", type=float, default=0.15)
     ap.add_argument("--burn-in", type=int, default=None)
+    ap.add_argument("--demand-csv", default=None, help="demand file of the run, if not the default apportionment")
     a = ap.parse_args()
     in_dir = Path(a.in_dir); burn = a.burn_in if a.burn_in is not None else a.steps // 5
     graph = json.loads(GRAPH.read_text()); info = {n["id"]: n for n in graph["nodes"]}
+    if a.demand_csv:
+        dem = pd.read_csv(a.demand_csv); by_lsoa = dict(zip(dem["LSOA21CD"], dem["demand"]))
+        for n in info:
+            info[n]["demand"] = by_lsoa[info[n]["LSOA21CD"]]
     out = {"in_dir": str(in_dir), "steps": a.steps, "burn_in": burn, "chains": {}}
     all_loads, open_freq_time, open_freq_jump, nopen_time, nopen_jump = [], [], [], [], []
     cap_time, cap_jump = [], []
