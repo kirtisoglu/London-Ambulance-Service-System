@@ -80,9 +80,13 @@ def main():
         L = min(len(v) for v in seqs.values()); b = int(args.burnin * L)
         post = {s: v[:L][b:] for s, v in seqs.items()}
         arr = np.stack([post[s] for s in args.seeds])
-        ks = {f"{a}-{c}": ks_statistic(post[a], post[c]) for a, c in itertools.combinations(args.seeds, 2)}
+        thin = {s: v[::20] for s, v in post.items()}   # every twentieth post-burn-in step, as in the London study
+        ks = {f"{a}-{c}": ks_statistic(thin[a], thin[c]) for a, c in itertools.combinations(args.seeds, 2)}
+        halves = {s: ks_statistic(v[: len(v) // 2], v[len(v) // 2:]) for s, v in thin.items()}
         out[key] = {"means": {s: float(v.mean()) for s, v in post.items()},
                     "pairwise_ks": ks, "max_pairwise_ks": max(ks.values()),
+                    "ks_thinning": 20, "within_chain_halves_ks": halves,
+                    "within_chain_halves_ks_range": [min(halves.values()), max(halves.values())],
                     "split_rhat": split_rhat(arr), "ess": ess(arr),
                     "post_burnin_length": int(L - b)}
 

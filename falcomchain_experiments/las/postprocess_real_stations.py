@@ -252,6 +252,7 @@ def main() -> int:
                                for q in (0.05, 0.95)],
             "ks_pairwise_thinned": ks,
             "ks_max": max(ks.values()) if ks else None,
+            "ks_within_chain_halves_thinned": {s: ks_statistic(v[: len(v) // 2], v[len(v) // 2:]) for s, v in thin.items()},
             "split_rhat": split_rhat(list(per_chain.values())) if len(per_chain) > 1 else None,
             "ess_by_chain": {s: ess(v) for s, v in per_chain.items()},
         }
@@ -401,6 +402,17 @@ def main() -> int:
         if len(op) > 2:
             ari.append(adjusted_rand(s_lab, [group_of_station[i] for i in op]))
     co_freq = np.divide(co, both, out=np.zeros_like(co), where=both > 0)
+    # null reference for the adjusted Rand index: two sampled plans from different chains
+    rng_null = np.random.default_rng(0)
+    ari_null = []
+    chain_of_snap = np.repeat(np.arange(len(post)), n_snap // max(1, len(post)))[:n_snap]
+    for _ in range(400):
+        a, b = rng_null.integers(0, n_snap, 2)
+        if chain_of_snap[a] == chain_of_snap[b]:
+            continue
+        op = np.where(open_mask[a] & open_mask[b])[0]
+        if len(op) > 2:
+            ari_null.append(adjusted_rand(sup[a, st_own[op]], sup[b, st_own[op]]))
     off = ~np.eye(n_st, dtype=bool)
     out["groups"] = {
         "ari_vs_real_groups_mean": float(np.mean(ari)) if ari else None,
@@ -408,6 +420,8 @@ def main() -> int:
         "co_membership_mean_same_real_group": float(co_freq[same_group & off & (both > 0)].mean()),
         "co_membership_mean_different_real_group": float(co_freq[~same_group & off & (both > 0)].mean()),
         "n_superdistricts_mean": float(np.mean([p["P2"].mean() for p in post.values()])),
+        "ari_between_independent_sampled_plans_mean": float(np.mean(ari_null)) if ari_null else None,
+        "co_membership_definition": "share of plans in which both stations are open and lie in the same superdistrict, among plans in which both are open",
     }
     grp_order = sorted(range(n_st), key=lambda i: (group_of_station[i], i))
     fig, ax = plt.subplots(figsize=(8, 7))
