@@ -1,0 +1,69 @@
+{
+  "instance": "400_dense",
+  "n_seeds": 8,
+  "total_wall_s": 433.87611648500024,
+  "results": [
+    {
+      "seed": 100,
+      "ok": false,
+      "error": "RuntimeError('seed build failed across 50 retries; last error: Could not find a possible cut after 5000 attempts. Supergraph = False.')",
+      "elapsed_s": 55.55543189399759
+    },
+    {
+      "seed": 200,
+      "ok": false,
+      "error": "RuntimeError('seed build failed across 50 retries; last error: Could not find a possible cut after 5000 attempts. Supergraph = False.')",
+      "elapsed_s": 46.42927549700107
+    },
+    {
+      "seed": 300,
+      "ok": false,
+      "error": "RuntimeError('seed build failed across 50 retries; last error: Could not find a possible cut after 5000 attempts. Supergraph = False.')",
+      "elapsed_s": 54.66741411899784
+    },
+    {
+      "seed": 400,
+      "ok": false,
+      "error": "RuntimeError('seed build failed across 50 retries; last error: Could not find a possible cut after 5000 attempts. Supergraph = False.')",
+      "elapsed_s": 64.99318191299972
+    },
+    {
+      "seed": 500,
+      "ok": false,
+      "error": "RuntimeError('seed build failed across 50 retries; last error: Could not find a possible cut after 5000 attempts. Supergraph = False.')",
+      "elapsed_s": 54.328966745997604
+    },
+    {
+      "seed": 600,
+      "ok": false,
+      "error": "RuntimeError('seed build failed across 50 retries; last error: Could not find a possible cut after 5000 attempts. Supergraph = False.')",
+      "elapsed_s": 50.78405189800105
+    },
+    {
+      "seed": 700,
+      "ok": false,
+      "error": "RuntimeError('seed build failed across 50 retries; last error: Could not find a possible cut after 5000 attempts. Supergraph = False.')",
+      "elapsed_s": 51.18639025399898
+    },
+    {
+      "seed": 800,
+      "ok": false,
+      "error": "RuntimeError('seed build failed across 50 retries; last error: Could not find a possible cut after 5000 attempts. Supergraph = False.')",
+      "elapsed_s": 55.931079101999785
+    }
+  ],
+  "params": {
+    "steps": 10000,
+    "beta_magnitude": 1.0,
+    "eps": 0.15,
+    "rule": "per_team",
+    "c_l1": [
+      1,
+      2
+    ],
+    "c_l2": [
+      2,
+      5
+    ]
+  }
+}
