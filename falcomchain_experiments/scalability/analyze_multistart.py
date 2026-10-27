@@ -71,6 +71,7 @@ def main():
            "acceptance": {s: 1 - r["n_chain_steps_rejected"] / max(r["n_chain_steps_recorded"], 1)
                           for s, r in runs.items()},
            "rejection_causes": {s: r.get("rejection_report", {}).get("causes") for s, r in runs.items()},
+           "rejection_causes_detail": {s: r.get("rejection_report", {}).get("causes_detail") for s, r in runs.items()},
            "median_step_ms": {s: 1000 * float(np.median([x["t_step"] for x in r["steps"] if x["accepted"]]))
                               for s, r in runs.items()}}
 

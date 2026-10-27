@@ -1,35 +1,35 @@
 {
   "experiment": "scalability",
   "paper_section": "7",
-  "ran_at": "2026-09-29T03:51:42.849523+00:00",
+  "ran_at": "2026-10-27T17:22:17.012239+00:00",
   "T_steps": 30000,
   "sizes": [
-    50000
+    10000
   ],
-  "seed": 42,
+  "seed": 45,
   "environment": {
-    "python": "3.12.3",
-    "platform": "Linux-6.18.44-fc-v49-x86_64-with-glibc2.39",
+    "python": "3.13.17",
+    "platform": "Linux-6.18.44-fc-v165-x86_64-with-glibc2.39",
     "pythonhashseed": "0",
     "packages": {
       "networkx": "3.7",
-      "numpy": "2.5.3",
+      "numpy": "2.5.4",
       "scipy": "1.18.1",
       "matplotlib": "3.11.2",
       "falcomchain": "0.1.0",
       "pymetis": null
     }
   },
-  "total_wall_time_s": 6076.506031974999,
+  "total_wall_time_s": 2195.519188336002,
   "runs": [
     {
-      "n_nodes": 50000,
-      "seed": 42,
+      "n_nodes": 10000,
+      "seed": 45,
       "n_chain_steps_succeeded": 30000,
-      "chain_total_time_s": 6064.842533076,
-      "n_districts_initial": 79,
-      "n_l1_candidates": 168,
-      "n_l2_candidates": 168
+      "chain_total_time_s": 2120.6184744560014,
+      "n_districts_initial": 34,
+      "n_l1_candidates": 77,
+      "n_l2_candidates": 77
     }
   ]
 }

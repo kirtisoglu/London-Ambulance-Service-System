@@ -1,0 +1,25 @@
+{
+  "experiment": "scalability",
+  "paper_section": "7",
+  "ran_at": "2026-10-27T18:12:27.373151+00:00",
+  "T_steps": 3000,
+  "sizes": [
+    10000
+  ],
+  "seed": 43,
+  "environment": {
+    "python": "3.13.17",
+    "platform": "Linux-6.18.44-fc-v165-x86_64-with-glibc2.39",
+    "pythonhashseed": "0",
+    "packages": {
+      "networkx": "3.7",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "matplotlib": "3.11.2",
+      "falcomchain": "0.1.0",
+      "pymetis": null
+    }
+  },
+  "total_wall_time_s": 1194.2376241640013,
+  "runs": []
+}
