@@ -1,0 +1,69 @@
+{
+  "tag": "opt",
+  "seed": 18,
+  "steps": 50000,
+  "snap_every": 5000,
+  "max_attempts_base": 1000,
+  "counting": true,
+  "rule": "per_team",
+  "falcomchain_version": "0.1.0",
+  "calibration": {
+    "w": 10887,
+    "eps_base": 0.15,
+    "eps_super": 0.15,
+    "c_min_base": 1,
+    "c_max_base": 3,
+    "c_min_super": 2,
+    "c_max_super": 6,
+    "min_districts_super": 2,
+    "gamma_base": 0.0,
+    "gamma_super": 0.0
+  },
+  "init": "sectors",
+  "init_attempts": 1,
+  "init_seconds": 0.7,
+  "zone_units": "exact",
+  "units": 97,
+  "initial_total_capacity": 97,
+  "demand_total": 1055992.0,
+  "d_bar": 10886.515463917525,
+  "level2_target": "dbar",
+  "level2_target_value": 10886.515463917525,
+  "demand_csv": null,
+  "optimizer": true,
+  "sa": {
+    "k": 49999,
+    "accepted": 703,
+    "worsening_accepted": 362,
+    "rejected": 34354,
+    "scale": 2434.6317734960385
+  },
+  "best_E": 8481100.276788281,
+  "best_E1": 3701556.613578466,
+  "best_step": 1894,
+  "rejection_causes_detail": {
+    "super_district_below_kappa": 2396,
+    "cut_search_exhausted:super:tree:open": 12544,
+    "not_accepted": 34354,
+    "cut_search_exhausted:super:demand:closing": 2
+  },
+  "runtime_seconds": 3170.4,
+  "steps_per_second": 15.77,
+  "acceptance_rate": 0.0141,
+  "rejection_causes": {
+    "super_district_below_kappa": 2396,
+    "cut_search_exhausted:super": 12546,
+    "not_accepted": 34354
+  },
+  "travel_pairs_missing_from_road_matrix": 264,
+  "travel_fallback_lookups": 650488,
+  "P1_range": [
+    48,
+    58
+  ],
+  "P2_range": [
+    5,
+    26
+  ],
+  "E_final": 8621183.309188172
+}
