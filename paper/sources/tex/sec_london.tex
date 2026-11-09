@@ -1,5 +1,4 @@
 % =========================================================================
-\FloatBarrier
 \section{Case Study: The London Ambulance Service}
 \label{sec:exp-emergency}
 % =========================================================================
@@ -17,26 +16,7 @@ The convergence diagnostics of the London chains are in Table~\ref{tab:multistar
 % -------------------------------------------------------------------------
 
 \paragraph{Data.}
-The base graph $G^1$ has $|V^1| = 4{,}994$ nodes, the Lower layer Super Output Areas (LSOAs) of Greater London on 2021 boundaries, joined by $|E^1| = 14{,}550$ rook-adjacency edges (Figure~\ref{fig:las-instance}). LSOAs are the small-area unit of NHS planning and of recent spatial work on LAS~\citep{murphy2024socio}. The candidate set $F^1$ is the set of $66$ LSOAs that contain an active station, and any open station can serve as the level-2 facility of its superdistrict. Demand $d_v$ is the annual number of attended incidents: the 2010 to 2015 mean of the borough totals that LAS publishes~\citep{las_incidents}, about $1.056$ million incidents a year, apportioned to the LSOAs of each borough in proportion to population~\citep{ons_sape2024}. Travel times are shortest-path driving times on the OpenStreetMap road network from every station to every LSOA centroid, with free-flow speeds scaled by $1.6$ for driving under lights and sirens. Variation within a borough is thus a proxy, and the speed factor is an assumption; Section~\ref{sec:las-sensitivity} tests the proxy and Appendix~\ref{app:slas} documents the assembly.
-
-\begin{figure}[!htbp]
-\centering
-\begin{subfigure}[t]{0.495\linewidth}
-  \centering
-  \includegraphics[width=\linewidth]{figures/las_map.png}
-  \caption{LSOA polygons of the LAS catchment with the stations.}
-  \label{fig:las-lsoas}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.495\linewidth}
-  \centering
-  \includegraphics[width=\linewidth]{figures/las_dual_graph.png}
-  \caption{Rook-adjacency dual graph $G^1$, $14{,}550$ edges.}
-  \label{fig:las-dual}
-\end{subfigure}
-\caption{The LAS instance. The $48$ Brentwood LSOAs, served by another ambulance service, are excluded. Each node of the dual graph carries its integer annual demand.}
-\label{fig:las-instance}
-\end{figure}
+The base graph $G^1$ has $|V^1| = 4{,}994$ nodes, the Lower layer Super Output Areas (LSOAs) of Greater London on 2021 boundaries, joined by $|E^1| = 14{,}550$ rook-adjacency edges; the $48$ Brentwood LSOAs, served by another ambulance service, are excluded. LSOAs are the small-area unit of NHS planning and of recent spatial work on LAS~\citep{murphy2024socio}. The candidate set $F^1$ is the set of $66$ LSOAs that contain an active station, and any open station can serve as the level-2 facility of its superdistrict. Demand $d_v$ is the annual number of attended incidents: the 2010 to 2015 mean of the borough totals that LAS publishes~\citep{las_incidents}, about $1.056$ million incidents a year, apportioned to the LSOAs of each borough in proportion to population~\citep{ons_sape2024}. Travel times are shortest-path driving times on the OpenStreetMap road network from every station to every LSOA centroid, with free-flow speeds scaled by $1.6$ for driving under lights and sirens. Variation within a borough is thus a proxy, and the speed factor is an assumption; Section~\ref{sec:las-sensitivity} tests the proxy and Appendix~\ref{app:slas} documents the assembly.
 
 \paragraph{Calibration.}\label{sec:las-calibration}
 The capacity unit is a block of ambulances. The 2024/25 Annual Report~\citep{las_ar_2024_25} states a target of $5.2$ patients per crew per twelve-hour shift; five patients per shift, two shifts a day and $365$ days give $3{,}650$ calls per ambulance per year. The granularity floor requires the per-unit tolerance $\varepsilon^1 w$ to exceed the heaviest LSOA demand, $1{,}526$, so a unit must hold at least three ambulances. We take blocks of three, $w = 10{,}887$ calls per year, and the catchment's demand is $k = 97$ units, which every sampled state carries exactly. Stations carry one to three units, the safe range of Corollary~\ref{cor:app-invariant}, and Groups carry two to six units in at least two stations. By Proposition~\ref{prop:effective} a sampled one-unit station then serves between $0.72$ and $1.32$ units, a two-unit station between $1.51$ and $2.56$ and a three-unit station between $2.29$ and $3.79$. The number of open stations is not an input: the calibration admits between $33$ and $66$, and the chain decides. The unit is a demand quantum and not a vehicle count, since the fleet of April 2025 is about twice the $291$ vehicles that $97$ blocks at the published target would be; a calibration that bounds each station by the fleet based there is left to future work.
@@ -62,7 +42,6 @@ Four chains run for $80{,}000$ steps each from sector-wise initial plans, and a 
 \end{figure}
 
 % -------------------------------------------------------------------------
-\FloatBarrier
 \subsection{What Most Sampled Plans Have in Common}\label{sec:las-structure}
 % -------------------------------------------------------------------------
 
@@ -70,25 +49,13 @@ Four chains run for $80{,}000$ steps each from sector-wise initial plans, and a 
 Every frequency below estimates a probability under the stationary law of the chain as implemented, with its rejection rule and retry budget. That law is characterized only empirically. It is supported on plans that satisfy the windows and it is not uniform over them (Section~\ref{sec:exp-enumeration}). The readouts therefore come in three kinds. Statements about the operational layout, its loads and its position relative to every sampled plan, do not depend on the law. Frequencies, how often an edge is cut, a station open or two stations grouped, do, and Sections~\ref{sec:exp-ablation} and~\ref{sec:las-sensitivity} show how they respond to the retry budget, the tolerance and the demand proxy. Group readouts depend in addition on the greedy supergraph recursion, whose law is validated against enumeration only on small instances.
 
 \paragraph{Boundaries.}
-The ensemble separates the geography that most sampled plans reproduce from the choices that remain open (Figure~\ref{fig:las-boundary}). Over the $6{,}400$ plans, no edge of $G^1$ is cut by a station boundary in more than $44\%$ of them. $12.1\%$ of the $14{,}550$ edges are cut in fewer than $10\%$ of plans and lie inside catchments in nearly every plan; the other $87.9\%$ are contested. Group boundaries are more constrained: $30.8\%$ of edges are interior at level $2$, no edge is cut in more than $34\%$ of plans, and the level-2 boundary frequency concentrates on a few corridors in inner north London and along the river. Seen from the units, an LSOA is served by its most frequent station in $48.3\%$ of plans on average, and $58.9\%$ of LSOAs have no station that serves them in even half of the plans. The map of contestedness shows a settled core around each station, contested ground between stations, and settled fringes where stations are scarce (Heathrow, Havering, the southern edge), which are settled by scarcity and not by geography.
+The ensemble separates the geography that most sampled plans reproduce from the choices that remain open (Figure~\ref{fig:las-contested}). Over the $6{,}400$ plans, no edge of $G^1$ is cut by a station boundary in more than $44\%$ of them. $12.1\%$ of the $14{,}550$ edges are cut in fewer than $10\%$ of plans and lie inside catchments in nearly every plan; the other $87.9\%$ are contested. Group boundaries are more constrained: $30.8\%$ of edges are interior at level $2$, no edge is cut in more than $34\%$ of plans, and the level-2 boundary frequency concentrates on a few corridors in inner north London and along the river (Figure~\ref{fig:las-boundary} in Appendix~\ref{app:london-extra}). Seen from the units, an LSOA is served by its most frequent station in $48.3\%$ of plans on average, and $58.9\%$ of LSOAs have no station that serves them in even half of the plans. The map of contestedness shows a settled core around each station, contested ground between stations, and settled fringes where stations are scarce (Heathrow, Havering, the southern edge), which are settled by scarcity and not by geography.
 
 \begin{figure}[!htbp]
 \centering
-\begin{subfigure}[t]{\linewidth}
-  \centering
-  \includegraphics[width=\linewidth,trim=0 80 0 80,clip]{figures/las/fig_boundary_freq.png}
-  \caption{Share of plans in which each edge of $G^1$ is cut by a station boundary (left) or a Group boundary (right).}
-  \label{fig:las-boundary-panels}
-\end{subfigure}
-
-\begin{subfigure}[t]{0.55\linewidth}
-  \centering
-  \includegraphics[width=\linewidth]{figures/las/fig_contested.png}
-  \caption{Contestedness of each LSOA: one minus the share of plans in which it is served by its most frequent station.}
-  \label{fig:las-contested}
-\end{subfigure}
-\caption{Boundaries and contested areas in the pooled ensemble. In (\subref{fig:las-boundary-panels}) darker and thicker edges are cut more often, and the colour scale runs to the largest observed frequency. Stations are marked in (\subref{fig:las-contested}).}
-\label{fig:las-boundary}
+\includegraphics[width=0.55\linewidth]{figures/las/fig_contested.png}
+\caption{Contestedness of each LSOA in the pooled ensemble: one minus the share of plans in which it is served by its most frequent station. Stations are marked.}
+\label{fig:las-contested}
 \end{figure}
 
 \paragraph{Stations.}
@@ -102,17 +69,9 @@ Because the candidates are the real stations, the ensemble also describes each s
 \end{figure}
 
 \paragraph{Groups.}
-The sampled Groups recover part of the operational structure (Figure~\ref{fig:las-groups}). A plan has $22.3$ Groups on average, between $20$ and $24$ in the central $90\%$ of plans, against the $21$ real Groups. Two stations of the same real Group share a superdistrict in $27\%$ of the plans in which both are open, two stations of different Groups in $2\%$; part of this contrast is distance. The adjusted Rand index between a sampled grouping of the open stations and the real Groups is $0.28$ on average ($0.17$ to $0.39$ in the central $90\%$ of plans), against $0.19$ between two sampled plans from different chains. The real Groups are thus one contiguous, capacity-feasible grouping among many that the geography admits, a typical member of the family and not its mode. The pairs the ensemble keeps together most often inside a real Group are Hornchurch and Romford ($67\%$) and Barnehurst and Woolwich ($55\%$). Equally strong are pairs that the real Groups separate, such as Barnehurst and St Pauls Cray ($49\%$) and Richmond and Putney ($48\%$); fourteen cross-Group pairs exceed $30\%$, against $29$ within-Group pairs. These are the associations a planner would examine first, since they mark Group boundaries that balanced plans tend not to draw.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.7\linewidth]{figures/las/fig_groups.png}
-\caption{Share of plans in which two stations belong to the same superdistrict, among the plans in which both are open; stations ordered by their real Group, with white lines separating the $21$ Groups and the colour scale running to the largest off-diagonal value.}
-\label{fig:las-groups}
-\end{figure}
+The sampled Groups recover part of the operational structure (Figure~\ref{fig:las-groups} in Appendix~\ref{app:london-extra}). A plan has $22.3$ Groups on average, between $20$ and $24$ in the central $90\%$ of plans, against the $21$ real Groups. Two stations of the same real Group share a superdistrict in $27\%$ of the plans in which both are open, two stations of different Groups in $2\%$; part of this contrast is distance. The adjusted Rand index between a sampled grouping of the open stations and the real Groups is $0.28$ on average ($0.17$ to $0.39$ in the central $90\%$ of plans), against $0.19$ between two sampled plans from different chains. The real Groups are thus one contiguous, capacity-feasible grouping among many that the geography admits, a typical member of the family and not its mode. The pairs the ensemble keeps together most often inside a real Group are Hornchurch and Romford ($67\%$) and Barnehurst and Woolwich ($55\%$). Equally strong are pairs that the real Groups separate, such as Barnehurst and St Pauls Cray ($49\%$) and Richmond and Putney ($48\%$); fourteen cross-Group pairs exceed $30\%$, against $29$ within-Group pairs. These are the associations a planner would examine first, since they mark Group boundaries that balanced plans tend not to draw.
 
 % -------------------------------------------------------------------------
-\FloatBarrier
 \subsection{The Operational Layout Against the Ensemble}\label{sec:las-price}
 % -------------------------------------------------------------------------
 
@@ -153,7 +112,6 @@ Every sampled plan satisfies the windows, so the minimum access cost over the ba
 Part of this price is a limit of the demand proxy and not of the layout: the smallest catchments sit on daytime hot spots, the West End, the City and the airport, which residential apportionment does not see. Whether the rest is worth paying is an operational question that the ensemble informs but does not settle.
 
 % -------------------------------------------------------------------------
-\FloatBarrier
 \subsection{Sensitivity to the Demand Proxy and the Tolerance}\label{sec:las-sensitivity}
 % -------------------------------------------------------------------------
 

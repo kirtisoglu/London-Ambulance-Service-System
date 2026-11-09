@@ -13,7 +13,6 @@ The experiments answer five questions, and each subsection opens with its answer
 Section~\ref{sec:exp-emergency} then applies the sampler to the London Ambulance Service. There is no competing sampler for this state space, so the reference points are exact enumeration, the chain's own components and an exact solver.
 
 % =========================================================================
-\FloatBarrier
 \subsection{Instances and Protocol}\label{sec:setup}
 % =========================================================================
 
@@ -60,7 +59,6 @@ A proposal is rejected for one of four reasons (Section~\ref{sec:feasibility}). 
 All chains ran on a single core of a four-core cloud container. The exact solver and the annealing runs of Section~\ref{sec:exp-milp} ran on a laptop with an Apple M3 processor, which is about twice as fast per core. Timings are therefore compared only within one machine. The experiment code, the instances and the stored outputs of every run are in the companion repository~\citep{falcomchain}.
 
 % =========================================================================
-\FloatBarrier
 \subsection{Correctness on Enumerable Instances}
 \label{sec:exp-convergence}\label{sec:exp-enumeration}
 % =========================================================================
@@ -101,7 +99,6 @@ On this instance the feasible set has to be defined with more care. The balance 
 The three chains start from the first, middle and last state of the outer set, none of which the proposal can itself produce. Each chain visits all $454$ reachable level-1 states and all $614$ joint states, and no chain visits any other state (Table~\ref{tab:enum}, last row). Their laws agree to within the noise floor, and the sampled law is again far from uniform on its support. On an instance that exercises the debt mechanism, the support of the chain is thus exactly the reachable set of its proposal and that set is irreducible. It is also a proper subset, $15\%$, of the states that the balance rule admits: the loads of sampled districts lie between $0.89$ and $1.15$ of their capacity, against $0.73$ to $1.32$ under the rule. Proposition~\ref{prop:effective} is a guarantee that every sampled state satisfies, not a description of the support, and this instance answers in the negative the question, left open in Section~\ref{sec:rules}, of whether every state that satisfies the rule is reachable.
 
 % =========================================================================
-\FloatBarrier
 \subsection{Stability on Large Instances}
 \label{sec:exp-multistart}
 % =========================================================================
@@ -143,7 +140,6 @@ Table~\ref{tab:rejections} splits the rejected proposals by cause. Rejections ar
 \end{table}
 
 % =========================================================================
-\FloatBarrier
 \subsection{What Each Component Contributes}\label{sec:exp-ablation}
 % =========================================================================
 
@@ -188,7 +184,6 @@ Two further comparisons are reported elsewhere. A plan can also be drawn by one 
 
 
 % =========================================================================
-\FloatBarrier
 \subsection{Scalability}\label{sec:exp-scalability}
 % =========================================================================
 
@@ -222,7 +217,6 @@ With $w \propto \sqrt{|V|}$ the number of units and the district size grow toget
 On one core the sampler handles graphs of $50{,}000$ units at about a tenth of a second per step, with superdistricts of a few hundred to a few thousand nodes. Its working regime in the number of units is up to a few hundred: the supergraph is re-partitioned from scratch at every step, at a cost that grows with the number of districts, and a plan built from nothing must extract every district in one recursion. Both limits concern the greedy supergraph recursion and the initial plan, not the level-1 move, and Section~\ref{sec:limitations} returns to them.
 
 % =========================================================================
-\FloatBarrier
 \subsection{The Ensemble Relative to an Exact Optimum}\label{sec:exp-milp}
 % =========================================================================
 

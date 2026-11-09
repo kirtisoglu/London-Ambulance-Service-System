@@ -10,8 +10,10 @@
 \usepackage{amsmath, amsthm, amssymb}
 \usepackage{placeins}
 % Float placement: keep figures and tables near their text (article build).
-\renewcommand{\topfraction}{0.9}\renewcommand{\bottomfraction}{0.6}
-\renewcommand{\textfraction}{0.07}\renewcommand{\floatpagefraction}{0.75}
+% float placement: fill pages with text and floats together; a page of floats only must be nearly full
+\renewcommand{\topfraction}{0.9}\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.07}\renewcommand{\floatpagefraction}{0.85}
+\setcounter{topnumber}{3}\setcounter{bottomnumber}{2}\setcounter{totalnumber}{5}
 \setcounter{topnumber}{3}\setcounter{bottomnumber}{2}\setcounter{totalnumber}{5}
 \usepackage{graphicx}
 \usepackage{subcaption}
@@ -683,7 +685,7 @@ Algorithm~\ref{alg:overview} summarizes one iteration.
 
 \medskip
 
-\begin{algorithm}[H]
+\begin{algorithm}[tbp]
 \LinesNumbered
 \caption{Outline of FalCom for $|L| = 2$}\label{alg:overview}
 
@@ -772,7 +774,7 @@ Algorithm~\ref{alg:proposal} summarizes the hierarchical proposal phase.
 \medskip
 \medskip
 
-\begin{algorithm}[H]
+\begin{algorithm}[tbp]
 \LinesNumbered
 \caption{Hierarchical proposal}\label{alg:proposal}
 \KwIn{Current level-1 partition $\mathcal{P}^1$ with capacities $c^1$; global unit $\bar d$; tolerances $\varepsilon^1, \varepsilon^2$; capacity bounds; $\kappa^2_{\min}$}
@@ -941,7 +943,7 @@ We summarize the recursive partitioning phase via Algorithm~\ref{alg:recursive} 
 \medskip
 \medskip
 
-\begin{algorithm}[H]
+\begin{algorithm}[tbp]
 \LinesNumbered
 \caption{Recursive partitioning phase at level $\ell$}\label{alg:recursive}
 \KwIn{Subgraph $H$, capacity $c_H$, demand target $\bar{d}_H$, tolerance $\varepsilon^{\ell}$, capacity limit $c_{\max}^{\ell}$}
@@ -1024,7 +1026,7 @@ Algorithm~\ref{alg:treecut} wraps Algorithm~\ref{alg:findcuts} with repeated spa
 
 \medskip
 
-\begin{algorithm}[H]
+\begin{algorithm}[tbp]
 \LinesNumbered
 \caption{Capacitated Tree Cut}\label{alg:treecut}
 \KwIn{Residual graph $H^{(r-1)}$, remaining capacity $c_{H^{(r-1)}}$, max capacity $c_{\max}^{\ell}$, set of debt corrected windows $I^{(r)}$, max attempts $M$}
@@ -1067,7 +1069,7 @@ spanning tree via a single depth-first traversal that accumulates subtree demand
 \medskip
 \medskip
 
-\begin{algorithm}[H]
+\begin{algorithm}[tbp]
 \LinesNumbered
 \caption{Find Feasible Cuts}\label{alg:findcuts}
 \KwIn{Spanning tree $T^{(r-1)}$ with root $v^\star$, remaining capacity $c_{H^{(r-1)}}$, max capacity $c^{\ell}_{\max}$, debt-corrected windows $I^{I(r)}$}
@@ -1221,7 +1223,6 @@ chain mixes in time at worst polynomial in $|V|$, $k_1$, and $k_2$. This localit
 
 \input{tex/sec_london}
 
-\FloatBarrier
 
 %% -----------------------------------------------------------------------
 \section{Discussion and Conclusions}
@@ -1302,8 +1303,6 @@ single plan produced by any method can be placed against that ensemble, as Secti
 \bibliographystyle{plainnat}
 \bibliography{ref_final}
 
-
-\newpage
 
 \appendix\label{app}
 

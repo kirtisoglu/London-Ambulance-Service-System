@@ -55,6 +55,10 @@ repository root:
    `sec_london.tex` is edited by hand; the numbers it quotes are in the tables and the
    `*_numbers.json` files.
 
+Page layout: the manuscript has no forced float barriers or page breaks, and the algorithms
+float. `python paper/text_generators/check_page_gaps.py <pdf> <tmpdir> 0.05 0.07` lists the
+pages with blank areas; only the last page should appear.
+
 New runs behind the restructured sections (all with `PYTHONHASHSEED=0`):
 
 | Paper | Script(s) | Stored output |
