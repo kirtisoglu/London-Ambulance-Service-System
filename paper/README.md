@@ -43,13 +43,13 @@ repository root:
 
 1. `python paper/text_generators/make_sec7_grids.py` writes the tables and figures of
    Section 7 (`tab_enum`, `tab_stability`, `tab_rejections`, `tab_scal`, `tab_fixed`,
-   `tab_milp`, `tab_ablation`, `tab_budget`; `fig_forgetting`, `fig_scaling`,
-   `fig_placement`).
+   `tab_milp`, `tab_ablation`, `tab_budget`; `fig_forgetting`, `fig_placement`).
 2. `python paper/text_generators/make_sec8_london.py` writes those of Section 8
    (`tab_london_layout`, `tab_london_sens`; `fig_plan_vs_layout`, `fig_station_loads`,
    `fig_layout_vs_ensemble`).
-3. `python paper/text_generators/apply_sec7_restructure.py` rebuilds `main_arxiv.tex`
-   from the committed manuscript: it replaces the old Section 7 by the two `\input`
+3. `python paper/text_generators/apply_sec7_restructure.py` rebuilt `main_arxiv.tex`
+   from the earlier manuscript (applied once; it now refuses to run without `--force`,
+   because the manuscript has been edited by hand since): it replaces the old Section 7 by the two `\input`
    files, moves the detailed London diagnostics verbatim into `tex/app_london.tex`, and
    updates the abstract and the roadmap. The prose of `sec_experiments.tex` and
    `sec_london.tex` is edited by hand; the numbers it quotes are in the tables and the
@@ -66,6 +66,8 @@ New runs behind the restructured sections (all with `PYTHONHASHSEED=0`):
 
 The section numbers in the table below are those of the earlier layout
 (7.2.1 is now 7.2, 7.2.2 is 7.3, 7.2.3 is 7.5, 7.3 is 7.6 and 7.4 is Section 8).
+The appendix on the optional candidate-aware cut selection has been removed, so the
+candidate-density appendix is now Appendix C and the LAS data assembly Appendix D.
 
 ## Where each part of the paper comes from
 

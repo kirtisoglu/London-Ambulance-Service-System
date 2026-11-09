@@ -24,6 +24,13 @@ REPO = Path(__file__).resolve().parents[2]
 SRC = REPO / "paper/sources"
 BASE = "9623b6d"      # the commit whose Section 7 this script replaces
 
+# This transformation was applied once (commit d3a6c74). The manuscript has been edited by hand since
+# (Appendix C removed, the scaling figure dropped), so re-running it would discard those edits.
+import sys
+if "--force" not in sys.argv:
+    raise SystemExit("apply_sec7_restructure.py was applied at d3a6c74 and rebuilds main_arxiv.tex from "
+                     f"{BASE}; later manual edits would be lost. Pass --force to run it anyway.")
+
 orig = subprocess.run(["git", "show", f"{BASE}:paper/sources/main_arxiv.tex"], cwd=REPO, capture_output=True,
                       text=True, check=True).stdout
 lines = orig.split("\n")

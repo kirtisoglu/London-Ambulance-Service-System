@@ -12,7 +12,6 @@ and figures to ``paper/sources/figures/sec7/``:
     tab_ablation.tex    component ablations (grid_1000, grid_10000, London)
     tab_budget.tex      sensitivity of the readouts to the retry budget M
     fig_forgetting.pdf  share of the initial boundary still in place
-    fig_scaling.pdf     step time against |V| and against the team count
     fig_placement.pdf   sampled objective values against the exact optimum
 
     python paper/text_generators/make_sec7_grids.py
@@ -384,31 +383,9 @@ def tab_scal():
     lines += [r"\bottomrule", r"\end{tabular}"]
     write("tab_fixed.tex", "\n".join(lines) + "\n")
 
-    fig, axes = plt.subplots(1, 2, figsize=(6.6, 2.6))
     ns = np.array(sorted(sweep))
     med = np.array([sweep[n][0]["median"] for n in ns])
-    mean_all = np.array([sweep[n][0]["mean_all"] for n in ns])
-    slope = np.polyfit(np.log(ns), np.log(med), 1)
-    ax = axes[0]
-    ax.loglog(ns, med, "o-", color=C[0], lw=1.2, ms=4, label="median accepted step")
-    ax.loglog(ns, mean_all, "s--", color=C[1], lw=1.0, ms=3.5, label="mean over all proposals")
-    ax.loglog(ns, np.exp(slope[1]) * ns ** slope[0], ":", color="k", lw=0.8, label=f"$|V|^{{{slope[0]:.2f}}}$")
-    ax.loglog(ns, med[0] * ns / ns[0], "-", color="0.75", lw=0.8, label="linear in $|V|$")
-    ax.set_xlabel("$|V|$"); ax.set_ylabel("time per step [ms]"); ax.set_ylim(top=3e3); ax.legend(fontsize=7)
-    ax.set_title("(a) growing graph, $w\\propto\\sqrt{|V|}$", fontsize=9)
-    ax = axes[1]
-    ks_ = sorted(fixed)
-    base_t = [fixed[k]["median"] * (1 - fixed[k]["super_share"]) for k in ks_]
-    sup_t = [fixed[k]["median"] * fixed[k]["super_share"] for k in ks_]
-    x = np.arange(len(ks_))
-    ax.bar(x, base_t, 0.55, color=C[0], label="level-1 re-cut and bookkeeping")
-    ax.bar(x, sup_t, 0.55, bottom=base_t, color=C[1], label="supergraph re-partition")
-    ax.set_xticks(x); ax.set_xticklabels([f"$k={k}$" for k in ks_])
-    ax.set_ylabel("median accepted step [ms]"); ax.legend(fontsize=7, loc="upper left")
-    ax.set_title("(b) $|V|=10{,}000$, growing team count", fontsize=9)
-    fig.tight_layout()
-    fig.savefig(FIG / "fig_scaling.pdf")
-    plt.close(fig)
+    slope = np.polyfit(np.log(ns), np.log(med), 1)        # exponent of the step time in |V|, quoted in the text
     (TEX / "scaling_numbers.json").write_text(json.dumps({"slope": float(slope[0])}))
 
 

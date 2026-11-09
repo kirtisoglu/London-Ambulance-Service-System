@@ -986,9 +986,9 @@ The core operation in each iteration of Algorithm~\ref{alg:recursive} is the cal
 %% --------------------------------------------------
 
 The capacitated tree cut phase performs the actual district extraction at
-each step of the recursive partitioning. Given the input $(H^{(r-1)},\, c_{H^{(r-1)}},\, I^{(r)},\, c_{\max}^{\ell}\bigr)$ at recursion step $r$ of level $\ell=1,2$, it samples a random spanning tree $T^{(r-1)}$ of the residual graph $H^{(r-1)}$ by Wilson's algorithm \cite{wilson1996generating}. It then identifies the subtrees whose extraction would yield an admissible district under the conditions described below, and it selects one of them uniformly at random (an optional candidate-aware weighting is described in Appendix~\ref{app:psi}). The node set of the selected subtree becomes the extracted district $D_r$, with a capacity $c^{\ell}(D_r) \in [c^{\ell}_{\min}, c^{\ell}_{\max}]$. Algorithm~\ref{alg:findcuts} determines the admissible cuts and Algorithm~\ref{alg:treecut} performs the extraction. Both run at the base level $\ell=1$ and at the supergraph level $\ell=2$ with the same control structure, but the admissibility condition, the window and the way a capacity is attached to a subtree differ between the levels, as stated below.
+each step of the recursive partitioning. Given the input $(H^{(r-1)},\, c_{H^{(r-1)}},\, I^{(r)},\, c_{\max}^{\ell}\bigr)$ at recursion step $r$ of level $\ell=1,2$, it samples a random spanning tree $T^{(r-1)}$ of the residual graph $H^{(r-1)}$ by Wilson's algorithm \cite{wilson1996generating}. It then identifies the subtrees whose extraction would yield an admissible district under the conditions described below, and it selects one of them uniformly at random. The node set of the selected subtree becomes the extracted district $D_r$, with a capacity $c^{\ell}(D_r) \in [c^{\ell}_{\min}, c^{\ell}_{\max}]$. Algorithm~\ref{alg:findcuts} determines the admissible cuts and Algorithm~\ref{alg:treecut} performs the extraction. Both run at the base level $\ell=1$ and at the supergraph level $\ell=2$ with the same control structure, but the admissibility condition, the window and the way a capacity is attached to a subtree differ between the levels, as stated below.
 
-\paragraph{Spanning tree cuts.} Let $T^{(r-1)}$ be a spanning tree of $H^{(r-1)}$ rooted at an arbitrary node $v^\star$. For any node $u$, let $T_u$ denote the subtree rooted at $u$ and $T_{u'} := T^{(r-1)} \setminus T_u$ its complement. When $u \neq v^\star$, removing the edge $uu'$ splits $T^{(r-1)}$ into $T_u$ and $T_{u'}$. The case $u=v^\star$ corresponds to $T_u = T^{(r-1)}$ and $T_{u^\prime} = \emptyset$, which cannot be expressed by removing any edge. We therefore phrase the algorithm in terms of subtrees rather than edge cuts. We describe the admissibility condition for a subtree $T_u$ at both levels $\ell=1,2$ below, and treat the node set $V(T_u)$ as the candidate district to be extracted. Removing an edge from a spanning tree always yields two connected components, so the rule contiguity$(\mathcal{P}^{\ell}) \ \in \mathcal{C}^{\ell}$ is guaranteed by construction. A single depth-first traversal of $T^{(r-1)}$ from $v^\star$ computes the demand $d(T_u)$ of every subtree $T_u$ in $O(|H^{(r-1)}|)$ total time, so the per-step cost of FalCom is linear in the residual graph size. The tree itself is drawn uniformly at random by Wilson's loop-erased random walk, whose expected running time on planar graphs of bounded average degree is also near linear in $|H^{(r-1)}|$. The optional candidate-aware weighting of Appendix~\ref{app:psi} acts on the choice of the cut, not on the distribution of the tree.
+\paragraph{Spanning tree cuts.} Let $T^{(r-1)}$ be a spanning tree of $H^{(r-1)}$ rooted at an arbitrary node $v^\star$. For any node $u$, let $T_u$ denote the subtree rooted at $u$ and $T_{u'} := T^{(r-1)} \setminus T_u$ its complement. When $u \neq v^\star$, removing the edge $uu'$ splits $T^{(r-1)}$ into $T_u$ and $T_{u'}$. The case $u=v^\star$ corresponds to $T_u = T^{(r-1)}$ and $T_{u^\prime} = \emptyset$, which cannot be expressed by removing any edge. We therefore phrase the algorithm in terms of subtrees rather than edge cuts. We describe the admissibility condition for a subtree $T_u$ at both levels $\ell=1,2$ below, and treat the node set $V(T_u)$ as the candidate district to be extracted. Removing an edge from a spanning tree always yields two connected components, so the rule contiguity$(\mathcal{P}^{\ell}) \ \in \mathcal{C}^{\ell}$ is guaranteed by construction. A single depth-first traversal of $T^{(r-1)}$ from $v^\star$ computes the demand $d(T_u)$ of every subtree $T_u$ in $O(|H^{(r-1)}|)$ total time, so the per-step cost of FalCom is linear in the residual graph size. The tree itself is drawn uniformly at random by Wilson's loop-erased random walk, whose expected running time on planar graphs of bounded average degree is also near linear in $|H^{(r-1)}|$.
 
 \paragraph{Feasibility function.}
 The two levels share the same control structure but differ in what counts as an admissible subtree. At the base level $\ell =1$, the extracted subtree $T_u$ must contain a candidate facility from $F^1$, and the complement $T_{u^\prime}$, which becomes the residual, must keep enough candidates for the districts it still has to be cut into: at least $\lceil (c_{H^{(r-1)}}-c)/c^{1}_{\max}\rceil$ of them when $T_u$ takes capacity $c$. This \emph{counting predicate} is a necessary condition for the recursion to close, so it does not change the feasible state space. It prevents the recursion from stranding a candidate-free residual, and it is what makes sparse, real-world candidate sets workable (Section~\ref{sec:feasibility}). At the supergraph level $\ell=2$, no facility constraint is imposed, but a size constraint $\kappa^2_{\min} \in \mathbb{Z}_{\geq 1}$ requires both $T_u$ and $T_{u^\prime}$ to contain at least $\kappa^2_{\min}$ supergraph nodes, equivalently at least $\kappa^2_{\min}$ level-1 districts each, so that every superdistrict bundles a non-trivial number of level-1 districts (Section~\ref{sec:graph}). The two tolerances are related by $\varepsilon^{2} \geq \varepsilon^{1}$: under global targets Lemma~\ref{lem:super-convex} would place every union of balanced districts inside its level-2 window, but the chain cuts districts against local targets, so the level-2 window can bind and the supergraph recursion can fail on demand (Appendix~\ref{app:supergraph-correctness}). In one-sided mode the residual must moreover remain partitionable: with $c$ capacity units and $n$ supernodes left after the extraction, some number $k$ of superdistricts must satisfy $\lceil c/c^{2}_{\max}\rceil \leq k \leq \min\{\lfloor c/c^{2}_{\min}\rfloor,\ \lfloor n/\kappa^{2}_{\min}\rfloor\}$. Like the counting predicate, this \emph{residual predicate} is a necessary condition, so it leaves the state space unchanged. It keeps the greedy extraction from stranding a final supernode, which was by far the most frequent cause of rejection before it was introduced (Section~\ref{sec:feasibility}). We define
@@ -1018,7 +1018,7 @@ Lemma~\ref{lem:app-shape} shows that the corrected windows $I^{(r)}(c)$ are non-
 
 \paragraph{Choosing an admissible subtree.} Let $\mathcal{T}^{(r-1)}$ be the set of all subtrees of $T^{(r-1)}$ and let $\mathcal{E}^{\ell}_{r-1} = \{T_u \subset T^{(r-1)} \; : \; \phi^{\ell}(T_u) > 0 \} \subset \mathcal{T}^{(r-1)}$ denote the set of admissible subtrees. The algorithm selects a subtree $T_u \in \mathcal{E}^{\ell}_{r-1}$, sets the extracted district $D_r := V(T_u)$, and assigns $c^{\ell}(D_r) := c$, the unique capacity whose window contains $d(T_u)$ at level $1$ and the aggregate capacity of the members at level $2$. 
 
-FalCom samples $T_u$ uniformly from $\mathcal{E}^{\ell}_{r-1}$, generating a contiguous, capacity-balanced district first and only then assigning a facility within it. District shapes are geometrically blind, so the library also offers a weighted choice that favours subtrees whose best candidate is a strong demand-weighted centre (Appendix~\ref{app:psi}). Every experiment in this paper uses the uniform choice.
+FalCom samples $T_u$ uniformly from $\mathcal{E}^{\ell}_{r-1}$, generating a contiguous, capacity-balanced district first and only then assigning a facility within it. District shapes are therefore blind to the locations of the candidates. The library also offers a weighted choice that favours subtrees whose best candidate is a strong demand-weighted centre~\citep{falcomchain}; it changes the sampled law and is not used in this paper.
 
 Algorithm~\ref{alg:treecut} wraps Algorithm~\ref{alg:findcuts} with repeated spanning tree sampling until an admissible subtree is found, or rejects after $M$ attempts.
 
@@ -1039,7 +1039,7 @@ Algorithm~\ref{alg:treecut} wraps Algorithm~\ref{alg:findcuts} with repeated spa
     $\mathcal{E}^{\ell}_{r-1} \leftarrow \textit{FindFeasibleCuts}\bigl(T^{(r-1)},\, c_{H^{(r-1)}},\, c^{\ell}_{\max},\, I^{(r)},\, v^\star \bigr)$ \tcp*{Algorithm~\ref{alg:findcuts}}
 
     \If{$\mathcal{E}^{\ell}_{r-1} \neq \emptyset$}{
-                Select $T_u$ uniformly at random from $\mathcal{E}^{\ell}_{r-1}$ \tcp*{optional weights: Appendix~\ref{app:psi}}
+                Select $T_u$ uniformly at random from $\mathcal{E}^{\ell}_{r-1}$
         $D_r \leftarrow V(T_u)$\;
         $c^{\ell}(D_r) \leftarrow c$, the unique capacity with $d(D_r) \in I^{(r)}(c)$ at $\ell = 1$, or $\sum_{v \in V(T_u)} c^1(D_v)$ at $\ell = 2$\\
         
@@ -1148,7 +1148,7 @@ At the supergraph level a superdistrict $D^2_j$ groups several level-1 districts
 On the London instance the level-2 candidates are the open level-1 facilities, $F^2(s) = \{f^1(D) : D \in \mathcal{P}^1\}$, so that $f^2(D^2_j)$ is the demand-weighted $1$-median of $V^1[D^2_j]$ among the stations open inside it; the grids use the fixed candidate set $F^2 = F^1$. Section~\ref{sec:exp-emergency} states which rule each experiment uses.
 Both levels therefore place each facility at the demand-weighted $1$-median of the base units it serves, and the two terms sum to the disaggregated hierarchical median. Level-2 facility presence is not a hard admissibility constraint. A superdistrict without a level-2 candidate is left without a level-2 facility, which the ensemble readouts report.
 
-Facilities are assigned fresh at every iteration, independently of the current state, and they do not enter the proposal or the acceptance decision at $\gamma = 0$. The library also supports a candidate-aware weighting of the cut selection, in which admissible subtrees are drawn with probability proportional to $\psi^{\ell}(T_u) = \phi^{\ell}(T_u)\,e^{-\gamma\,\eta^{\ell}(T_u)}$ for a per-capita access penalty $\eta^{\ell}$ and an inverse temperature $\gamma \geq 0$. Appendix~\ref{app:psi} defines it, and all experiments in this paper use $\gamma = 0$.
+Facilities are assigned fresh at every iteration, independently of the current state, and they do not enter the proposal or the acceptance decision.
 
 \section{Feasibility and Convergence}
 \label{sec:convergence}
@@ -1579,34 +1579,6 @@ contiguity of every service area assigned to $j$ by requiring a flow path
 back to~$j$ through nodes that are themselves assigned to $j$ at level
 $\ell$. Both levels reuse the same base graph $G^1$ (superdistricts inherit
 adjacency from the base graph through the dual graph $G^2$), so no separate supergraph flow is needed. Level-2 contiguity becomes contiguity of the level-2 footprint on $G^1$. The runs of Section~\ref{sec:exp-milp} impose the system at level~$1$ only, which keeps the model at $O(|F^{1}|\cdot|E^{1}|)$ flow variables and capacity constraints plus $O(|F^{1}|\cdot|V^{1}|)$ conservation constraints, and check level-2 contiguity on the returned solution. Every superdistrict of every optimum reported in Table~\ref{tab:milp} is connected. The level-1 model is a relaxation of the two-level model, so an optimum of the relaxation that is feasible for the two-level model is also an optimum of the two-level model, and the values in Table~\ref{tab:milp} are optima of the model of Section~\ref{sec:model}.
-
-\section{Optional candidate-aware cut selection}
-\label{app:psi}
-
-Sampling a subtree uniformly from $\mathcal{E}^{\ell}_{r-1}$ produces a
-district that is geometrically blind to the locations of the candidate
-facilities. The library therefore offers a Boltzmann-style weighting of the
-admissible subtrees, the \emph{candidate-awareness score}
-\begin{equation}\label{eq:awareness}
-    \psi^{\ell}(T_u) = \phi^{\ell}(T_u) \cdot e^{-\gamma\,\eta^{\ell}(T_u)},
-\end{equation}
-where $\eta^\ell$ is a level-specific geometric penalty and $\gamma \geq 0$ an inverse temperature. At $\gamma = 0$ the score is the indicator $\phi^{\ell}$ and the selection is uniform. At the base level the penalty is the
-\emph{per-capita access cost}
-\begin{equation}
-    \eta^1(T_u) = \hat r(T_u) \;=\; \frac{1}{d(T_u)}\,\min_{\nu \in F^1 \cap V(T_u)} \sum_{v \in V(T_u)} d_v\, \mathrm{d}(v, \nu),
-    \qquad d(T_u) = \sum_{v \in V(T_u)} d_v,
-\end{equation}
-the demand-weighted mean distance from the best-located candidate, the demand-weighted $1$-median of $T_u$, to the units it would serve. The normalisation by $d(T_u)$ keeps $\eta^1$ comparable across cuts of different sizes, and $\eta^1$ is well defined whenever $\phi^1(T_u) > 0$. At the
-supergraph level the same quantity is measured from the best-located
-level-2 candidate to the base units of the subtree,
-\begin{equation}\label{eq:eta-super}
-    \eta^{2}(T_u) \;=\; \frac{1}{d(V^1[T_u])}\,\min_{\nu \in F^2 \cap V^1 [T_u]}\; \sum_{v \in V^1[T_u]} d_v\, \mathrm{d}\bigl(\nu,\, v\bigr),
-\end{equation}
-with $\eta^{2}(T_u) = +\infty$ when $F^2 \cap V^1[T_u] = \emptyset$, so that
-superdistricts without a level-2 candidate vanish from the selection when
-$\gamma > 0$. Larger $\gamma$ concentrates the cut distribution on subtrees
-whose induced districts admit a strong demand-weighted centre, in the manner of
-an inverse temperature. The weighting changes the sampled law and would have to be characterized separately. No experiment in this paper uses it.
 
 \section{Candidate density on the grids}
 \label{app:density}
