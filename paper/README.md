@@ -18,6 +18,12 @@ installed in editable mode (`pip install -e ../FalcomChain`), plus
   0.25), `phase2_optimizer.sh` (eight annealer seeds), `phase345.sh` (uniform-demand
   chains, the 4x6 enumeration, the grid multi-start reruns, the sweep, the
   fixed-size grids, the dense-grid annealer attempt), `phase5_fixedsize.sh`.
+- `sources/tex/`: the restructured experiments. `sec_experiments.tex` (Section 7) and
+  `sec_london.tex` (Section 8, the London case study) are `\input` by `main_arxiv.tex`;
+  `app_london.tex` is the appendix with the detailed London diagnostics; the `tab_*.tex`
+  files are the tables, generated from the stored outputs, and the `*_numbers.json`
+  files hold every generated number that the text quotes. Figures of the two sections
+  are in `sources/figures/sec7/`.
 - `text_generators/`: scripts that read the stored outputs and write the
   corresponding paragraphs and tables of the manuscript (they expect the sources
   under `/home/user/paper_revision/src`; adjust `P` at the top of each script):
@@ -27,6 +33,39 @@ installed in editable mode (`pip install -e ../FalcomChain`), plus
   (demand-proxy paragraph), `apply_g7.py` (fifth chain), `apply_v4_fixes.py` and
   `trim_pass.py` (the last editorial passes), `make_ejor.py` (EJOR build and
   highlights), `make_bundle.sh` (PDFs and source zip).
+
+## Restructured experiments (Sections 7 and 8)
+
+The experiments are organized around five questions (correctness, stability, component
+ablations, scalability, the ensemble relative to an exact optimum) followed by the London
+case study as its own section. Three scripts rebuild them, in this order, from the
+repository root:
+
+1. `python paper/text_generators/make_sec7_grids.py` writes the tables and figures of
+   Section 7 (`tab_enum`, `tab_stability`, `tab_rejections`, `tab_scal`, `tab_fixed`,
+   `tab_milp`, `tab_ablation`, `tab_budget`; `fig_forgetting`, `fig_scaling`,
+   `fig_placement`).
+2. `python paper/text_generators/make_sec8_london.py` writes those of Section 8
+   (`tab_london_layout`, `tab_london_sens`; `fig_plan_vs_layout`, `fig_station_loads`,
+   `fig_layout_vs_ensemble`).
+3. `python paper/text_generators/apply_sec7_restructure.py` rebuilds `main_arxiv.tex`
+   from the committed manuscript: it replaces the old Section 7 by the two `\input`
+   files, moves the detailed London diagnostics verbatim into `tex/app_london.tex`, and
+   updates the abstract and the roadmap. The prose of `sec_experiments.tex` and
+   `sec_london.tex` is edited by hand; the numbers it quotes are in the tables and the
+   `*_numbers.json` files.
+
+New runs behind the restructured sections (all with `PYTHONHASHSEED=0`):
+
+| Paper | Script(s) | Stored output |
+|---|---|---|
+| 7.2 enumeration with non-uniform demand (4x4 grid, demands 80 to 120) | `python -m falcomchain_experiments.validation.enumeration_nonuniform --instance 4x4 --steps 1000000` | `data/derived/validation_nonuniform/` |
+| 7.2 reachable set of the proposal on that instance, computed without the sampler | `python -m falcomchain_experiments.validation.enumeration_closure` (after the run above) | `data/derived/validation_nonuniform/enumeration_closure_4x4.json` |
+| 7.4 component ablations and retry budget (grid_1000, grid_10000, London) | `falcomchain_experiments/ablation/run_job.sh` on each line of `ablation/logs/jobs.txt` (`run_grid.py`, `run_london.py`, variants in `variants.py`; `ABLATION_BUDGET_S=900` caps the chain of a variant at 15 minutes) | `falcomchain_experiments/ablation/results/<variant>/`, `data/derived/ablation_london/<variant>/` |
+| 7.6 the ensemble against the exact optimum (grid_100, grid_400) | `python -m falcomchain_experiments.gurobi.sample_energy --sizes 100 400 --steps 20000 --seeds 1 2 3 4` | `falcomchain_experiments/gurobi/results_sparse/sample_energy_{100,400}.json` |
+
+The section numbers in the table below are those of the earlier layout
+(7.2.1 is now 7.2, 7.2.2 is 7.3, 7.2.3 is 7.5, 7.3 is 7.6 and 7.4 is Section 8).
 
 ## Where each part of the paper comes from
 

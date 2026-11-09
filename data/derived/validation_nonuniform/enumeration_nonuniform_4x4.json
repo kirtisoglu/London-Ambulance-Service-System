@@ -1,0 +1,157 @@
+{
+  "instance": {
+    "name": "4x4",
+    "rows": 4,
+    "cols": 4,
+    "w": 400.0,
+    "units": 4,
+    "c_max": 2,
+    "c_super": [
+      2,
+      4
+    ],
+    "kappa": 2,
+    "demand_seed": 7,
+    "candidates": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "eps": 0.15,
+    "demand": [
+      114,
+      101,
+      104,
+      112,
+      99,
+      107,
+      110,
+      85,
+      80,
+      88,
+      87,
+      112,
+      114,
+      80,
+      97,
+      110
+    ],
+    "retry_budget": 200
+  },
+  "steps": 1000000,
+  "feasible_level1": 3087,
+  "feasible_joint": 4775,
+  "capacity_mixes": {
+    "(1, 1, 2)": 1866,
+    "(1, 1, 1, 1)": 964,
+    "(2, 2)": 257
+  },
+  "district_sizes": {
+    "3": 2133,
+    "4": 3130,
+    "5": 2325,
+    "6": 173,
+    "7": 693,
+    "8": 831,
+    "9": 519,
+    "10": 164
+  },
+  "runs": {
+    "first": {
+      "acceptance_rate": 0.9602299602299602,
+      "causes": {
+        "super_district_below_kappa": 39770
+      },
+      "seconds": 1066.0,
+      "capacity_mismatch_visits": 0,
+      "share_of_steps_with_off_centre_district": 1.0,
+      "visited_level1": 454,
+      "visited_joint": 614,
+      "unsound_level1_visits": 0,
+      "unsound_joint_visits": 0,
+      "tv_first_vs_second_half": 0.014136933109866218
+    },
+    "middle": {
+      "acceptance_rate": 0.9606499606499607,
+      "causes": {
+        "super_district_below_kappa": 39350
+      },
+      "seconds": 1011.0,
+      "capacity_mismatch_visits": 0,
+      "share_of_steps_with_off_centre_district": 1.0,
+      "visited_level1": 454,
+      "visited_joint": 614,
+      "unsound_level1_visits": 0,
+      "unsound_joint_visits": 0,
+      "tv_first_vs_second_half": 0.012732890601781196
+    },
+    "last": {
+      "acceptance_rate": 0.9602499602499602,
+      "causes": {
+        "super_district_below_kappa": 39750
+      },
+      "seconds": 1018.5,
+      "capacity_mismatch_visits": 0,
+      "share_of_steps_with_off_centre_district": 1.0,
+      "visited_level1": 454,
+      "visited_joint": 614,
+      "unsound_level1_visits": 0,
+      "unsound_joint_visits": 0,
+      "tv_first_vs_second_half": 0.014132992157984312
+    }
+  },
+  "visited_level1_union": 454,
+  "visited_level1_by_all_chains": 454,
+  "visited_joint_union": 614,
+  "mass_on_states_not_visited_by_all_chains": 0.0,
+  "tv_between_starts_level1": {
+    "first-middle": 0.010473010473010469,
+    "first-last": 0.010119010119010115,
+    "middle-last": 0.009631009631009631
+  },
+  "tv_between_starts_joint": {
+    "first-middle": 0.01161401161401161,
+    "first-last": 0.011113011113011106,
+    "middle-last": 0.010601010601010602
+  },
+  "iid_noise_floor": {
+    "level1": {
+      "tv_between_two_samples": 0.0093195,
+      "tv_between_halves": 0.013106499999999998,
+      "expected_unvisited": 8.46671696553379e-07
+    },
+    "joint": {
+      "tv_between_two_samples": 0.0102794,
+      "tv_between_halves": 0.014264500000000003,
+      "expected_unvisited": 8.466717060807345e-07
+    }
+  },
+  "pooled_tv_to_uniform_on_support": 0.5086345409399742,
+  "pooled_tv_to_spanning_tree_law_on_support": 0.42740574010175403,
+  "max_over_min_pooled_frequency": 2806.813953488372,
+  "relative_load_visited": [
+    0.88875,
+    1.1475
+  ],
+  "relative_load_feasible_set": [
+    0.7275,
+    1.3225
+  ]
+}

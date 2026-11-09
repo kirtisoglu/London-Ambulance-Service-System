@@ -1,0 +1,21 @@
+{
+  "outer_set_level1": 3087,
+  "outer_set_joint": 4775,
+  "visited_level1": 454,
+  "visited_joint": 614,
+  "reachable_level1_closed_windows": 456,
+  "reachable_joint_closed_windows": 616,
+  "reachable_level1_open_windows": 454,
+  "reachable_joint_open_windows": 614,
+  "boundary_tie_states": 2,
+  "visited_equals_reachable_open_windows": true,
+  "visited_subset_of_reachable_closed_windows": true,
+  "reachable_inside_outer_set": true,
+  "single_communicating_class_closed": true,
+  "single_communicating_class_open": true,
+  "start_states_reachable": {
+    "first": false,
+    "middle": false,
+    "last": false
+  }
+}

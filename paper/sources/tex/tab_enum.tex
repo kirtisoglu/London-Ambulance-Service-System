@@ -1,0 +1,13 @@
+\begin{tabular}{llrrrrrrrrr}
+\toprule
+ & & \multicolumn{2}{c}{feasible states} & & \multicolumn{3}{c}{TV between chains (noise floor)} & \multicolumn{2}{c}{TV of pooled law to} & \\
+\cmidrule(lr){3-4}\cmidrule(lr){6-8}\cmidrule(lr){9-10}
+grid & demand & level 1 & joint & unvisited & level 1 & halves & joint & uniform & tree & max/min \\
+\midrule
+$3\times4$ & $100$ & $93$ & $119$ & 0 & $0.012$ ($0.011$) & $0.016$ ($0.015$) & $0.012$ ($0.011$) & $0.40$ & $0.37$ & $262$ \\
+$4\times4$ & $100$ & $435$ & $595$ & 0 & $0.024$ ($0.021$) & $0.033$ ($0.029$) & $0.026$ ($0.022$) & $0.51$ & $0.43$ & $6{,}381$ \\
+$4\times6$ & $100$ & $22{,}549$ & $43{,}689$ & 14 (53) & $0.050$ ($0.035$) & $0.069$ ($0.049$) & $0.062$ ($0.047$) & $0.59$ & $0.32$ & $63{,}724$ \\
+\midrule
+$4\times4$ & $80$--$120$ & $454$ & $614$ & 0 & $0.010$ ($0.009$) & $0.014$ ($0.013$) & $0.012$ ($0.010$) & $0.51$ & $0.43$ & $2{,}807$ \\
+\bottomrule
+\end{tabular}
