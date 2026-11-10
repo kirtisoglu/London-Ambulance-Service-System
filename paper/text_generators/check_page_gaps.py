@@ -17,7 +17,7 @@ rows = []
 for i, f in enumerate(sorted(glob.glob(out + "/p-*.pgm")), start=1):
     a = np.array(Image.open(f))
     h, w = a.shape
-    top, bot = int(h * 1.0 / 11), int(h * 9.75 / 11)        # text block, page number excluded
+    top, bot = int(h * 1.0 / 11), int(h * 10.0 / 11)        # text block (1in margins); the page number sits below it
     x0, x1 = int(w * 1.2 / 8.5), int(w * 7.5 / 8.5)         # skip the line numbers in the margin
     ink = (a[top:bot, x0:x1] < 200).any(axis=1)
     n = len(ink)

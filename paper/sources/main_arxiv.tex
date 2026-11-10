@@ -9,11 +9,9 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath, amsthm, amssymb}
 \usepackage{placeins}
-% Float placement: keep figures and tables near their text (article build).
 % float placement: fill pages with text and floats together; a page of floats only must be nearly full
 \renewcommand{\topfraction}{0.9}\renewcommand{\bottomfraction}{0.8}
 \renewcommand{\textfraction}{0.07}\renewcommand{\floatpagefraction}{0.85}
-\setcounter{topnumber}{3}\setcounter{bottomnumber}{2}\setcounter{totalnumber}{5}
 \setcounter{topnumber}{3}\setcounter{bottomnumber}{2}\setcounter{totalnumber}{5}
 \usepackage{graphicx}
 \usepackage{subcaption}
@@ -98,11 +96,19 @@ of Technology, Chicago, IL 60616. E-mail: {\tt {kaul@iit.edu, kirtisoglu@hawk.ii
 
     In this paper, we introduce \emph{FalCom} (Facility Location Combination), a 
     recombination-type MCMC sampler for hierarchical districting with capacitated 
-    facility assignments. FalCom partitions a geographic region at two hierarchical levels, assigns a facility and an integer capacity to every district, and lets the number and sizes of districts emerge within a total capacity fixed by the demand. We validate FalCom against exact enumeration on small 
-    instances and evaluate its computational scaling on synthetic grids with up 
-    to $50{,}000$ basic units. Ablations show which components of the proposal the chain cannot run without. On grids of $100$ and $400$ basic units a typical sampled plan lies $40$ to $50\%$ above the proven optimum of a median objective that the sampler never sees, and the same proposal run as an annealer comes within $1\%$ and $8\%$ of it. 
+    facility assignments. FalCom partitions a geographic region at two hierarchical 
+    levels, assigns a facility and a capacity to every district, balances districts 
+    according to the capacity constraints, and allows the number of districts to emerge 
+    from capacity and demand requirements. We validate FalCom against exact enumeration 
+    on small instances and evaluate its computational scaling on synthetic 
+    grids with up to $50{,}000$ basic units. We also run it as an annealing optimizer 
+    on grids of $100$ and $400$ basic units, where FalCom comes within $1\%$ and $8\%$ of the proven 
+    optima of the mixed-integer program. 
     Finally, we apply FalCom to the London Ambulance Service, using data on its $66$ 
-    real ambulance stations. The resulting ensemble characterizes the variation of response-area boundaries, station workloads and operational groupings under the sampler's law, and provides a reference distribution against which the existing service layout is read.
+    real ambulance stations. The resulting ensemble characterizes the variation of 
+    response-area boundaries, station workloads and operational groupings under the 
+    sampler's law, and provides a distributional reference for assessing the existing 
+    service layout.
 \end{abstract}
 
 
@@ -187,7 +193,29 @@ linking assignments across levels, but without necessarily requiring contiguity 
 service areas~\citep{contreras2020hierarchical}. 
 
 % ---- 5. Computational challenge and sampling ----
-Districting problems are computationally hard. Enforcing geographic contiguity in an integer program takes either exponentially many cut constraints, separated during branch-and-cut, or a polynomial-size flow formulation with many auxiliary variables~\citep{validi2022imposing}. Exact methods have nonetheless come a long way. For contiguous, population-balanced districts with a compactness objective, branch-and-cut now solves every county-level instance in the United States and some tract-level ones~\citep{validi2022cutedges, validi2022imposing}, and a cut-generation scheme solves commercial territory instances with $5{,}000$ to $10{,}000$ units for one specific model~\citep{rios2013commercial}. The remaining tract-level instances, and models with more structure, are beyond exact methods without decomposition, which is why the largest instances are handled by coarsening the graph and solving exactly only at the coarsest level~\citep{swamy2023multiobjective}, or by metaheuristics, which the survey of \citet{kalcsics2020districting} reviews. Capacitated facilities and a second hierarchical level add decisions that interact with every assignment, and Section~\ref{sec:exp-milp} shows what that costs on our own model: a proven optimum takes a quarter of an hour on a grid of $400$ units with $15$ candidate sites. All of these methods, exact or heuristic, return one plan. Many planning applications would benefit from several. A distribution over plans lets decision-makers investigate trade-offs, assess the stability of assignments and the robustness of facility locations, and identify the features that persist across solutions. The survey of \citet{kalcsics2020districting} calls for a common and generic framework for districting problems in place of application-specific heuristics with yet another compactness measure or balance constraint. This paper takes a step in that direction by developing a framework for sampling hierarchical districting plans at scale while locating capacitated facilities.
+\textcolor{purple}{Districting problems are computationally hard. Enforcing geographic contiguity in an 
+integer program can require complex formulations with large numbers of 
+constraints~\citep{validi2022imposing}
+. Exact methods have nonetheless come a long way. For contiguous, population-balanced 
+districts with a compactness objective, branch-and-cut now solves every county-level 
+instance in the United States and some tract-level ones~\citep{validi2022cutedges, 
+validi2022imposing}, and a cut-generation scheme solves commercial territory instances 
+with $5{,}000$ to $10{,}000$ units for one specific model~\citep{rios2013commercial}. 
+The remaining tract-level instances, and models with more structure, are beyond exact 
+methods without decomposition, which is why the largest instances are handled by coarsening 
+the graph and solving exactly only at the coarsest level~\citep{swamy2023multiobjective},
+or by metaheuristics, which the survey of \citet{kalcsics2020districting} reviews. 
+Capacitated facilities and a second hierarchical level add decisions that interact with 
+every assignment, and Section~\ref{sec:exp-milp} shows what that costs on our own model: 
+a proven optimum takes a quarter of an hour on a grid of $400$ units with $15$ candidate 
+sites. All of these methods, exact or heuristic, return one plan. Many planning 
+applications would benefit from several. A distribution over plans lets decision-makers 
+investigate trade-offs, assess the stability of assignments and the robustness of facility 
+locations, and identify the features that persist across solutions. The survey of 
+\citet{kalcsics2020districting} calls for a common and generic framework for districting 
+problems in place of application-specific heuristics with yet another compactness measure 
+or balance constraint. This paper takes a step in that direction by developing a framework 
+for sampling hierarchical districting plans at scale while locating capacitated facilities.}
 
 % ---- 6. Political redistricting as methodological bridge ----
 A promising methodological direction comes from computational political redistricting. 
@@ -202,34 +230,39 @@ which are considered here in detail.
 \paragraph{Our contribution.}
 We introduce \emph{FalCom} (Facility Location Combination), a
 ReCom-type MCMC sampler for capacitated hierarchical districting
-with facility assignment. To our knowledge, FalCom is the first sampler that combines a hierarchy of districts, a facility and an integer capacity in every district, and a variable number of districts. The multiscale merge-split samplers of political redistricting, which work on two levels of geographic units, are its closest predecessors (Section~\ref{sec:lit-districting}).
-We summarize FalCom's contributions as follows.
+with facility assignment. To our knowledge, FalCom is the first 
+sampler that combines a hierarchy of districts, a facility and 
+an integer capacity in every district, and a variable number of 
+districts. We summarize FalCom's contributions as follows.
 \vspace{2mm}
 \begin{enumerate}[nosep, label=(\roman*)]
      \item \textbf{Hierarchical capacitated partitioning.}
         FalCom operates on a multi-level graph structure, enforcing
-        capacity and demand balance constraints at each level. Unlike the samplers in political redistricting, which prescribe the number of districts in advance, FalCom fixes the total number of service teams from the demand and lets the number and capacities of districts emerge within that budget: a plan with $k$ teams opens between $k/c^1_{\max}$ and $k$ facilities.
-
-
+        capacity and demand balance constraints at each level. Unlike the 
+        samplers in political redistricting, which prescribe the number of 
+        districts in advance, FalCom allows this number to emerge from the 
+        demand and capacity requirements.
     \item \textbf{Ensemble-based analysis.} FalCom samples feasible hierarchical 
         partitions, enabling distributional analyses of district boundaries, facility
-        assignments, and capacity utilization. Boundary frequency maps
-        reveal which boundaries recur across sampled plans, facility
-        assignment frequencies indicate the stability of assignments
-        across the ensemble, and capacity utilization profiles characterize
-        the distribution of workloads. This ensemble perspective, developed
+        assignments, and capacity utilization. This ensemble perspective, developed
         extensively in political redistricting for applications such as
         gerrymandering detection, provides a basis for assessing alternatives 
         beyond a single optimized plan.
 
     \item \textbf{Scalability.}  We demonstrate that FalCom can run chains on 
-        instances with up to $|V| = 50{,}000$ basic units. A step is local at level~1, where it re-cuts one superdistrict, and global at level~2, where it re-partitions the supergraph of $k$ nodes. On the tested grids, where $k$ grows from $5$ to $112$, the median time of an accepted step grows by a factor of $30$ and the mean step including rejected proposals by a factor of about $41$, while $|V|$ grows $500$-fold; at a fixed graph size the cost grows with the team count through the supergraph re-partition (Section~\ref{sec:exp-scalability}).
-
-    \item \textbf{A benchmark for plans obtained by other means.} The ensemble places a given plan, an existing layout or the output of an optimization model, against a reference distribution of feasible plans; Section~\ref{sec:exp-emergency} reads the operational layout of the London Ambulance Service in this way. FalCom does not optimize within districts. Routing, staffing and dispatch models can be applied inside the sampled districts, which we leave to future work (Section~\ref{sec:extensions}).
+        instances with up to $|V| = 50{,}000$ basic units. As in ReCom, each 
+        step operates on a local region rather than the entire instance. 
+    \item \textbf{Composability.} FalCom separates the districting and 
+        facility-assignment structure from within-district operational decisions. 
+        Flow-based formulations, vehicle-routing heuristics, and stochastic models 
+        can be applied within the resulting districts to optimize facility placement,
+        route vehicles, or allocate staff, which we leave to future work.
     \end{enumerate}
 \vspace{2mm}
 
-To aid reproducibility of our work, an open-source implementation of FalCom is available online, and a companion repository holds the experiment code, the synthetic instances, the London data assembly and the stored output of every chain reported in Section~\ref{sec:experiments}, with the commands and seeds that produced them~\citep{falcomchain}.
+To aid reproducibility of our work, an open-source implementation of FalCom is 
+available online, and a companion repository holds the experiment code and data
+we use in this study~\citep{falcomchain}.
 
 
 % ---- 8. Paper outline ----
@@ -238,8 +271,12 @@ Section~\ref{sec:literature} reviews the related literature. Section~\ref{sec:mo
 introduces the problem formulation and the hierarchical graph structure, while 
 Section~\ref{sec:graph} describes the state space and feasibility rules. 
 Section~\ref{sec:falcom} presents the FalCom algorithm, including the proposal 
-mechanism, recursive partitioning, capacitated tree cuts, and facility assignment 
-phase. Section~\ref{sec:convergence} establishes feasibility and states what is known, and what is open, about the chain's convergence, a status it shares with the ReCom family. Section~\ref{sec:experiments} validates the sampler against exact enumeration and across independently started chains, ablates its components, evaluates its scaling on large synthetic grids and places the ensemble relative to exact optima of the mixed-integer model. Section~\ref{sec:exp-emergency} applies it to the London Ambulance Service. Finally, Section~\ref{sec:discussion} 
+mechanism with its facility assignment phase. Section~\ref{sec:convergence} discusses 
+feasibility and convergence theory. Section~\ref{sec:experiments} 
+validates the sampler against exact enumeration, ablates its components, evaluates 
+its scaling on large synthetic grids, and compares sampled results with mixed-integer 
+linear programming solutions. Section~\ref{sec:exp-emergency} presents an application 
+to the London Ambulance Service. Finally, Section~\ref{sec:discussion} 
 concludes the paper and discusses directions for future research.
 
 
@@ -339,6 +376,7 @@ are summarized in the table below before we state the model.
  
 \input{tex/table2}
 \setcounter{equation}{0}
+{\allowdisplaybreaks % the ten constraints may break across a page, so that no page ends short
 \begin{align}
 % Constraint 1 - unique assignment
     &\sum\limits_{j \in F^\ell} x_{ij}^\ell=1,
@@ -373,6 +411,7 @@ are summarized in the table below before we state the model.
     & c^\ell_j \in \{0, 1, \ldots, c^\ell_{\max}\}, \;\ u_{j'j} \in \{0, 1, \ldots, c^1_{\max}\}, \;\ x^\ell_{ij}, y^\ell_j, z_{j'j} \in \{0, 1\},
     &\forall i \in V^1, \;\ j \in F^\ell, \;\ \forall \ell \in L \label{cons:integrality} 
     \end{align}
+}
 
 
 The formulation captures the key structural elements of our problem.
