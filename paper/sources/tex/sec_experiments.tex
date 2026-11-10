@@ -2,15 +2,7 @@
 \section{Computational Experiments}\label{sec:experiments}
 % =========================================================================
 
-The experiments answer five questions, and each subsection opens with its answer.
-\begin{enumerate}[label=(Q\arabic*),leftmargin=3em,itemsep=1pt,topsep=3pt]
-\item \emph{Is the chain correct?} On every instance small enough to list, the chain visits only feasible states, covers exactly the states its proposal can reach from very different starts, and its empirical law does not depend on the start (Section~\ref{sec:exp-enumeration}).
-\item \emph{Is the sampled law stable on instances that cannot be listed?} On grids of $10{,}000$ and $50{,}000$ units and on the London instance, independently started chains agree on every observable to within the noise of a single chain and forget their starts within a few hundred steps (Section~\ref{sec:exp-multistart}).
-\item \emph{What does each component of the proposal contribute?} Removing the counting predicate, the residual predicate, the absolute debt window or the local demand target, one at a time, shows which of them the chain cannot run without and which only buy acceptance (Section~\ref{sec:exp-ablation}).
-\item \emph{How does the cost of a step scale, and where does the method stop?} The step time grows as about $|V|^{0.55}$ up to $50{,}000$ units; the limit is the team count rather than the graph size, through the supergraph re-partition and the construction of the first plan (Section~\ref{sec:exp-scalability}).
-\item \emph{Where does the ensemble sit relative to an optimum?} On the two grids the exact solver can handle, a typical sampled plan is $40$ to $50\%$ above the optimum of a median objective that the sampler never sees, and the same proposal run as an annealer closes most of that distance (Section~\ref{sec:exp-milp}).
-\end{enumerate}
-Section~\ref{sec:exp-emergency} then applies the sampler to the London Ambulance Service. There is no competing sampler for this state space, so the reference points are exact enumeration, the chain's own components and an exact solver.
+The experiments answer five questions, one per subsection, and each subsection opens with its finding: whether the chain is correct on instances small enough to list (Section~\ref{sec:exp-enumeration}); whether the sampled law is stable on instances that cannot be listed (Section~\ref{sec:exp-multistart}); what each component of the proposal contributes (Section~\ref{sec:exp-ablation}); how the cost of a step scales and where the method stops (Section~\ref{sec:exp-scalability}); and where the ensemble sits relative to an exact optimum (Section~\ref{sec:exp-milp}). There is no competing sampler for this state space, so the reference points are exact enumeration, the chain's own components and an exact solver. Section~\ref{sec:exp-emergency} then applies the sampler to the London Ambulance Service.
 
 % =========================================================================
 \subsection{Instances and Protocol}\label{sec:setup}
