@@ -83,7 +83,7 @@ def ks(a, b):
 
 def tab_enum():
     rows = []
-    for name, label in [("3x4", r"$3\times4$"), ("4x4", r"$4\times4$"), ("4x6", r"$4\times6$")]:
+    for name, label in [("4x4", r"$4\times4$"), ("4x6", r"$4\times6$")]:   # the 3x4 run is stored but no longer reported
         d = J(DER / f"validation_v2/enumeration_{name}.json")
         steps = next(iter(d["runs"].values()))["steps"]
         fl, fj = d["iid_noise_floor"]["level1"], d["iid_noise_floor"]["joint"]
