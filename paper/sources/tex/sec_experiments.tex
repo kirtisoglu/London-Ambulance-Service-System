@@ -54,9 +54,6 @@ Every chain uses uniform cut selection and accepts every proposal that closes; a
 \paragraph{Diagnostics.}
 Agreement between chains is measured on scalar observables: the level-1 access cost $\sum_{D\in\Pc^1}\sum_{v\in D} d_v\,\mathrm{d}(f^1(D),v)$, which is the slowest observable since one superdistrict is re-cut per step, the numbers of districts and superdistricts, and the number of cut edges. For each observable we report the largest Kolmogorov--Smirnov distance between the post-burn-in series of two chains, on every twentieth step. The series are autocorrelated, so the critical values of the two-sample test do not apply, and the reference is the same distance between the two halves of one chain. This reference calibrates the noise of the statistic. It cannot detect a region that all chains miss, which is why Section~\ref{sec:exp-enumeration} checks the support exhaustively where that is possible. \emph{Steps to forget} is the number of steps after which the share of the initial plan's district boundary that is still in place comes within $10\%$ of the share that two independently started plans have in common. Split-$\hat R$ and the effective sample size are reported for the access cost.
 
-\paragraph{Rejections.}
-A proposal is rejected for one of four reasons (Section~\ref{sec:feasibility}). At the supergraph, a \emph{tree failure} means that none of the $M$ spanning trees had an admissible pendant subtree although the residual lies inside the window of its remaining capacity, and a \emph{demand failure} means that the residual lies outside that window, so that no tree can close. A re-cut that would leave the selected superdistrict with fewer than $\kappa^2_{\min}$ districts is rejected as \emph{below~$\kappa$}. A \emph{base-level failure} is a level-1 recursion that exhausts its budget. Table~\ref{tab:rejections} in Section~\ref{sec:exp-multistart} reports all four on every instance.
-
 % =========================================================================
 \subsection{Correctness on Enumerable Instances}
 \label{sec:exp-convergence}\label{sec:exp-enumeration}
@@ -75,7 +72,7 @@ Section~\ref{sec:convergence-status} explained why no closed-form stationary dis
 \end{table}
 
 \paragraph{Soundness and support.}
-No chain produced a district without a candidate, a demand outside its window, a superdistrict with fewer than $\kappa^2_{\min}$ districts or a disconnected part. On the two smaller grids every chain visited every level-1 and every joint state. On the $4\times6$ grid the three chains together visited all but $14$ of the $22{,}549$ level-1 states and all but $45$ of the $43{,}689$ joint states, fewer than an independent sample of the same length would miss. Acceptance is $96$ to $97\%$, and almost every rejection is a re-cut below $\kappa$.
+No chain produced a district without a candidate, a demand outside its window, a superdistrict with fewer than $\kappa^2_{\min}$ districts or a disconnected part. On the two smaller grids every chain visited every level-1 and every joint state. On the $4\times6$ grid the three chains together visited all but $14$ of the $22{,}549$ level-1 states and all but $45$ of the $43{,}689$ joint states, fewer than an independent sample of the same length would miss. Acceptance is $96$ to $97\%$, and almost every rejection is a re-cut that would leave a superdistrict with fewer than $\kappa^2_{\min}$ districts.
 
 \paragraph{Start-independence.}
 Every distance between two chains, and between the two halves of one chain, is within a factor of $1.5$ of its noise floor (Table~\ref{tab:enum}). The empirical law is determined by the chain and not by its start, at level 1 and jointly.
@@ -128,13 +125,13 @@ On ten of the twelve instance and observable pairs the chains differ from each o
 The chains lose memory of their starts within $180$ to $780$ steps, for plans of $38$ to $85$ districts, after which the share of the initial boundary still in place stays at the independent-plan value (Figure~\ref{fig:forgetting}). The burn-in of $20\%$ is therefore conservative by more than an order of magnitude. This is the locality argument of Section~\ref{sec:convergence-status} at work: every level-2 boundary is redrawn at every step and one superdistrict is re-cut, so the number of steps needed scales with the number of superdistricts.
 
 \paragraph{Rejections.}
-Table~\ref{tab:rejections} splits the rejected proposals by cause. Rejections are a supergraph phenomenon on every instance. Base-level failures stay below five per $10{,}000$ proposals, which is the price of a candidate set with $1.5$ sites per unit, or $0.7$ on London, once the counting predicate is in place. Supergraph tree failures grow with the number of supernodes, from none on grid\_100 to $7.5\%$ on grid\_50000, and reach $26\%$ on London, where a superdistrict holds two to six units in stations of one to three and the windows are correspondingly harder to hit with a pendant subtree. Demand failures stay below $2\%$. In the multi-start runs on grid\_50000, $14$ of $120{,}000$ proposals were in addition rejected by a numerical guard that re-checks the per-unit balance~\eqref{eq:per-team-window} of a returned cut; in exact arithmetic the guard cannot fire, and it did not on any other instance. Every rejection is a repeated state, not an error; the holding times of rejected proposals enter the sampled law, and Appendix~\ref{app:london-extra} quantifies that effect on London, where it is largest.
+Table~\ref{tab:rejections} splits the rejected proposals by the four causes of Section~\ref{sec:feasibility}. Rejections are a supergraph phenomenon on every instance. Base-level failures stay below five per $10{,}000$ proposals, which is the price of a candidate set with $1.5$ sites per unit, or $0.7$ on London, once the counting predicate is in place. Supergraph tree failures grow with the number of supernodes, from none on grid\_100 to $7.5\%$ on grid\_50000, and reach $26\%$ on London, where a superdistrict holds two to six units in stations of one to three and the windows are correspondingly harder to hit with a pendant subtree. Demand failures stay below $2\%$. In the multi-start runs on grid\_50000, $14$ of $120{,}000$ proposals were in addition rejected by a numerical guard that re-checks the per-unit balance~\eqref{eq:per-team-window} of a returned cut; in exact arithmetic the guard cannot fire, and it did not on any other instance. Every rejection is a repeated state, not an error; the holding times of rejected proposals enter the sampled law, and Appendix~\ref{app:london-extra} quantifies that effect on London, where it is largest.
 
 \begin{table}[!htbp]
 \centering
 \small
 \input{tex/tab_rejections}
-\caption{Rejected proposals by cause, as shares of all proposals: the scaling sweep on the grids (one chain of $10{,}000$ steps each) and the four London chains pooled. The four causes are defined in Section~\ref{sec:setup}.}
+\caption{Rejected proposals by cause, as shares of all proposals: the scaling sweep on the grids (one chain of $10{,}000$ steps each) and the four London chains pooled. The four causes are defined in Section~\ref{sec:feasibility}.}
 \label{tab:rejections}
 \end{table}
 
@@ -150,7 +147,7 @@ No other sampler exists for this state space, so we measure the sampler against 
 \centering
 \small\setlength{\tabcolsep}{4pt}
 \resizebox{\linewidth}{!}{\input{tex/tab_ablation}}
-\caption{Component ablations: one chain per variant and instance. ``Accepted'' is the share of proposals that close. ``Base'' and ``supergr.''\ are the shares of proposals rejected because the level-1 recursion or the supergraph recursion exhausted its retry budget; the remaining rejections are re-cuts below $\kappa$. Variants that reached the fifteen-minute cap made fewer proposals than the full method: without the counting predicate, with the scaled window and with the global target, $2{,}194$, $1{,}262$ and $490$ on grid\_1000 and $995$, $755$ and $182$ on grid\_10000, and $2{,}405$ with the global target on London.}
+\caption{Component ablations: one chain per variant and instance. ``Accepted'' is the share of proposals that close. ``Base'' and ``supergr.''\ are the shares of proposals rejected because the level-1 recursion or the supergraph recursion exhausted its retry budget; the remaining rejections are re-cuts that would leave a superdistrict with fewer than $\kappa^2_{\min}$ districts. Variants that reached the fifteen-minute cap made fewer proposals than the full method: without the counting predicate, with the scaled window and with the global target, $2{,}194$, $1{,}262$ and $490$ on grid\_1000 and $995$, $755$ and $182$ on grid\_10000, and $2{,}405$ with the global target on London.}
 \label{tab:ablation}
 \end{table}
 
