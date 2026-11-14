@@ -1,5 +1,5 @@
 % =========================================================================
-\section{Computational Experiments}\label{sec:experiments}\label{sec:setup}
+\section{Experimental Comparison}\label{sec:experiments}\label{sec:setup}
 % =========================================================================
 
 All chains ran on a single core of a four-core cloud container. The exact solver and the annealing runs of Section~\ref{sec:exp-milp} ran on a laptop with an Apple M3 processor, which is about twice as fast per core. Timings are therefore compared only within one machine. The experiment code, the instances and the stored outputs of every run are in the companion repository~\citep{falcomchain}.
@@ -15,7 +15,7 @@ There is no competing sampler for this state space, so the reference points are 
 Section~\ref{sec:exp-emergency} then applies the sampler to the London Ambulance Service.
 
 \paragraph{Data sets.}
-Table~\ref{tab:grids} lists the instances. Three small grids of $16$ to $24$ units are small enough for every state to be listed. Five synthetic grids of $100$ to $50{,}000$ units have i.i.d.\ demands $d_v \sim \mathrm{Uniform}(80,120)$, a unit workload $w = 200\sqrt{|V|}$ rounded to the nearest thousand, so that the number of units $k$ and the mean district size both grow as $\sqrt{|V|}$, and a sparse candidate set of $\lceil 1.5\,k\rceil$ sites placed uniformly at random. Assumption~\ref{asm:facility-density} thus fails on every grid by design, and the chain runs on the counting predicate of Section~\ref{sec:capacitated}. The tolerance $0.15$ is above the granularity floor on every grid, and the level-2 capacity range exceeds the safe range of Corollary~\ref{cor:app-invariant}, which concerns level $1$ only. The London instance is described with its case study.
+Table~\ref{tab:grids} lists the instances. Three small grids of $16$ to $24$ units are small enough for every state to be listed. Five synthetic grids of $100$ to $50{,}000$ units have i.i.d.\ demands $d_v \sim \mathrm{Uniform}(80,120)$, a unit workload $w = 200\sqrt{|V|}$ rounded to the nearest thousand, so that the number of units $k$ and the mean district size both grow as $\sqrt{|V|}$, and a sparse candidate set of $\lceil 1.5\,k\rceil$ sites placed uniformly at random. Assumption~\ref{asm:facility-density} thus fails on every grid by design, and the chain runs on the counting predicate of Section~\ref{sec:capacitated}. The tolerance $0.15$ is above the granularity floor on every grid, and the level-2 capacity range exceeds the safe range of Corollary~\ref{cor:app-invariant}, which concerns level $1$ only. The London instance is described in Section~\ref{sec:exp-emergency}.
 
 \begin{table}[!htbp]
 \centering

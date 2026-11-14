@@ -111,6 +111,9 @@ of Technology, Chicago, IL 60616. E-mail: {\tt {kaul@iit.edu, kirtisoglu@hawk.ii
     service layout.
 \end{abstract}
 
+\setcounter{tocdepth}{2}
+\tableofcontents
+
 
 \section{Introduction}
 \label{sec:intro}
@@ -226,66 +229,7 @@ However, ReCom was developed for political redistricting and does not directly a
 capacity constraints, multiple hierarchical levels, and facility assignments, 
 which are considered here in detail.
 
-% ---- 7. Our contribution ----
-\paragraph{Our contribution.}
-We introduce \emph{FalCom} (Facility Location Combination), a
-ReCom-type MCMC sampler for capacitated hierarchical districting
-with facility assignment. To our knowledge, FalCom is the first 
-sampler that combines a hierarchy of districts, a facility and 
-an integer capacity in every district, and a variable number of 
-districts. We summarize FalCom's contributions as follows.
-\vspace{2mm}
-\begin{enumerate}[nosep, label=(\roman*)]
-     \item \textbf{Hierarchical capacitated partitioning.}
-        FalCom operates on a multi-level graph structure, enforcing
-        capacity and demand balance constraints at each level. Unlike the 
-        samplers in political redistricting, which prescribe the number of 
-        districts in advance, FalCom allows this number to emerge from the 
-        demand and capacity requirements.
-    \item \textbf{Ensemble-based analysis.} FalCom samples feasible hierarchical 
-        partitions, enabling distributional analyses of district boundaries, facility
-        assignments, and capacity utilization. This ensemble perspective, developed
-        extensively in political redistricting for applications such as
-        gerrymandering detection, provides a basis for assessing alternatives 
-        beyond a single optimized plan.
-
-    \item \textbf{Scalability.}  We demonstrate that FalCom can run chains on 
-        instances with up to $|V| = 50{,}000$ basic units. As in ReCom, each 
-        step operates on a local region rather than the entire instance. 
-    \item \textbf{Composability.} FalCom separates the districting and 
-        facility-assignment structure from within-district operational decisions. 
-        Flow-based formulations, vehicle-routing heuristics, and stochastic models 
-        can be applied within the resulting districts to optimize facility placement,
-        route vehicles, or allocate staff, which we leave to future work.
-    \end{enumerate}
-\vspace{2mm}
-
-To aid reproducibility of our work, an open-source implementation of FalCom is 
-available online, and a companion repository holds the experiment code and data
-we use in this study~\citep{falcomchain}.
-
-
-% ---- 8. Paper outline ----
-The rest of the paper is organized as follows.
-Section~\ref{sec:literature} reviews the related literature. Section~\ref{sec:model} 
-introduces the problem formulation and the hierarchical graph structure, while 
-Section~\ref{sec:graph} describes the state space and feasibility rules. 
-Section~\ref{sec:falcom} presents the FalCom algorithm, including the proposal 
-mechanism with its facility assignment phase. Section~\ref{sec:convergence} discusses 
-feasibility and convergence theory. Section~\ref{sec:experiments} 
-validates the sampler against exact enumeration, ablates its components, evaluates 
-its scaling on large synthetic grids, compares sampled results with mixed-integer 
-linear programming solutions, and presents an application to the London 
-Ambulance Service. Finally, Section~\ref{sec:discussion} 
-concludes the paper and discusses directions for future research.
-
-
-
-%% -----------------------------------------------------------------------
-\section{Literature Overview}
-\label{sec:literature}
-%% -----------------------------------------------------------------------
-
+% ---- Related literature (formerly Section 2) ----
 Our problem sits between two literatures that rarely meet: districting, which partitions a graph into balanced, contiguous zones but does not locate capacitated facilities, and hierarchical facility location, which places capacitated facilities on several service tiers but leaves the shape of the service areas unconstrained. Table~\ref{tab:positioning} positions FalCom against both.
 
 \begin{table}[!htb]
@@ -329,6 +273,62 @@ Hierarchical facility location problems locate facilities at several service lev
 \paragraph{The gap.}
 \label{sec:gaps}
 Hierarchical location models rarely require contiguity: demand is assigned to the cheapest feasible facility, so a service area may consist of several disconnected pieces~\citep{contreras2020hierarchical}. A median objective favours compact districts but does not guarantee connected ones under capacity or balance constraints. Yet contiguity matters more in a hierarchy than at a single level: referral paths should not cross another facility's territory, districts at every level must be recognizable regions for staffing and reporting, and fragmented areas produce crossing routes in distribution~\citep{MUYLDERMANS2002521}. The literature thus leaves three gaps, which FalCom addresses together (Table~\ref{tab:positioning}): contiguity as a structural guarantee in hierarchical settings, sampling rather than optimization over the feasible hierarchical plans, and a number of districts set by capacity and demand rather than fixed in advance, as the max-$p$-regions problem of \citet{duque2012maxp} allows in optimization.
+
+% ---- Our contribution ----
+\subsection{Our Contribution}
+\label{sec:contribution}
+We introduce \emph{FalCom} (Facility Location Combination), a
+ReCom-type MCMC sampler for capacitated hierarchical districting
+with facility assignment. To our knowledge, FalCom is the first 
+sampler that combines a hierarchy of districts, a facility and 
+an integer capacity in every district, and a variable number of 
+districts. We summarize FalCom's contributions as follows.
+\vspace{2mm}
+\begin{enumerate}[nosep, label=(\roman*)]
+     \item \textbf{Hierarchical capacitated partitioning.}
+        FalCom operates on a multi-level graph structure, enforcing
+        capacity and demand balance constraints at each level. Unlike the 
+        samplers in political redistricting, which prescribe the number of 
+        districts in advance, FalCom allows this number to emerge from the 
+        demand and capacity requirements.
+    \item \textbf{Ensemble-based analysis.} FalCom samples feasible hierarchical 
+        partitions, enabling distributional analyses of district boundaries, facility
+        assignments, and capacity utilization. This ensemble perspective, developed
+        extensively in political redistricting for applications such as
+        gerrymandering detection, provides a basis for assessing alternatives 
+        beyond a single optimized plan.
+
+    \item \textbf{Scalability.}  We demonstrate that FalCom can run chains on 
+        instances with up to $|V| = 50{,}000$ basic units. As in ReCom, each 
+        step operates on a local region rather than the entire instance. 
+    \item \textbf{Composability.} FalCom separates the districting and 
+        facility-assignment structure from within-district operational decisions. 
+        Flow-based formulations, vehicle-routing heuristics, and stochastic models 
+        can be applied within the resulting districts to optimize facility placement,
+        route vehicles, or allocate staff, which we leave to future work.
+    \end{enumerate}
+\vspace{2mm}
+
+To aid reproducibility of our work, an open-source implementation of FalCom is 
+available online, and a companion repository holds the experiment code and data
+we use in this study~\citep{falcomchain}.
+
+
+% ---- 8. Paper outline ----
+The rest of the paper is organized as follows.
+Section~\ref{sec:model} 
+introduces the problem formulation and the hierarchical graph structure, while 
+Section~\ref{sec:graph} describes the state space and feasibility rules. 
+Section~\ref{sec:falcom} presents the FalCom algorithm, including the proposal 
+mechanism with its facility assignment phase. Section~\ref{sec:convergence} discusses 
+feasibility and convergence theory. Section~\ref{sec:experiments} 
+validates the sampler against exact enumeration, ablates its components, evaluates 
+its scaling on large synthetic grids, and compares sampled results with mixed-integer 
+linear programming solutions. Section~\ref{sec:exp-emergency} presents an application 
+to the London Ambulance Service. Finally, Section~\ref{sec:discussion} 
+concludes the paper and discusses directions for future research.
+
+
 
 %% -----------------------------------------------------------------------
 \section{Problem Description and Model Formulation}
@@ -658,7 +658,7 @@ the capacity function $c^\ell$ encodes $c^{\ell}_j$. A state $s \in \Omega_\math
 \label{sec:falcom}
 %% -----------------------------------------------------------------------
 
-FalCom carries the merge-and-split move of ReCom (Section~\ref{sec:literature}) from political redistricting to hierarchical capacitated facility location, generalizing it in two directions: (1)~a hierarchical two-level proposal that operates on a supergraph to localize computation, and (2)~a recursive partitioning scheme that produces a variable number of districts under capacity constraints, with a facility assigned to every district.
+FalCom carries the merge-and-split move of ReCom (Section~\ref{sec:lit-districting}) from political redistricting to hierarchical capacitated facility location, generalizing it in two directions: (1)~a hierarchical two-level proposal that operates on a supergraph to localize computation, and (2)~a recursive partitioning scheme that produces a variable number of districts under capacity constraints, with a facility assigned to every district.
 
 %% --------------------------------------------------
 \subsection{Outline of FalCom}

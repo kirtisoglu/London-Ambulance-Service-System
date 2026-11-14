@@ -1,12 +1,12 @@
 % =========================================================================
-\subsection{Case Study: The London Ambulance Service}
+\section{Case Study: London Ambulance Service}
 \label{sec:exp-emergency}
 % =========================================================================
 
 The London Ambulance Service (LAS) is the busiest urban ambulance service in the United Kingdom. It serves about $9$ million residents through $66$ ambulance stations organized into $21$ operational Groups within $5$ sectors. Optimization studies of LAS produce a single recommended plan~\citep{mccormack2015simulation}. We instead run FalCom on the real stations, with no artificial candidates, to obtain a reference distribution over hierarchical layouts. We use it to separate the settled from the contested geography and to describe every station and every Group (Section~\ref{sec:las-structure}), and to place the operational layout against balanced plans, which bounds the access cost of workload balance from above (Section~\ref{sec:las-price}). Section~\ref{sec:las-sensitivity} repeats the study under a second demand proxy and a wider tolerance. The convergence diagnostics of the London chains are in Table~\ref{tab:multistart} and their rejections in Table~\ref{tab:rejections}.
 
 % -------------------------------------------------------------------------
-\subsubsection{Instance, Calibration and Benchmark}\label{sec:las-data}
+\subsection{Instance, Calibration and Benchmark}\label{sec:las-data}
 % -------------------------------------------------------------------------
 
 \paragraph{Data.}
@@ -36,7 +36,7 @@ Four chains run for $80{,}000$ steps each from sector-wise initial plans, and a 
 \end{figure}
 
 % -------------------------------------------------------------------------
-\subsubsection{What Most Sampled Plans Have in Common}\label{sec:las-structure}
+\subsection{What Most Sampled Plans Have in Common}\label{sec:las-structure}
 % -------------------------------------------------------------------------
 
 \paragraph{What a frequency means.}
@@ -66,7 +66,7 @@ Because the candidates are the real stations, the ensemble also describes each s
 The sampled Groups recover part of the operational structure (Figure~\ref{fig:las-groups} in Appendix~\ref{app:london-extra}). A plan has $22.3$ Groups on average, between $20$ and $24$ in the central $90\%$ of plans, against the $21$ real Groups. Two stations of the same real Group share a superdistrict in $27\%$ of the plans in which both are open, two stations of different Groups in $2\%$; part of this contrast is distance. The adjusted Rand index between a sampled grouping of the open stations and the real Groups is $0.28$ on average ($0.17$ to $0.39$ in the central $90\%$ of plans), against $0.19$ between two sampled plans from different chains. The real Groups are thus one contiguous, capacity-feasible grouping among many that the geography admits, a typical member of the family and not its mode. The pairs the ensemble keeps together most often inside a real Group are Hornchurch and Romford ($67\%$) and Barnehurst and Woolwich ($55\%$). Equally strong are pairs that the real Groups separate, such as Barnehurst and St Pauls Cray ($49\%$) and Richmond and Putney ($48\%$); fourteen cross-Group pairs exceed $30\%$, against $29$ within-Group pairs. These are the associations a planner would examine first, since they mark Group boundaries that balanced plans tend not to draw.
 
 % -------------------------------------------------------------------------
-\subsubsection{The Operational Layout Against the Ensemble}\label{sec:las-price}
+\subsection{The Operational Layout Against the Ensemble}\label{sec:las-price}
 % -------------------------------------------------------------------------
 
 \emph{Finding.} The operational layout has a lower access cost than every one of the $6{,}400$ sampled plans and than every annealed plan. The reason is its station loads, $20$ of which lie outside every balance window. The distance from the layout to the best balanced plan found, $0.5$ minutes of mean drive time, is an upper bound on the access cost of workload balance at this calibration.
@@ -106,7 +106,7 @@ Every sampled plan satisfies the windows, so the minimum access cost over the ba
 Part of this price is a limit of the demand proxy and not of the layout: the smallest catchments sit on daytime hot spots, the West End, the City and the airport, which residential apportionment does not see. Whether the rest is worth paying is an operational question that the ensemble informs but does not settle.
 
 % -------------------------------------------------------------------------
-\subsubsection{Sensitivity to the Demand Proxy and the Tolerance}\label{sec:las-sensitivity}
+\subsection{Sensitivity to the Demand Proxy and the Tolerance}\label{sec:las-sensitivity}
 % -------------------------------------------------------------------------
 
 \emph{Finding.} Under a second demand proxy and under a wider tolerance the station-level frequencies move by a few points, and the structure of the ensemble and the position of the operational layout below it do not change.
