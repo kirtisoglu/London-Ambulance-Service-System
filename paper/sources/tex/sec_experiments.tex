@@ -1,5 +1,5 @@
 % =========================================================================
-\section{Computational Experiments}\label{sec:experiments}
+\section{Computational Experiments}\label{sec:experiments}\label{sec:setup}
 % =========================================================================
 
 All chains ran on a single core of a four-core cloud container. The exact solver and the annealing runs of Section~\ref{sec:exp-milp} ran on a laptop with an Apple M3 processor, which is about twice as fast per core. Timings are therefore compared only within one machine. The experiment code, the instances and the stored outputs of every run are in the companion repository~\citep{falcomchain}.
@@ -14,11 +14,8 @@ There is no competing sampler for this state space, so the reference points are 
 \end{enumerate}
 Section~\ref{sec:exp-emergency} then applies the sampler to the London Ambulance Service.
 
-% =========================================================================
-\subsection{Instances and Diagnostics}\label{sec:setup}
-% =========================================================================
-
-Table~\ref{tab:grids} lists every instance of the paper with the parameters of its runs.
+\paragraph{Data sets.}
+Table~\ref{tab:grids} lists the instances. Four small grids of $12$ to $24$ units are small enough for every state to be listed. Five synthetic grids of $100$ to $50{,}000$ units have i.i.d.\ demands $d_v \sim \mathrm{Uniform}(80,120)$, a unit workload $w = 200\sqrt{|V|}$ rounded to the nearest thousand, so that the number of units $k$ and the mean district size both grow as $\sqrt{|V|}$, and a sparse candidate set of $\lceil 1.5\,k\rceil$ sites placed uniformly at random. Assumption~\ref{asm:facility-density} thus fails on every grid by design, and the chain runs on the counting predicate of Section~\ref{sec:capacitated}. The tolerance $0.15$ is above the granularity floor on every grid, and the level-2 capacity range exceeds the safe range of Corollary~\ref{cor:app-invariant}, which concerns level $1$ only. The London instance is described with its case study.
 
 \begin{table}[!htbp]
 \centering
@@ -41,15 +38,9 @@ grid\_50000 & $U(80,120)$ & $50{,}000$ & $168$ & $45{,}000$ & $112$ & $[1,2]$ & 
 London & incidents & $4{,}994$ & $66$ & $10{,}887$ & $97$ & $[1,3]$ & $[2,6]$ & $1{,}000/1{,}000$ & $5\times80{,}000$ & \ref{sec:exp-multistart}, \ref{sec:exp-ablation}, \ref{sec:exp-emergency} \\
 \bottomrule
 \end{tabular}}
-\caption{Instances and run parameters. $k = \lceil d/w\rceil$ is the number of capacity units, $c^1$ and $c^2$ are the capacity ranges of a district and a superdistrict, and $M$ is the retry budget of the tree cut at the base level and at the supergraph. On every instance $\varepsilon^1 = \varepsilon^2 = 0.15$, $\kappa^2_{\min} = 2$ and $F^2 = F^1$, except that on London a level-2 facility must be an open station. The run length is that of the main experiment on the instance; the grids are also run for $10{,}000$ steps in the scaling sweep of Section~\ref{sec:exp-scalability}.}
+\caption{Instances and run parameters. $k = \lceil d/w\rceil$ is the number of capacity units, $c^1$ and $c^2$ are the capacity ranges of a district and a superdistrict, and $M$ is the retry budget of the tree cut at the base level and at the supergraph. On every instance $\varepsilon^1 = \varepsilon^2 = 0.15$, $\kappa^2_{\min} = 2$ and $F^2 = F^1$, except that on London a level-2 facility must be an open station. The level-2 windows are centred at $w$ on the grids, which differs from $\bar d = d/k$ by $0.9$ to $2.3\%$, and at $\bar d$ on London. The run length is that of the main experiment on the instance; the grids are also run for $10{,}000$ steps in the scaling sweep of Section~\ref{sec:exp-scalability}.}
 \label{tab:grids}
 \end{table}
-
-\paragraph{Synthetic grids.}
-The five grids have i.i.d.\ demands $d_v \sim \mathrm{Uniform}(80,120)$. The workload of a unit is $w = 200\sqrt{|V|}$, rounded to the nearest thousand, so that the number of units $k$ and the mean district size $|V|/k$ both grow as $\sqrt{|V|}$ and neither collapses as the grid grows. The candidate set is sparse, as on London: $\lceil 1.5\,k\rceil$ sites placed uniformly at random, between $8\%$ of the nodes on grid\_100 and $0.3\%$ on grid\_50000. Assumption~\ref{asm:facility-density} therefore fails on every grid by design, and the chain runs on the counting predicate of Section~\ref{sec:capacitated}. Appendix~\ref{app:density} repeats two grids at $1.0$ and $0.7$ sites per unit, the London ratio. The tolerance $0.15$ is above the granularity floor $\varepsilon^1 w \ge d_{\max}$ on every grid and below the bound $2/5$ of Claim~\ref{claim:app-unique}. The level-2 capacity bound $c^2_{\max} = 5$ exceeds the safe range $c \le 3$ of Corollary~\ref{cor:app-invariant}; that range concerns the debt-corrected window of level $1$, and the supergraph recursion carries no debt term and has no closing guarantee (Appendix~\ref{app:debt}). On the grids the level-2 windows are centred at $w$, which differs from $\bar d = d/k$ by $0.9$ to $2.3\%$; the London chains use $\bar d$.
-
-\paragraph{Diagnostics.}
-Agreement between chains is measured on scalar observables: the level-1 access cost $\sum_{D\in\Pc^1}\sum_{v\in D} d_v\,\mathrm{d}(f^1(D),v)$, which is the slowest observable since one superdistrict is re-cut per step, the numbers of districts and superdistricts, and the number of cut edges. For each observable we report the largest Kolmogorov--Smirnov distance between the series of two chains, on every twentieth step, after the first $20\%$ of each chain is discarded as burn-in. The series are autocorrelated, so the critical values of the two-sample test do not apply, and the reference is the same distance between the two halves of one chain. This reference calibrates the noise of the statistic. It cannot detect a region that all chains miss, which is why Section~\ref{sec:exp-enumeration} checks the support exhaustively where that is possible. \emph{Steps to forget} is the number of steps after which the share of the initial plan's district boundary that is still in place comes within $10\%$ of the share that two independently started plans have in common. Split-$\hat R$ and the effective sample size are reported for the access cost.
 
 % =========================================================================
 \subsection{Correctness on Enumerable Instances}
@@ -98,7 +89,10 @@ The three chains start from the first, middle and last state of the outer set, n
 
 \emph{Finding.} On grid\_10000, grid\_50000 and London, independently started chains differ from each other no more than one chain differs from itself on ten of twelve observables, slightly more on the other two, and every chain forgets its start within $800$ steps, a small fraction of its length.
 
-Where enumeration is impossible we run four chains from independently drawn zone-wise initial plans and compare them with the diagnostics of Section~\ref{sec:setup}. The zones are rectangular blocks of about $5{,}000$ nodes on the grids and the five operational sectors on London, each cut against its own per-unit demand, so that every initial plan carries exactly $k$ units. The London instance is described in Section~\ref{sec:exp-emergency}; its chains are included here so that all three instances are read against the same table. On London the four chains share the sector-wise construction, so a fifth chain was started from a structurally different plan, built inside the $21$ real Groups with the three single-station Groups merged into their neighbours ($18$ zones instead of five). Table~\ref{tab:multistart} and Figure~\ref{fig:forgetting} report the diagnostics.
+Where enumeration is impossible we run four chains from independently drawn zone-wise initial plans and compare them with the diagnostics defined below. The zones are rectangular blocks of about $5{,}000$ nodes on the grids and the five operational sectors on London, each cut against its own per-unit demand, so that every initial plan carries exactly $k$ units. The London instance is described in Section~\ref{sec:exp-emergency}; its chains are included here so that all three instances are read against the same table. On London the four chains share the sector-wise construction, so a fifth chain was started from a structurally different plan, built inside the $21$ real Groups with the three single-station Groups merged into their neighbours ($18$ zones instead of five). Table~\ref{tab:multistart} and Figure~\ref{fig:forgetting} report the diagnostics.
+
+\paragraph{Diagnostics.}
+Agreement between chains is measured on scalar observables: the level-1 access cost $\sum_{D\in\Pc^1}\sum_{v\in D} d_v\,\mathrm{d}(f^1(D),v)$, which is the slowest observable since one superdistrict is re-cut per step, the numbers of districts and superdistricts, and the number of cut edges. For each observable we report the largest Kolmogorov--Smirnov distance between the series of two chains, on every twentieth step, after the first $20\%$ of each chain is discarded as burn-in. The series are autocorrelated, so the critical values of the two-sample test do not apply, and the reference is the same distance between the two halves of one chain. This reference calibrates the noise of the statistic. It cannot detect a region that all chains miss, which is why Section~\ref{sec:exp-enumeration} checks the support exhaustively where that is possible. \emph{Steps to forget} is the number of steps after which the share of the initial plan's district boundary that is still in place comes within $10\%$ of the share that two independently started plans have in common. Split-$\hat R$ and the effective sample size are reported for the access cost.
 
 \begin{table}[!htbp]
 \centering
