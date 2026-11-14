@@ -2,7 +2,17 @@
 \section{Computational Experiments}\label{sec:experiments}
 % =========================================================================
 
-The experiments answer five questions, one per subsection, and each subsection opens with its finding: whether the chain is correct on instances small enough to list (Section~\ref{sec:exp-enumeration}); whether the sampled law is stable on instances that cannot be listed (Section~\ref{sec:exp-multistart}); what each component of the proposal contributes (Section~\ref{sec:exp-ablation}); how the cost of a step scales and where the method stops (Section~\ref{sec:exp-scalability}); and where the ensemble sits relative to an exact optimum (Section~\ref{sec:exp-milp}). There is no competing sampler for this state space, so the reference points are exact enumeration, the chain's own components and an exact solver. Section~\ref{sec:exp-emergency} then applies the sampler to the London Ambulance Service.
+All chains ran on a single core of a four-core cloud container. The exact solver and the annealing runs of Section~\ref{sec:exp-milp} ran on a laptop with an Apple M3 processor, which is about twice as fast per core. Timings are therefore compared only within one machine. The experiment code, the instances and the stored outputs of every run are in the companion repository~\citep{falcomchain}.
+
+There is no competing sampler for this state space, so the reference points are exact enumeration, the chain's own components and an exact solver. The experiments answer five questions, and each subsection opens with its finding.
+\begin{enumerate}[label=(Q\arabic*),leftmargin=3em,itemsep=1pt,topsep=3pt]
+\item Is the chain correct on instances small enough to list? (Section~\ref{sec:exp-enumeration})
+\item Is the sampled law stable on instances that cannot be listed? (Section~\ref{sec:exp-multistart})
+\item What does each component of the proposal contribute? (Section~\ref{sec:exp-ablation})
+\item How does the cost of a step scale, and where does the method stop? (Section~\ref{sec:exp-scalability})
+\item Where does the ensemble sit relative to an exact optimum? (Section~\ref{sec:exp-milp})
+\end{enumerate}
+Section~\ref{sec:exp-emergency} then applies the sampler to the London Ambulance Service.
 
 % =========================================================================
 \subsection{Instances and Protocol}\label{sec:setup}
@@ -46,9 +56,6 @@ Agreement between chains is measured on scalar observables: the level-1 access c
 
 \paragraph{Rejections.}
 A proposal is rejected for one of four reasons (Section~\ref{sec:feasibility}). At the supergraph, a \emph{tree failure} means that none of the $M$ spanning trees had an admissible pendant subtree although the residual lies inside the window of its remaining capacity, and a \emph{demand failure} means that the residual lies outside that window, so that no tree can close. A re-cut that would leave the selected superdistrict with fewer than $\kappa^2_{\min}$ districts is rejected as \emph{below~$\kappa$}. A \emph{base-level failure} is a level-1 recursion that exhausts its budget. Table~\ref{tab:rejections} in Section~\ref{sec:exp-multistart} reports all four on every instance.
-
-\paragraph{Hardware.}
-All chains ran on a single core of a four-core cloud container. The exact solver and the annealing runs of Section~\ref{sec:exp-milp} ran on a laptop with an Apple M3 processor, which is about twice as fast per core. Timings are therefore compared only within one machine. The experiment code, the instances and the stored outputs of every run are in the companion repository~\citep{falcomchain}.
 
 % =========================================================================
 \subsection{Correctness on Enumerable Instances}
