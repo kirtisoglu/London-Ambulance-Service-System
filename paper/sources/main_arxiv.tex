@@ -363,8 +363,9 @@ base graph $G^1$. We write this requirement as a closed-form
 $\Contiguity\!\bigl(x^{\ell}_{ij},\, G^1\bigr)$ that returns $1$ 
 iff the set of base units $\{i \in V^1 : x^{\ell}_{ij} =1\}$ assigned 
 to facility $j$ at level $\ell$ induces a connected subgraph of $G^1$. 
-Its reformulation as a polynomial-size mixed-integer system is given in 
-Appendix~\ref{app:shir}, so that the main formulation remains compact.
+Its reformulation as a polynomial-size linear system, the single-commodity flow 
+formulation of \citet{shirabe2005model} that the exact solutions of Section~\ref{sec:exp-milp} use, 
+is given in Appendix~\ref{app:shir}, so that the main formulation remains compact.
 
 The decision variables are defined for each level $\ell \in L$. For each
 $j \in F^\ell$ and $i \in V^1$, let $x_{ij}^\ell \in \{0,1\}$ equal 1 if
@@ -425,12 +426,10 @@ a union of level-$(\ell{-}1)$ districts, which is a linking constraint for
 coherent hierarchical systems. Constraint~\eqref{cons:contiguity} enforces 
 contiguity of every service area at both levels by requiring the units assigned 
 to facility~$j$ at level~$\ell$ to induce a connected subgraph of~$G^1$. 
-Appendix~\ref{app:shir} gives a specific contiguity formulation.
 The hierarchy constraint~\eqref{cons:hierarchy} forces every
 superdistrict to be a union of level-1 districts, but does not by
 itself force the superdistrict's footprint to be connected, so
-$\Contiguity$ is stated for every $\ell \in L$. Its mixed-integer
-reformulation is given in Appendix~\ref{app:shir}.
+$\Contiguity$ is stated for every $\ell \in L$.
 Constraint~\eqref{cons4} links facility opening to capacity at 
 every level $\ell \in L$: a facility is open if and only if its 
 capacity is at least $c^\ell_{\min}$, and its capacity cannot exceed 
@@ -451,9 +450,6 @@ Constraint~\eqref{cons:minL1perL2} sets a minimum number of level-1 districts pe
     standard way ($z \leq y^1_{j'}$, $z \leq x^2_{j'j}$,
     $z \geq y^1_{j'} + x^2_{j'j} - 1$). Constraint~\eqref{cons:aggregate} makes the capacity of a superdistrict the sum of its members' capacities: a level-2 capacity unit is a level-1 team coordinated by the level-2 facility, not a separate service. The product $u_{j'j} = c^1_{j'} z_{j'j}$ is linearized by $u_{j'j} \leq c^1_{\max} z_{j'j}$, $u_{j'j} \leq c^1_{j'}$ and $u_{j'j} \geq c^1_{j'} - c^1_{\max}(1 - z_{j'j})$, and with it constraint~\eqref{cons:coverage} at level $2$ follows from level $1$. When $F^2 \subseteq F^1$ and level-2 facilities must stand at open level-1 facilities, as in Section~\ref{sec:exp-emergency}, the link $y^2_j \leq y^1_j$ is added. We assume $d_i > 0$ for every unit, as on every instance of this paper; with zero-demand units an explicit link $x^\ell_{ij} \leq y^\ell_j$ would be needed to keep closed facilities from receiving units.
 
-
-\paragraph{Contiguity formulation.}
-We realize $\Contiguity(x^{\ell}_{ij}, G^1)$ with the single-commodity flow (SHIR) reformulation of \citet{shirabe2005model}. It replaces each contiguity requirement by a polynomial-size linear system, needs no callbacks, and is what the Gurobi benchmark of Section~\ref{sec:exp-milp} uses. Appendix~\ref{app:shir} states the constraints.
 
 \paragraph{Absence of an objective function.}
 The formulation above should be compared to classical capacitated facility
@@ -1033,7 +1029,7 @@ each step of the recursive partitioning. Given the input $(H^{(r-1)},\, c_{H^{(r
 \paragraph{Spanning tree cuts.} Let $T^{(r-1)}$ be a spanning tree of $H^{(r-1)}$ rooted at an arbitrary node $v^\star$. For any node $u$, let $T_u$ denote the subtree rooted at $u$ and $T_{u'} := T^{(r-1)} \setminus T_u$ its complement. When $u \neq v^\star$, removing the edge $uu'$ splits $T^{(r-1)}$ into $T_u$ and $T_{u'}$. The case $u=v^\star$ corresponds to $T_u = T^{(r-1)}$ and $T_{u^\prime} = \emptyset$, which cannot be expressed by removing any edge. We therefore phrase the algorithm in terms of subtrees rather than edge cuts. We describe the admissibility condition for a subtree $T_u$ at both levels $\ell=1,2$ below, and treat the node set $V(T_u)$ as the candidate district to be extracted. Removing an edge from a spanning tree always yields two connected components, so the rule contiguity$(\mathcal{P}^{\ell}) \ \in \mathcal{C}^{\ell}$ is guaranteed by construction. A single depth-first traversal of $T^{(r-1)}$ from $v^\star$ computes the demand $d(T_u)$ of every subtree $T_u$ in $O(|H^{(r-1)}|)$ total time, so the per-step cost of FalCom is linear in the residual graph size. The tree itself is drawn uniformly at random by Wilson's loop-erased random walk, whose expected running time on planar graphs of bounded average degree is also near linear in $|H^{(r-1)}|$.
 
 \paragraph{Feasibility function.}
-The two levels share the same control structure but differ in what counts as an admissible subtree. At the base level $\ell =1$, the extracted subtree $T_u$ must contain a candidate facility from $F^1$, and the complement $T_{u^\prime}$, which becomes the residual, must keep enough candidates for the districts it still has to be cut into: at least $\lceil (c_{H^{(r-1)}}-c)/c^{1}_{\max}\rceil$ of them when $T_u$ takes capacity $c$. This \emph{counting predicate} is a necessary condition for the recursion to close, so it does not change the feasible state space. It prevents the recursion from stranding a candidate-free residual, and it is what makes sparse, real-world candidate sets workable (Section~\ref{sec:feasibility}). At the supergraph level $\ell=2$, no facility constraint is imposed, but a size constraint $\kappa^2_{\min} \in \mathbb{Z}_{\geq 1}$ requires both $T_u$ and $T_{u^\prime}$ to contain at least $\kappa^2_{\min}$ supergraph nodes, equivalently at least $\kappa^2_{\min}$ level-1 districts each, so that every superdistrict bundles a non-trivial number of level-1 districts (Section~\ref{sec:graph}). The two tolerances are related by $\varepsilon^{2} \geq \varepsilon^{1}$: under global targets Lemma~\ref{lem:super-convex} would place every union of balanced districts inside its level-2 window, but the chain cuts districts against local targets, so the level-2 window can bind and the supergraph recursion can fail on demand (Appendix~\ref{app:supergraph-correctness}). In one-sided mode the residual must moreover remain partitionable: with $c$ capacity units and $n$ supernodes left after the extraction, some number $k$ of superdistricts must satisfy $\lceil c/c^{2}_{\max}\rceil \leq k \leq \min\{\lfloor c/c^{2}_{\min}\rfloor,\ \lfloor n/\kappa^{2}_{\min}\rfloor\}$. Like the counting predicate, this \emph{residual predicate} is a necessary condition, so it leaves the state space unchanged. It keeps the greedy extraction from stranding a final supernode, which was by far the most frequent cause of rejection before it was introduced (Section~\ref{sec:feasibility}). We define
+The two levels share the same control structure but differ in what counts as an admissible subtree. At the base level $\ell =1$, the extracted subtree $T_u$ must contain a candidate facility from $F^1$, and the complement $T_{u^\prime}$, which becomes the residual, must keep enough candidates for the districts it still has to be cut into: at least $\lceil (c_{H^{(r-1)}}-c)/c^{1}_{\max}\rceil$ of them when $T_u$ takes capacity $c$. This \emph{counting predicate} is a necessary condition for the recursion to close, so it does not change the feasible state space. It prevents the recursion from stranding a candidate-free residual, and it is what makes sparse, real-world candidate sets workable (Section~\ref{sec:feasibility}). At the supergraph level $\ell=2$, no facility constraint is imposed, but a size constraint $\kappa^2_{\min} \in \mathbb{Z}_{\geq 1}$ requires both $T_u$ and $T_{u^\prime}$ to contain at least $\kappa^2_{\min}$ supergraph nodes, equivalently at least $\kappa^2_{\min}$ level-1 districts each, so that every superdistrict bundles a non-trivial number of level-1 districts (Section~\ref{sec:graph}). The two tolerances are related by $\varepsilon^{2} \geq \varepsilon^{1}$: under global targets every union of balanced districts would lie inside its level-2 window, since its per-unit load is a convex combination of theirs, but the chain cuts districts against local targets, so the level-2 window can bind and the supergraph recursion can fail on demand (Appendix~\ref{app:supergraph-correctness}). In one-sided mode the residual must moreover remain partitionable: with $c$ capacity units and $n$ supernodes left after the extraction, some number $k$ of superdistricts must satisfy $\lceil c/c^{2}_{\max}\rceil \leq k \leq \min\{\lfloor c/c^{2}_{\min}\rfloor,\ \lfloor n/\kappa^{2}_{\min}\rfloor\}$. Like the counting predicate, this \emph{residual predicate} is a necessary condition, so it leaves the state space unchanged. It keeps the greedy extraction from stranding a final supernode, which was by far the most frequent cause of rejection before it was introduced (Section~\ref{sec:feasibility}). We define
 %
 \begin{align*}
     \text{fac}^\ell(T_u) =
@@ -1056,7 +1052,7 @@ for the level-specific admissibility predicate. \emph{The feasibility function} 
 \end{equation}
 where at level $1$ $I^{(r)}(c)$ is the debt-corrected window~\eqref{eq:window} and the capacity is the $c$ whose window contains $d(T_u)$, while at level $2$ the capacity is given by the members, $c = c^2(T_u) = \sum_{v \in V(T_u)} c^1(D_v)$, and $I^{(r)}(c)$ is the nominal capacity-scaled window $[(1-\varepsilon^2)\,c\,\bar d,\ (1+\varepsilon^2)\,c\,\bar d]$ with no debt term (Appendix~\ref{app:supergraph-correctness}). The feasibility function is an indicator: it equals one when $T_u$ is admissible, in which case the matching capacity $c(T_u)$ is recorded alongside, and zero otherwise. At level $1$, uniqueness of the matching capacity requires the windows $I^{(r)}(c)$ to be pairwise disjoint, which holds by Claim~\ref{claim:app-unique} whenever $\varepsilon^{1} < 2/5$, a condition every calibration in this paper satisfies; at level $2$ no disjointness is needed, since the capacity is determined by the members, and the scaled windows of consecutive capacities overlap for $c \geq 3$ at $\varepsilon^2 = 0.15$.
 
-Lemma~\ref{lem:app-shape} shows that the corrected windows $I^{(r)}(c)$ are non-empty exactly when the running debt satisfies $|\delta^{(r-1)}| \leq 2\tau^{\ell}$, and Corollary~\ref{cor:app-invariant} shows that $|\delta^{(r)}| \leq \tau^{\ell}$ is preserved by every extraction of capacity $c \leq 3$, so with $c^{\ell}_{\max} \leq 3$ no window is ever empty. However, the demands of subtrees form a discrete set, so a non-empty real interval need not contain any achievable demand. The \emph{granularity floor} $\tau^{\ell} \geq \max_{v \in H^{(r-1)}} d(v)$, where $d(v)$ is the demand of node $v$, is a design rule that keeps every window at least as wide as the heaviest node (Appendix~\ref{app:debt}); it is neither necessary nor sufficient for feasibility, and the enumeration instances of Section~\ref{sec:exp-enumeration} violate it and are feasible. Proposition~\ref{thm:nec} gives the only necessary lower bound on $\varepsilon^\ell$ we know, and it is vacuous on every instance of this paper.
+Lemma~\ref{lem:app-shape} shows that the corrected windows $I^{(r)}(c)$ are non-empty exactly when the running debt satisfies $|\delta^{(r-1)}| \leq 2\tau^{\ell}$, and Corollary~\ref{cor:app-invariant} shows that $|\delta^{(r)}| \leq \tau^{\ell}$ is preserved by every extraction of capacity $c \leq 3$, so with $c^{\ell}_{\max} \leq 3$ no window is ever empty. However, the demands of subtrees form a discrete set, so a non-empty real interval need not contain any achievable demand. The \emph{granularity floor} $\tau^{\ell} \geq \max_{v \in H^{(r-1)}} d(v)$, where $d(v)$ is the demand of node $v$, is a design rule that keeps every window at least as wide as the heaviest node, since the width of a window is $2h^{(r)} = 2\tau^{\ell} - |\delta^{(r-1)}| \geq \tau^{\ell}$; it is neither necessary nor sufficient for feasibility, and the enumeration instances of Section~\ref{sec:exp-enumeration} violate it and are feasible.
 
 \paragraph{Choosing an admissible subtree.} Let $\mathcal{T}^{(r-1)}$ be the set of all subtrees of $T^{(r-1)}$ and let $\mathcal{E}^{\ell}_{r-1} = \{T_u \subset T^{(r-1)} \; : \; \phi^{\ell}(T_u) > 0 \} \subset \mathcal{T}^{(r-1)}$ denote the set of admissible subtrees. The algorithm selects a subtree $T_u \in \mathcal{E}^{\ell}_{r-1}$, sets the extracted district $D_r := V(T_u)$, and assigns $c^{\ell}(D_r) := c$, the unique capacity whose window contains $d(T_u)$ at level $1$ and the aggregate capacity of the members at level $2$. 
 
@@ -1349,27 +1345,7 @@ single plan produced by any method can be placed against that ensemble, as Secti
 \section{The debt mechanism: correctness and feasibility}
 \label{app:debt}
 
-This appendix analyses the per-team debt mechanism of
-Section~\ref{sec:recursive}. Let $H=(V,E)$ be a connected graph with
-non-negative node demands $d\colon V\to\mathbb{R}_{\ge 0}$, aggregate
-capacity $c_H\in\mathbb{Z}_{\ge 1}$, capacity bounds
-$c_{\min}\le c_{\max}$ in $\mathbb{Z}_{\ge 1}$, and tolerance
-$\varepsilon\in(0,1)$. Write $d_H:=\sum_{v\in V} d(v)$, let
-$\bar d := d_H/c_H$ be the demand target per team and
-$\tau := \varepsilon\,\bar d$ the \emph{per-team tolerance}. A district
-$D$ with capacity $c(D)$ is \emph{globally balanced} when
-\begin{equation}\label{eq:app-global}
-  \frac{d(D)}{c(D)} \in J := [\bar d-\tau,\;\bar d+\tau].
-\end{equation}
-
-\paragraph{Recursion state.}
-The recursion extracts connected districts $D_1,D_2,\ldots$ from a shrinking
-residual. After $r-1$ extractions the remaining capacity is
-$c^{(r)} := c_H-\sum_{j<r} c(D_j)$ (this is $c_{H^{(r-1)}}$ in the notation of Section~\ref{sec:recursive}) and the \emph{demand debt} is
-\begin{equation}\label{eq:app-debt}
-  \delta^{(0)} := 0,\qquad
-  \delta^{(r)} := \delta^{(r-1)} + \bigl(d(D_r)-c(D_r)\,\bar d\bigr).
-\end{equation}
+This appendix analyses the debt mechanism of Section~\ref{sec:recursive} and uses its notation, without the level index $\ell$. A connected graph $H$ of aggregate capacity $c_H$ is cut against the target $\bar d := d_H/c_H$ with per-team tolerance $\tau := \varepsilon\,\bar d$. The debt $\delta^{(r)}$ is defined by~\eqref{eq:delta}, the per-team window $J$ by~\eqref{eq:per-team-window}, the clipped window $[\widetilde L^{(r)},\widetilde U^{(r)}]$ by~\eqref{eq:Li}--\eqref{eq:Ui} and the admissible window $I^{(r)}(c)$ by~\eqref{eq:window}. We write $c^{(r)} := c_{H^{(r-1)}}$ for the capacity that remains after $r-1$ extractions, and call a district $D$ \emph{globally balanced} when $d(D)/c(D) \in J$.
 
 \begin{lemma}[Telescoping]\label{lem:app-telescoping}\label{rem:telescoping}
 The demand of the residual after $r-1$ extractions is
@@ -1383,20 +1359,8 @@ $d(H^{(r-1)}) = d_H-\sum_{j<r} d(D_j)
  = c^{(r)}\bar d-\delta^{(r-1)}$.
 \end{proof}
 
-This identity is the reason the target $\bar d$ is recomputed \emph{locally}
-for every subgraph the recursion is invoked on (the merged superdistrict at
-the lower level, each zone at initialization): anchoring every call to one
-global average would start the recursion with $\delta^{(0)}\neq 0$.
-
-\paragraph{The debt-clipped window.}
-At step $r$ the per-team window is shifted by the debt and clipped to $J$:
-\begin{equation}\label{eq:app-clip}
-  \widetilde L^{(r)} := \max\{\bar d-\tau,\;\bar d-\tau-\delta^{(r-1)}\},\qquad
-  \widetilde U^{(r)} := \min\{\bar d+\tau,\;\bar d+\tau-\delta^{(r-1)}\}.
-\end{equation}
-
 \begin{lemma}[Shape of the clipped window]\label{lem:app-shape}\label{cor:feas-condition}\label{cor:debt-consequences}
-The clipped window has midpoint and half-width
+The clipped window~\eqref{eq:Li}--\eqref{eq:Ui} has midpoint and half-width
 \begin{equation}\label{eq:app-mh}
   m^{(r)} := \tfrac12\bigl(\widetilde L^{(r)}+\widetilde U^{(r)}\bigr)
            = \bar d-\tfrac12\,\delta^{(r-1)},\qquad
@@ -1411,17 +1375,6 @@ $[\bar d-\tau,\;\bar d+\tau-\delta^{(r-1)}]$, for $\delta^{(r-1)}<0$ it gives $[
 $\bar d-\delta^{(r-1)}/2$ and the half-width $\tau-|\delta^{(r-1)}|/2$.
 \end{proof}
 
-\paragraph{Admissibility.}
-A candidate district $D$ at capacity $c\in\{c_{\min},\ldots,c_{\max}\}$,
-$c\le c^{(r)}$, is \emph{admissible} at step $r$ iff
-\begin{equation}\label{eq:app-window}
-  d(D)\in I^{(r)}(c) := \bigl[\,c\,m^{(r)}-h^{(r)},\; c\,m^{(r)}+h^{(r)}\,\bigr],
-\end{equation}
-that is, its demand lies within the \emph{same} absolute half-width
-$h^{(r)}$ of the capacity-scaled midpoint $c\,m^{(r)}$ for every $c$.
-(The capacity-scaled alternative $c\cdot[\widetilde L^{(r)},\widetilde U^{(r)}]$,
-whose half-width grows with $c$, is discussed in Remark~\ref{rem:app-scaled}.)
-
 \begin{theorem}[Debt evolution]\label{thm:app-evolution}\label{thm:debt-evol}\label{thm:correctness}
 If $D_r$ is admissible at capacity $c=c(D_r)$, then
 \begin{equation}\label{eq:app-evolution}
@@ -1432,9 +1385,9 @@ If $D_r$ is admissible at capacity $c=c(D_r)$, then
 and both endpoints are attained.
 \end{theorem}
 \begin{proof}
-By \eqref{eq:app-window}, $d(D_r)-c\,\bar d\in
+By \eqref{eq:window}, $d(D_r)-c\,\bar d\in
 [\,c(m^{(r)}-\bar d)-h^{(r)},\;c(m^{(r)}-\bar d)+h^{(r)}]$ and
-$c(m^{(r)}-\bar d)=-\tfrac{c}{2}\delta^{(r-1)}$ by \eqref{eq:app-mh}. Adding $\delta^{(r-1)}$ and using \eqref{eq:app-debt} gives \eqref{eq:app-evolution}. The endpoints correspond to $d(D_r)=c\,m^{(r)}\mp h^{(r)}$.
+$c(m^{(r)}-\bar d)=-\tfrac{c}{2}\delta^{(r-1)}$ by \eqref{eq:app-mh}. Adding $\delta^{(r-1)}$ and using \eqref{eq:delta} gives \eqref{eq:app-evolution}. The endpoints correspond to $d(D_r)=c\,m^{(r)}\mp h^{(r)}$.
 \end{proof}
 
 \begin{corollary}[Safe capacity range]\label{cor:app-invariant}\label{cor:envelope}
@@ -1457,7 +1410,7 @@ If $|\delta^{(r-1)}|\le 2\tau$, every district admissible at step $r$ is
 globally balanced: $d(D)\in I^{(r)}(c)$ implies $d(D)/c\in J$.
 \end{corollary}
 \begin{proof}
-Write $\delta:=\delta^{(r-1)}$. From \eqref{eq:app-window},
+Write $\delta:=\delta^{(r-1)}$. From \eqref{eq:window},
 $d(D)/c\in[\,\bar d-\delta/2-h^{(r)}/c,\;\bar d-\delta/2+h^{(r)}/c\,]$ with
 $h^{(r)}=\tau-|\delta|/2$. For the upper end, if $\delta\ge0$ then
 $-\delta/2+h^{(r)}/c\le h^{(r)}\le\tau$. If $\delta<0$ then
@@ -1490,93 +1443,12 @@ $m^{(r)}\ge\bar d-\tau/2$ and $h^{(r)}\le\tau$, it suffices that
 $\bar d-\tau/2>2\tau$, i.e.\ $\varepsilon<2/5$.
 \end{proof}
 
-\paragraph{One-sided steps and the retry budget.}
-In one-sided mode ($c^{(r)}>c_{\max}$) the tree-cut phase needs a
-\emph{pendant} subtree of the sampled spanning tree whose demand lies in
-$I^{(r)}(c)$ for some $c$ and which satisfies the candidate predicate. The
-existence of such a subtree in a given tree is not guaranteed (demands of
-pendant subtrees along a root-to-leaf path can jump by more than the
-window width at a branching node), which is why the phase re-samples up to $M$ trees and otherwise rejects the proposal. Rejection causes are counted and reported with every experiment. Subtree demands are discrete: adding one node changes them by up to $d_{\max}:=\max_{v}d(v)$, so a window narrower than $d_{\max}$ may contain no achievable demand at all. The \emph{granularity floor} $\tau\ge d_{\max}$ keeps every window under the invariant of Corollary~\ref{cor:app-invariant} at least as wide as the heaviest node, since $2h^{(r)}=2\tau-|\delta^{(r-1)}|\ge\tau$, the grid and London calibrations satisfy it, and the enumeration instances of Section~\ref{sec:exp-enumeration} violate it and are feasible nonetheless.
-
-\begin{remark}[Capacity-scaled window]\label{rem:app-scaled}
-The alternative window $c\cdot[\widetilde L^{(r)},\widetilde U^{(r)}]$ has
-half-width $c\,h^{(r)}$ and admits more cuts for $c\ge2$, but the debt
-then moves by up to $c\,\tau$ per extraction: the analogue of
-Corollary~\ref{cor:app-invariant} only gives $|\delta^{(r)}|\le 2\tau$ for
-$c\le 2$, and for $c\ge 3$ the debt can leave the feasible envelope in one
-step, after which no window is non-empty and the proposal must be
-rejected. On the London instance the recursion did not close under this
-window, and on a $12\times12$ test grid only 7 of 12 seeds closed at
-$c_{\max}=3$ against 12 of 12 under the absolute window. FalcomChain keeps
-the scaled window as \texttt{rule="scaled"} for comparison.
-\end{remark}
-
-\begin{proposition}[Necessary tolerance]
-\label{thm:nec}\label{thm:lower-bound}
-Let $d_{\max} := \max_{v \in V} d(v)$. If
-\begin{equation}\label{eq:nec}
-    \varepsilon \;<\; \frac{d_{\max}}{c_{\max}\,\bar{d}} \;-\; 1,
-\end{equation}
-then $H$ admits no globally balanced partition into connected districts
-with capacities in $[c_{\min}, c_{\max}]$.
-\end{proposition}
-\begin{proof}
-Let $v^\ast$ attain $d_{\max}$ and let $D^\ast$ be the district containing
-it in any partition with capacities in $[c_{\min}, c_{\max}]$. Demands are
-non-negative, so $d(D^\ast) \geq d_{\max}$, while global
-balance~\eqref{eq:app-global} requires
-$d(D^\ast) \leq c(D^\ast)\,\bar d\,(1+\varepsilon)
-\leq c_{\max}\,\bar d\,(1+\varepsilon)$. Hence
-$d_{\max} \leq c_{\max}\,\bar d\,(1+\varepsilon)$, the negation
-of~\eqref{eq:nec}.
-\end{proof}
-The bound binds only when a single unit outweighs the largest admissible
-district. On the London instance $d_{\max} = 1{,}526$ against
-$c_{\max}\,\bar d\,(1+\varepsilon) \approx 37{,}600$, so the operative
-constraint there is the granularity floor of
-Section~\ref{sec:capacitated}, not this bound.
-
 %% ----------------------------------------------------------------
 \subsection*{Supergraph level}
 \label{app:supergraph-correctness}\label{sec:supergraph}
 %% ----------------------------------------------------------------
 
-The supergraph recursion inherits the per-team analysis above with
-three changes. The minimum number of level-1 districts per superdistrict
-is $\kappa^{2}_{\min} \geq 2$, since a single-district super
-collapses the hierarchy (cf.~\S\ref{sec:recursive}). The minimum
-capacity is $c_{\min}^{2} = 2$. The demand target at the supergraph
-level is the global average $\bar{d} = d_{G^1}/c_{G^1}$. At the base level, $\bar{d}$ is recomputed locally for the selected superdistrict so that $\delta^{(0)} = 0$ at every invocation (Remark~\ref{rem:telescoping}). The implementation disables the debt term at the supergraph level (\texttt{debt = 0}), so the corrected windows coincide with the nominal ones. The next lemma shows that demand balance is then automatic at the supergraph when the member districts were cut against the global target, with no granularity-floor condition needed there at all; under local targets the window can bind on the fringe described after the lemma. Each supernode $v$
-corresponds to a level-1 district $D^1_v$, so its demand is bounded
-by $d_v = d(D^1_v) \leq c_{\max}^{1}\,\bar{d}\,(1+\varepsilon^{1})$
-by Corollary~\ref{cor:app-containment} at level 1.
-
-\begin{lemma}[Supergraph balance under global targets]
-\label{thm:super-feasibility}\label{cor:super-feas}\label{lem:super-convex}
-Let $S$ be a superdistrict with capacity
-$c(S) = \sum_{v \in S} c_v$, where supernode $v$ carries demand
-$d_v = d(D^1_v)$ and weight $c_v = c^{1}(D^1_v)$. Then
-\[
-    \frac{d(S)}{c(S)}
-    \;=\; \sum_{v \in S} \frac{c_v}{c(S)} \cdot \frac{d_v}{c_v}
-\]
-is a convex combination of the level-1 per-team loads. If every
-level-1 district satisfies
-$d_v / c_v \in \bar{d}\,[1 - \varepsilon^{1},\, 1 + \varepsilon^{1}]$
-with respect to the level-2 target $\bar{d}$, then every
-superdistrict, connected or not, satisfies the level-2 per-team
-window whenever $\varepsilon^{2} \geq \varepsilon^{1}$, and no
-granularity floor is needed at the supergraph.
-\end{lemma}
-
-\begin{proof}
-A convex combination of points of an interval lies in the interval,
-and $\bar{d}\,[1-\varepsilon^{1}, 1+\varepsilon^{1}] \subseteq
-\bar{d}\,[1-\varepsilon^{2}, 1+\varepsilon^{2}]$ for
-$\varepsilon^{2} \geq \varepsilon^{1}$.
-\end{proof}
-
-Two qualifications. First, under the local-target convention (Remark~\ref{rem:telescoping}) level-1 balance holds with respect to the local average of the region in which a district was cut rather than the global $\bar{d}$, so supernode loads lie in $\bar{d}\,[(1-\varepsilon^{1})(1-\varepsilon^{2}),\,(1+\varepsilon^{1})(1+\varepsilon^{2})]$ (Proposition~\ref{prop:effective}), and the level-2 window can bind: a union of members of one parent region $H$ has per-unit load $\bar d_H(1+\bar e)$ with $|\bar e| \le \varepsilon^1$ and $\bar d_H \in (1\pm\varepsilon^2)\,\bar d$, so its excursion outside $(1\pm\varepsilon^2)\,\bar d$ is at most $\varepsilon^1(1+\varepsilon^2)\,\bar d$ per unit. The lemma's guarantee is exact only when every member was cut against the global target, which holds for a global initial partition and for no later state of the chain. Second, the supergraph recursion carries no debt term, so Corollaries~\ref{cor:app-invariant} and~\ref{cor:app-closing} do not apply to it and nothing guarantees that it closes: by Lemma~\ref{lem:app-telescoping} the last residual has demand $c^{(k)}\bar d - \delta^{(k-1)}$ and closes only if $|\delta^{(k-1)}| \le \varepsilon^2 c^{(k)} \bar d$. A residual that violates this lies outside the window of its remaining capacity, and since in-window parts sum to an in-window whole, no spanning tree can repair it: this is a \emph{demand failure}, as opposed to the \emph{tree failure} of a residual inside its window for which the sampled trees had no admissible pendant subtree. Both end in rejection after the retry budget, and the experiments count them separately. What binds at the supergraph in practice is the discrete capacity constraints: each superdistrict must contain at least $\kappa^{2}_{\min}$ level-1 districts and carry total weight in $[c^{2}_{\min}, c^{2}_{\max}]$, and the greedy extraction could strand a final supernode that violates them. The residual predicate of Section~\ref{sec:capacitated} rules out every stranding that can be detected from capacities and supernode counts alone. The supergraph rejections that remain are tree failures or demand failures and are reported alongside the experiments.
+The supergraph recursion uses the same extraction with the level-2 bounds: every superdistrict holds at least $\kappa^{2}_{\min}$ districts and a capacity in $[c^{2}_{\min}, c^{2}_{\max}]$, the target is the global $\bar d = d_{G^1}/c_{G^1}$, and no debt term is carried, so the windows are the nominal ones. If every level-1 district had been cut against the global target, the per-unit load of any union of districts would be a convex combination of loads within $(1\pm\varepsilon^{1})\,\bar d$ and would satisfy the level-2 window whenever $\varepsilon^{2} \geq \varepsilon^{1}$. The chain cuts districts against local targets instead, so supernode loads lie in $\bar{d}\,[(1-\varepsilon^{1})(1-\varepsilon^{2}),\,(1+\varepsilon^{1})(1+\varepsilon^{2})]$ (Proposition~\ref{prop:effective}) and the level-2 window can bind. Because no debt is carried, Corollaries~\ref{cor:app-invariant} and~\ref{cor:app-closing} do not apply and nothing guarantees that the supergraph recursion closes: by Lemma~\ref{lem:app-telescoping} the last residual has demand $c^{(k)}\bar d - \delta^{(k-1)}$, where $\delta$ is the accumulated deviation, and it closes only if $|\delta^{(k-1)}| \le \varepsilon^2 c^{(k)} \bar d$. Otherwise no spanning tree can repair it, which is the demand failure of Section~\ref{sec:feasibility}. The residual predicate of Section~\ref{sec:capacitated} rules out every stranding of a final supernode that can be detected from capacities and supernode counts alone.
 
 %% ----------------------------------------------------------------
 \section{Contiguity constraints of the mixed-integer model}
@@ -1617,13 +1489,13 @@ projection~\citep{validi2022imposing}: at each level $\ell$ they enforce
 contiguity of every service area assigned to $j$ by requiring a flow path
 back to~$j$ through nodes that are themselves assigned to $j$ at level
 $\ell$. Both levels reuse the same base graph $G^1$ (superdistricts inherit
-adjacency from the base graph through the dual graph $G^2$), so no separate supergraph flow is needed. Level-2 contiguity becomes contiguity of the level-2 footprint on $G^1$. The runs of Section~\ref{sec:exp-milp} impose the system at level~$1$ only, which keeps the model at $O(|F^{1}|\cdot|E^{1}|)$ flow variables and capacity constraints plus $O(|F^{1}|\cdot|V^{1}|)$ conservation constraints, and check level-2 contiguity on the returned solution. Every superdistrict of every optimum reported in Table~\ref{tab:milp} is connected. The level-1 model is a relaxation of the two-level model, so an optimum of the relaxation that is feasible for the two-level model is also an optimum of the two-level model, and the values in Table~\ref{tab:milp} are optima of the model of Section~\ref{sec:model}.
+adjacency from the base graph through the dual graph $G^2$), so no separate supergraph flow is needed. Level-2 contiguity becomes contiguity of the level-2 footprint on $G^1$. The runs of Section~\ref{sec:exp-milp} impose the system at level~$1$ only, which keeps the model at $O(|F^{1}|\cdot|E^{1}|)$ flow variables and capacity constraints plus $O(|F^{1}|\cdot|V^{1}|)$ conservation constraints, and check level-2 contiguity on the returned solution. The level-1 model is a relaxation of the two-level model, so an optimum of it whose superdistricts are connected is also an optimum of the two-level model.
 
 \section{Candidate density on the grids}
 \label{app:density}
 %% ----------------------------------------------------------------
 
-The grids of Section~\ref{sec:setup} have $1.5$ candidate sites per team, against $0.7$ on London. To see how much the density matters, we rebuilt grid\_1000 and grid\_10000 with $1.0$ and with $0.7$ sites per team and ran two chains of $10{,}000$ steps on each (Table~\ref{tab:density}). The chain keeps running at every density. Acceptance falls from $92\%$ to $91\%$ on grid\_1000 and from $90\%$ to $79\%$ on grid\_10000 as the density drops from $1.5$ to $0.7$ sites per team, and base-level failures stay below one proposal in $400$ ($23$ in $10{,}000$ at worst). What the density affects is the initial plan. On grid\_1000 the global recursion closes in under a second at every density. On grid\_10000 the zone-wise start closes at the first attempt in two seconds at $1.5$ sites per team, needs eight or nine attempts and $14$ to $18$ minutes at $1.0$, and at $0.7$ closes for one seed at the fifth attempt after $16$ minutes and not for the other within twelve attempts. London, at $0.7$ stations per team but with three-unit stations and sectors of about $19$ teams, starts at the first attempt, whereas the grid at $1.0$ sites per team has the same two units of candidate capacity per team but two-unit sites and zones of $25$ teams. The counting predicate keeps the chain running once it has started. Building the first plan at low density is a matter of zone size and attempts, and belongs to the initialization, not to the sampler.
+The grids of Section~\ref{sec:setup} have $1.5$ candidate sites per team, against $0.7$ on London. To see how much the density matters, we rebuilt grid\_1000 and grid\_10000 with $1.0$ and with $0.7$ sites per team and ran two chains of $10{,}000$ steps on each (Table~\ref{tab:density}). The chain keeps running at every density. Acceptance falls from $92\%$ to $91\%$ on grid\_1000 and from $90\%$ to $79\%$ on grid\_10000 as the density drops from $1.5$ to $0.7$ sites per team, and base-level failures stay below one proposal in $400$ ($23$ in $10{,}000$ at worst). What the density affects is the initial plan. On grid\_1000 the global recursion closes in under a second at every density. On grid\_10000 the zone-wise start closes at the first attempt in two seconds at $1.5$ sites per team, needs eight or nine attempts and $14$ to $18$ minutes at $1.0$, and at $0.7$ closes for one seed at the fifth attempt after $16$ minutes and not for the other within twelve attempts. London, at $0.7$ stations per team but with three-unit stations and sectors of about $19$ teams, starts at the first attempt, whereas the grid at $1.0$ sites per team has the same two units of candidate capacity per team but two-unit sites and zones of $25$ teams. Building the first plan at low density is thus a matter of zone size and attempts, and it belongs to the initialization, not to the sampler.
 
 \begin{table}[!htbp]
 \centering
