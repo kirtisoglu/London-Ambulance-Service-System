@@ -403,13 +403,14 @@ are summarized in the table below before we state the model.
     &\forall j \in F^\ell, \;\ \forall \ell \in L \label{cons:anchor} \\[6pt]
 % Constraint 8 - minimum L1 districts per open L2 superdistrict
     & \sum_{j' \in F^1} z_{j'j} \;\geq\; \kappa^2_{\min}\,y^{2}_j,
-       \;\;\text{where } z_{j'j} = y^1_{j'} \wedge x^{2}_{j'j},
     &\forall j \in F^2 \label{cons:minL1perL2} \\[6pt]
 % Constraint 9 - level-2 capacity aggregates the member districts' capacities
-    & c^{2}_j = \sum\limits_{j' \in F^1} u_{j'j}, \;\; u_{j'j} = c^1_{j'}\, z_{j'j},
+    & c^{2}_j = \sum\limits_{j' \in F^1} u_{j'j},
     &\forall j \in F^2 \label{cons:aggregate} \\[6pt]
 % Constraint 10 - integrality
-    & c^\ell_j \in \{0, 1, \ldots, c^\ell_{\max}\}, \;\ u_{j'j} \in \{0, 1, \ldots, c^1_{\max}\}, \;\ x^\ell_{ij}, y^\ell_j, z_{j'j} \in \{0, 1\},
+    & c^\ell_j \in \{0, 1, \ldots, c^\ell_{\max}\}, \;\ u_{j'j} \in \{0, 1, \ldots, c^1_{\max}\},
+    & \notag \\
+    & x^\ell_{ij},\, y^\ell_j,\, z_{j'j} \in \{0, 1\},
     &\forall i \in V^1, \;\ j \in F^\ell, \;\ \forall \ell \in L \label{cons:integrality} 
     \end{align}
 }
